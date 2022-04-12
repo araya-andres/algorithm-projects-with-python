@@ -1,3 +1,15 @@
+def binary_tree_as_str(node, level):
+    indent = '  ' * level
+    if node is None:
+        return f'{indent}{node}'
+    elif node.has_children():
+        left_child = binary_tree_as_str(node.left_child, level + 1)
+        right_child = binary_tree_as_str(node.right_child, level + 1) 
+        return f'{indent}{node.value}:\n{left_child}\n{right_child}'
+    else:
+        return f'{indent}{node.value}:'
+
+
 class BinaryNode:
     def __init__(self, value, left_child = None, right_child = None):
         self.value = value
@@ -10,10 +22,11 @@ class BinaryNode:
     def add_right(self, right):
         self.right_child = right
 
+    def has_children(self):
+        return self.left_child or self.right_child
+
     def __str__(self):
-        left_value = self.left_child.value if self.left_child else None
-        right_value = self.right_child.value if self.right_child else None
-        return f'{self.value}: {left_value} {right_value}'
+        return binary_tree_as_str(self, 0)
 
 
 def main():
@@ -22,8 +35,6 @@ def main():
         BinaryNode('B', None, BinaryNode('E', BinaryNode('F')))
     )
     print(root)
-    print(root.left_child)
-    print(root.right_child)
 
 
 if __name__ == '__main__':
