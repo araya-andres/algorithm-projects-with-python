@@ -34,7 +34,11 @@ def main():
             NaryNode(
                 "A",
                 [
-                    NaryNode("D"),
+                    NaryNode(
+                        "D",
+                        [
+                            NaryNode("G"),
+                        ]),
                     NaryNode("E"),
                 ],
             ),
