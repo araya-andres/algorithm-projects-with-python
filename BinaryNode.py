@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 
 
 def binary_tree_as_str(node: BinaryNode, level: int) -> str:
@@ -30,19 +31,47 @@ class BinaryNode:
     def has_children(self) -> bool:
         return self.left_child or self.right_child
 
+    def find_node(self, value) -> Optional[BinaryNode]:
+        if self.value == value:
+            return self
+        if self.left_child:
+            node = self.left_child.find_node(value)
+            if node:
+                return node
+        if self.right_child:
+            node = self.right_child.find_node(value)
+            if node:
+                return node
+        return None
+
     def __str__(self) -> str:
         return binary_tree_as_str(self, 0)
 
 
-def main():
+def find_value(tree: BinaryNode, value) -> None:
+    if tree.find_node(value):
+        print(f"Found {value}")
+    else:
+        print(f"Value {value} not found")
+
+
+def main() -> None:
     root = BinaryNode(
         "Root",
         BinaryNode("A", BinaryNode("C"), BinaryNode("D")),
         BinaryNode("B", None, BinaryNode("E", BinaryNode("F"))),
     )
+
     print(root)
-    print()
     print(root.left_child)
+
+    print()
+
+    find_value(root, "Root")
+    find_value(root, "E")
+    find_value(root, "F")
+    find_value(root, "Q")
+    find_value(root.right_child, "F")
 
 
 if __name__ == "__main__":
