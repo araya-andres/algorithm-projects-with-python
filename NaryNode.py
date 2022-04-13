@@ -29,10 +29,10 @@ def main():
         ]),
         NaryNode('B'),
         NaryNode('C', [
-            NaryNode('F'), [
+            NaryNode('F', [
                 NaryNode('H'),
                 NaryNode('I'),
-            ]
+            ])
         ]),
     ])
     print(root)
