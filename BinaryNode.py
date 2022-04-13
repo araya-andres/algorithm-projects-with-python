@@ -41,6 +41,8 @@ def main():
         BinaryNode("B", None, BinaryNode("E", BinaryNode("F"))),
     )
     print(root)
+    print()
+    print(root.left_child)
 
 
 if __name__ == "__main__":

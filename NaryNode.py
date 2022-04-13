@@ -58,6 +58,8 @@ def main():
         ],
     )
     print(root)
+    print()
+    print(root.children[0])
 
 
 if __name__ == "__main__":
