@@ -23,8 +23,25 @@ class NaryNode:
     def add_child(self, child_node: NaryNode):
         self.children.append(child_node)
 
+    def find_node(self, value) -> Optional[NaryNode]:
+        if value == self.value:
+            return self
+        else:
+            for child in self.children:
+                node = child.find_node(value)
+                if node:
+                    return node
+        return None
+
     def __str__(self) -> str:
         return nary_tree_as_str(self, 0)
+
+
+def find_value(root: NaryNode, value) -> None:
+    if root.find_node(value):
+        print(f"Found {value}")
+    else:
+        print(f"Value {value} not found")
 
 
 def main():
@@ -38,7 +55,8 @@ def main():
                         "D",
                         [
                             NaryNode("G"),
-                        ]),
+                        ],
+                    ),
                     NaryNode("E"),
                 ],
             ),
@@ -58,8 +76,13 @@ def main():
         ],
     )
     print(root)
-    print()
     print(root.children[0])
+    print()
+    # Find some values.
+    find_value(root, "Root")
+    find_value(root, "E")
+    find_value(root, "F")
+    find_value(root, "Q")
 
 
 if __name__ == "__main__":
