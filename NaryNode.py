@@ -33,6 +33,24 @@ class NaryNode:
                     return node
         return None
 
+    def traverse_preorder(self):
+        yield self
+        for child in self.children:
+            yield from child.traverse_preorder()
+
+    def traverse_postorder(self):
+        for child in self.children:
+            yield from child.traverse_postorder()
+        yield self
+
+    def traverse_breadth_first(self):
+        queue = [self]
+        while queue:
+            node = queue.pop(0)
+            yield node
+            queue += node.children
+
+
     def __str__(self) -> str:
         return nary_tree_as_str(self, 0)
 
@@ -83,6 +101,21 @@ def main():
     find_value(root, "E")
     find_value(root, "F")
     find_value(root, "Q")
+
+    print('Preorder:  ', end='')
+    for node in root.traverse_preorder():
+        print(f'{node.value} ', end='')
+    print()
+
+    print('Postorder:  ', end='')
+    for node in root.traverse_postorder():
+        print(f'{node.value} ', end='')
+    print()
+
+    print('Breadth-First:  ', end='')
+    for node in root.traverse_breadth_first():
+        print(f'{node.value} ', end='')
+    print()
 
 
 if __name__ == "__main__":
