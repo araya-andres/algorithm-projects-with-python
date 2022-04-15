@@ -14,19 +14,6 @@ def binary_tree_as_str(node: BinaryNode, level: int) -> str:
         return f"{indent}{node.value}:"
 
 
-def traverse_breadth_first_helper(current_level: List[BinaryNode]):
-    if len(current_level) == 0:
-        return
-    next_level = []
-    for node in current_level:
-        yield node
-        if node.left_child:
-            next_level.append(node.left_child)
-        if node.right_child:
-            next_level.append(node.right_child)
-    yield from traverse_breadth_first_helper(next_level)
-
-
 class BinaryNode:
     def __init__(
         self, value, left_child: BinaryNode = None, right_child: BinaryNode = None
@@ -79,7 +66,14 @@ class BinaryNode:
         yield self
 
     def traverse_breadth_first(self):
-        yield from traverse_breadth_first_helper([self])
+        queue = [self]
+        while queue:
+            node = queue.pop(0)
+            yield node
+            if node.left_child:
+                queue.append(node.left_child)
+            if node.right_child:
+                queue.append(node.right_child)
 
     def __str__(self) -> str:
         return binary_tree_as_str(self, 0)
