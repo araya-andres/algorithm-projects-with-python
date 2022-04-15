@@ -26,11 +26,10 @@ class NaryNode:
     def find_node(self, value) -> Optional[NaryNode]:
         if value == self.value:
             return self
-        else:
-            for child in self.children:
-                node = child.find_node(value)
-                if node:
-                    return node
+        for child in self.children:
+            node = child.find_node(value)
+            if node:
+                return node
         return None
 
     def traverse_preorder(self):
