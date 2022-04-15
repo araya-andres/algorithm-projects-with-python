@@ -104,25 +104,26 @@ def main() -> None:
     find_value(root, "Q")
     find_value(root.right_child, "F")
 
-    print('Preorder:  ', end='')
+    print("Preorder:  ", end="")
     for node in root.traverse_preorder():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
 
-    print('Inorder:  ', end='')
+    print("Inorder:  ", end="")
     for node in root.traverse_inorder():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
 
-    print('Postorder:  ', end='')
+    print("Postorder:  ", end="")
     for node in root.traverse_postorder():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
 
-    print('Breadth-First:  ', end='')
+    print("Breadth-First:  ", end="")
     for node in root.traverse_breadth_first():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
+
 
 if __name__ == "__main__":
     main()

@@ -49,7 +49,6 @@ class NaryNode:
             yield node
             queue += node.children
 
-
     def __str__(self) -> str:
         return nary_tree_as_str(self, 0)
 
@@ -101,19 +100,19 @@ def main():
     find_value(root, "F")
     find_value(root, "Q")
 
-    print('Preorder:  ', end='')
+    print("Preorder:  ", end="")
     for node in root.traverse_preorder():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
 
-    print('Postorder:  ', end='')
+    print("Postorder:  ", end="")
     for node in root.traverse_postorder():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
 
-    print('Breadth-First:  ', end='')
+    print("Breadth-First:  ", end="")
     for node in root.traverse_breadth_first():
-        print(f'{node.value} ', end='')
+        print(f"{node.value} ", end="")
     print()
 
 
