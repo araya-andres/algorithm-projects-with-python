@@ -44,15 +44,38 @@ class BinaryNode:
                 return node
         return None
 
+    def traverse_preorder(self):
+        yield self
+        if self.left_child:
+            yield from self.left_child.traverse_preorder()
+        if self.right_child:
+            yield from self.right_child.traverse_preorder()
+
+    def traverse_inorder(self):
+        pass
+
+    def traverse_postorder(self):
+        pass
+
+    def traverse_breadth_first(self):
+        pass
+
     def __str__(self) -> str:
         return binary_tree_as_str(self, 0)
 
 
-def find_value(tree: BinaryNode, value) -> None:
-    if tree.find_node(value):
+def find_value(root: BinaryNode, value) -> None:
+    if root.find_node(value):
         print(f"Found {value}")
     else:
         print(f"Value {value} not found")
+
+
+def print_preorder(root):
+    print('Preorder:  ', end='')
+    for node in root.traverse_preorder():
+        print(f'{node.value} ', end='')
+    print()
 
 
 def main() -> None:
@@ -73,6 +96,7 @@ def main() -> None:
     find_value(root, "Q")
     find_value(root.right_child, "F")
 
+    print_preorder(root)
 
 if __name__ == "__main__":
     main()
