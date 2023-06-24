@@ -75,7 +75,8 @@ class App:
         for p in self.points:
             self.draw_dot(p)
         self.point = self.pick_initial_point()
-        self.draw_dot(self.point)
+        self.last_vertex = None
+        self.restriction = 1
         self.draw_dots()
 
     def stop(self):
@@ -86,7 +87,7 @@ class App:
     def draw_dots(self):
         if not self.drawing: return
         for _ in range(100):
-            v = random.choice(self.points)
+            v = self.pick_vertice()
             self.point = multiply(.5, self.point + v)
             self.draw_dot(self.point)
         self.photoimage = ImageTk.PhotoImage(self.fractal_image)
@@ -100,5 +101,15 @@ class App:
 
     def pick_initial_point(self) -> Point:
         return Point(random.random(), random.random())
+
+    def pick_vertice(self) -> Point:
+        if self.restriction == 1:
+            while True:
+                v = random.choice(self.points)
+                if v != self.last_vertex:
+                    self.last_vertex = v
+                    return v
+        else:
+            return random.choice(self.points)
 
 App()
