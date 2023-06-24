@@ -32,6 +32,13 @@ class App:
 
         frame = tk.Frame(outer_frame)
         frame.pack(fill=tk.X, pady=(0,4))
+        label = tk.Label(frame, text='Restriction:', width=12, anchor='w')
+        label.pack(side='left')
+        self.restriction_entry = tk.Entry(frame, width=4)
+        self.restriction_entry.pack(side='left')
+        self.restriction_entry.insert(0, '0')
+
+        frame.pack(fill=tk.X, pady=(0,4))
         self.start_stop_button = tk.Button(frame, text='Start', width=8, command=self.start_stop)
         self.start_stop_button.pack(padx=(20, 0), side='top')
 
@@ -60,6 +67,7 @@ class App:
     def start(self):
         self.drawing = True
         self.start_stop_button.config(text="Stop")
+        self.restriction = int(self.restriction_entry.get())
         self.canvas.delete('all')
 
         width = self.canvas.winfo_width()
@@ -76,7 +84,6 @@ class App:
             self.draw_dot(p)
         self.point = self.pick_initial_point()
         self.last_vertex = None
-        self.restriction = 1
         self.draw_dots()
 
     def stop(self):
