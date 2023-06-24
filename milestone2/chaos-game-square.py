@@ -97,6 +97,7 @@ class App:
             v = self.pick_vertice()
             self.point = multiply(.5, self.point + v)
             self.draw_dot(self.point)
+            self.last_vertex = v
         self.photoimage = ImageTk.PhotoImage(self.fractal_image)
         self.canvas.create_image(0, 0, anchor=tk.NW, image=self.photoimage)
         self.window.after(10, self.draw_dots)
@@ -114,8 +115,13 @@ class App:
             while True:
                 v = random.choice(self.points)
                 if v != self.last_vertex:
-                    self.last_vertex = v
                     return v
+        elif self.restriction == 2:
+            l = len(self.points)
+            while True:
+                i = random.randrange(l)
+                if self.points[(l + i - 1) % l] != self.last_vertex:
+                    return self.points[i]
         else:
             return random.choice(self.points)
 
