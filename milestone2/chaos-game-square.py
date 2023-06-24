@@ -11,6 +11,9 @@ class Point:
     def __add__(self, other):
         return Point(self.x + other.x, self.y + other.y)
 
+    def __sub__(self, other):
+        return Point(self.x - other.x, self.y - other.y)
+
     def __repr__(self):
         return "Point(%f, %f)" % (self.x, self.y)
 
@@ -127,6 +130,12 @@ class App:
                 i = random.randrange(l)
                 if self.points[(l + i - 1) % l] != self.last_vertex:
                     return self.points[i]
+        elif self.restriction == 3:
+            while True:
+                v = random.choice(self.points)
+                p = multiply(.5, self.point + v) - Point(.5, .5)
+                if p.x**2 + p.y**2 > .01:
+                    return v
         elif self.restriction == 4:
             l = len(self.points)
             while True:
@@ -139,7 +148,7 @@ class App:
             while True:
                 i = random.randrange(l)
                 v = self.points[i]
-                if v != self.last_vertex and self.last_vertex_count >= 2:
+                if v != self.last_vertex and self.last_vertex_count > 1:
                     if ((self.points[(l + i - 1) % l] != self.last_vertex) and
                         (self.points[(i + 1) % l] != self.last_vertex)):
                         return v
