@@ -1,6 +1,6 @@
 FROM python:latest
 
-RUN pip install tk
+RUN pip install tk Pillow
 
 WORKDIR /usr/src/app
 
