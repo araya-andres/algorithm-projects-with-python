@@ -96,7 +96,7 @@ class App:
         h = math.sqrt(3) / 2
         while True:
             p = Point(random.random(), random.random())
-            if p.y < h and ((p.x < .5 and p.y > h * (1 - 2 * p .x)) or (p.x > .5 and p.y > h * (2 * p.x - 1))):
+            if p.y < h and ((p.x < .5 and p.y > h * (1 - 2 * p.x)) or (p.x > .5 and p.y > h * (2 * p.x - 1))):
                 return p
 
 App()
