@@ -14,6 +14,8 @@ class Point:
     def __repr__(self):
         return "Point(%f, %f)" % (self.x, self.y)
 
+def multiply(k: float, p: Point) -> Point:
+    return Point(k * p.x, k * p.y)
 
 class App:
     def __init__(self):
@@ -86,7 +88,7 @@ class App:
         self.window.after(10, self.draw_dots)
 
     def draw_dot(self, p: Point):
-        q = Point(self.scale * p.x, self.scale * p.y) + self.offset
+        q = multiply(self.scale, p) + self.offset
         self.canvas.create_oval(q.x, q.y, q.x, q.y)
         self.num_dots += 1
 
