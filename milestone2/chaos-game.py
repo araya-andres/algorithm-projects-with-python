@@ -82,6 +82,9 @@ class App:
         self.num_dots += 1
 
     def pick_initial_point(self):
-        return Point(200, 200) # FIXME
+        while True:
+            p = Point(random.randrange(400), random.randrange(400))
+            if (p.x < 200 and p.y >= -2 * p.x + 400) or (p.x > 200 and p.y >= 2 * p.x - 400):
+                return p
 
 App()
