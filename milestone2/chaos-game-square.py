@@ -35,11 +35,14 @@ class App:
 
         frame = tk.Frame(outer_frame)
         frame.pack(fill=tk.X, pady=(0,4))
+
         label = tk.Label(frame, text='Restriction:', width=12, anchor='w')
         label.pack(side='left')
-        self.restriction_entry = tk.Entry(frame, width=4)
-        self.restriction_entry.pack(side='left')
-        self.restriction_entry.insert(0, '0')
+
+        options = [str(r) for r in range(6)]
+        self.restriction_entry = tk.StringVar()
+        self.restriction_entry.set(options[1])
+        tk.OptionMenu(frame, self.restriction_entry, *options).pack(side='left')
 
         frame.pack(fill=tk.X, pady=(0,4))
         self.start_stop_button = tk.Button(frame, text='Start', width=8, command=self.start_stop)
