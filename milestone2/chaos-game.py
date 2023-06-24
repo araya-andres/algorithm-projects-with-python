@@ -83,7 +83,7 @@ class App:
         if not self.drawing: return
         for _ in range(100):
             v = random.choice(self.points)
-            self.point = Point((self.point.x + v.x) / 2, (self.point.y + v.y) / 2)
+            self.point = multiply(.5, self.point + v)
             self.draw_dot(self.point)
         self.window.after(10, self.draw_dots)
 
