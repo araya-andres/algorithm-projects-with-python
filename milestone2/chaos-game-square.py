@@ -122,6 +122,13 @@ class App:
                 i = random.randrange(l)
                 if self.points[(l + i - 1) % l] != self.last_vertex:
                     return self.points[i]
+        elif self.restriction == 4:
+            l = len(self.points)
+            while True:
+                i = random.randrange(l)
+                if (self.points[(l + i - 2) % l] != self.last_vertex and
+                    self.points[(i + 2) % l] != self.last_vertex):
+                    return self.points[i]
         else:
             return random.choice(self.points)
 
