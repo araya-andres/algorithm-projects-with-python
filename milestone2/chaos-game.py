@@ -1,6 +1,7 @@
-import tkinter as tk
 from PIL import ImageTk, Image
+import math
 import random
+import tkinter as tk
 
 class Point:
     def __init__(self, x: float = 0.0, y: float = 0.0):
@@ -8,13 +9,15 @@ class Point:
         self.y = y
 
     def __add__(self, other):
-        return Point(self.x + other.y, self.y + other.y)
+        return Point(self.x + other.x, self.y + other.y)
+
+    def __repr__(self):
+        return "Point(%f, %f)" % (self.x, self.y)
 
 
 class App:
     def __init__(self):
         self.drawing = False
-        self.points = [Point(200.0, 0.0), Point(0.0, 400.0), Point(400.0, 400.0)]
         
         # Make the tkinter window.
         self.window = tk.Tk()
@@ -57,7 +60,12 @@ class App:
         self.start_stop_button.config(text="Stop")
         self.canvas.delete('all')
 
+        self.scale = 0.9 * min(self.canvas.winfo_width(), self.canvas.winfo_height())
+        self.offset = Point((self.canvas.winfo_width() - self.scale) / 2, (self.canvas.winfo_height() - self.scale) / 2)
         self.num_dots = 0
+
+        h = math.sqrt(3) / 2
+        self.points = [Point(0.0, h), Point(0.5, 0.0), Point(1.0, h)]
         for p in self.points:
             self.draw_dot(p)
         self.point = self.pick_initial_point()
@@ -77,14 +85,16 @@ class App:
             self.draw_dot(self.point)
         self.window.after(10, self.draw_dots)
 
-    def draw_dot(self, p):
-        self.canvas.create_oval(p.x, p.y, p.x, p.y)
+    def draw_dot(self, p: Point):
+        q = Point(self.scale * p.x, self.scale * p.y) + self.offset
+        self.canvas.create_oval(q.x, q.y, q.x, q.y)
         self.num_dots += 1
 
     def pick_initial_point(self):
+        h = math.sqrt(3) / 2
         while True:
-            p = Point(random.randrange(400), random.randrange(400))
-            if (p.x < 200 and p.y >= -2 * p.x + 400) or (p.x > 200 and p.y >= 2 * p.x - 400):
+            p = Point(random.random(), random.random())
+            if p.y < h and ((p.x < .5 and p.y > h * (1 - 2 * p .x)) or (p.x > .5 and p.y > h * (2 * p.x - 1))):
                 return p
 
 App()
