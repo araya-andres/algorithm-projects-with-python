@@ -62,9 +62,14 @@ class App:
         self.start_stop_button.config(text="Stop")
         self.canvas.delete('all')
 
-        self.scale = 0.9 * min(self.canvas.winfo_width(), self.canvas.winfo_height())
-        self.offset = Point((self.canvas.winfo_width() - self.scale) / 2, (self.canvas.winfo_height() - self.scale) / 2)
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+        self.scale = 0.9 * min(height, width)
+        self.offset = Point((width - self.scale) / 2, (height - self.scale) / 2)
         self.num_dots = 0
+
+        self.fractal_image= Image.new(mode='RGB', size=(width, height))
+        self.pixels = self.fractal_image.load()
 
         h = math.sqrt(3) / 2
         self.points = [Point(0.0, h), Point(0.5, 0.0), Point(1.0, h)]
@@ -85,14 +90,16 @@ class App:
             v = random.choice(self.points)
             self.point = multiply(.5, self.point + v)
             self.draw_dot(self.point)
+        self.photoimage = ImageTk.PhotoImage(self.fractal_image)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.photoimage)
         self.window.after(10, self.draw_dots)
 
     def draw_dot(self, p: Point):
         q = multiply(self.scale, p) + self.offset
-        self.canvas.create_oval(q.x, q.y, q.x, q.y)
+        self.pixels[q.x, q.y] = (128, 255, 128)
         self.num_dots += 1
 
-    def pick_initial_point(self):
+    def pick_initial_point(self) -> Point:
         h = math.sqrt(3) / 2
         while True:
             p = Point(random.random(), random.random())
