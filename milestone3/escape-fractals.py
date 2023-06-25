@@ -288,15 +288,11 @@ class App:
     def draw_mandelbrot(self, pixels, avail_wid, avail_hgt, dx, dy):
         for ix in range(avail_wid):
             for iy in range(avail_hgt):
-                x0 = self.wxmin + ix * dx
-                y0 = self.wymin + iy * dy
-                x = 0
-                y = 0
+                c = complex(self.wxmin + ix * dx, self.wymin + iy * dy)
+                z = complex()
                 step_num = 0
-                while x*x + y*y <= 4 and step_num < self.max_iterations:
-                    xtemp = x*x - y*y + x0
-                    y = 2*x*y + y0
-                    x = xtemp
+                while z.real**2 + z.imag**2 <= 4 and step_num < self.max_iterations:
+                    z = z**2 + c
                     step_num += 1
                 self.color_pixel(pixels, ix, iy, step_num)
 
