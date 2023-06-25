@@ -286,13 +286,28 @@ class App:
             self.wxmax = self.wxmin + wid
 
     def draw_mandelbrot(self, pixels, avail_wid, avail_hgt, dx, dy):
-        pass
+        for ix in range(avail_wid):
+            for iy in range(avail_hgt):
+                x0 = self.wxmin + ix * dx
+                y0 = self.wymin + iy * dy
+                x = 0
+                y = 0
+                step_num = 0
+                while x*x + y*y <= 4 and step_num < self.max_iterations:
+                    xtemp = x*x - y*y + x0
+                    y = 2*x*y + y0
+                    x = xtemp
+                    step_num += 1
+                self.color_pixel(pixels, ix, iy, step_num)
 
     def draw_julia(self, pixels, avail_wid, avail_hgt, dx, dy):
         pass
 
     def draw_vortex(self, pixels, avail_wid, avail_hgt, dx, dy):
         pass
+
+    def color_pixel(self, pixels, ix, iy, step_num):
+        pixels[ix, iy] = (255, 0, 0) if step_num < self.max_iterations else (0, 0, 0)
 
     def kill_callback(self):
         """A callback to destroy the tkinter window."""
