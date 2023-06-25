@@ -309,7 +309,19 @@ class App:
                 self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def draw_vortex(self, pixels, avail_wid, avail_hgt, dx, dy):
-        pass
+        c = .6 - .9j
+        for ix in range(avail_wid):
+            for iy in range(avail_hgt):
+                z0 = complex(self.wxmin + ix * dx, self.wymin + iy * dy)
+                z1 = z0
+                step_num = 0
+                while step_num < self.max_iterations:
+                    z = z1**2 + c.real + c.imag * z0
+                    step_num += 1
+                    if z.real**2 + z.imag**2 > 4: break
+                    z0 = z1
+                    z1 = z
+                self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def color_pixel(self, pixels, ix, iy, z, c, step_num):
         pixels[ix, iy] = self.colors[step_num % self.num_colors] if self.smooth_type.get() == SMOOTH_NOT else self.smooth_color(z, c, step_num)
