@@ -39,8 +39,8 @@ class App:
         label = tk.Label(frame, text='Restriction:', width=12, anchor='w')
         label.pack(side='left')
 
-        options = [str(r) for r in range(6)]
-        self.restriction_entry = tk.StringVar()
+        options = [x for x in range(6)]
+        self.restriction_entry = tk.IntVar()
         self.restriction_entry.set(options[1])
         tk.OptionMenu(frame, self.restriction_entry, *options).pack(side='left')
 
@@ -73,7 +73,7 @@ class App:
     def start(self):
         self.drawing = True
         self.start_stop_button.config(text="Stop")
-        self.restriction = int(self.restriction_entry.get())
+        self.restriction = self.restriction_entry.get()
         self.canvas.delete('all')
 
         width = self.canvas.winfo_width()
