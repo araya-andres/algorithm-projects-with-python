@@ -297,7 +297,8 @@ class App:
                 self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def draw_julia(self, pixels, avail_wid, avail_hgt, dx, dy):
-        c = -.1226 + .7449j # corabbit
+        #c = -.1226 + .7449j # corabbit
+        c = .4 - .325j
         for ix in range(avail_wid):
             for iy in range(avail_hgt):
                 z = complex(self.wxmin + ix * dx, self.wymin + iy * dy)
@@ -311,7 +312,29 @@ class App:
         pass
 
     def color_pixel(self, pixels, ix, iy, z, c, step_num):
-        pixels[ix, iy] = self.colors[step_num % self.num_colors]
+        pixels[ix, iy] = self.colors[step_num % self.num_colors] if self.smooth_type.get() == SMOOTH_NOT else self.smooth_color(z, c, step_num)
+
+    def smooth_color(self, z, c, step_num):
+        if step_num == self.max_iterations: return self.colors[0]
+        for _ in range(3):
+            z = z**2 + c
+            step_num += 1
+        mu = step_num + 1 - math.log(math.log(abs(z))) / self.log_escape
+        if self.smooth_type.get() == SMOOTH_2:
+            mu *= self.num_colors / self.max_iterations
+        return self.mu_to_color(mu)
+
+    def mu_to_color(self, mu):
+        clr1 = int(mu)
+        t2 = mu - clr1
+        t1 = 1 - t2
+        clr1 = clr1 % self.num_colors
+        clr2 = (clr1 + 1) % self.num_colors
+
+        r = int(self.colors[clr1][0] * t1 + self.colors[clr2][0] * t2)
+        g = int(self.colors[clr1][1] * t1 + self.colors[clr2][1] * t2)
+        b = int(self.colors[clr1][2] * t1 + self.colors[clr2][2] * t2)
+        return (r, g, b)
 
     def kill_callback(self):
         """A callback to destroy the tkinter window."""
