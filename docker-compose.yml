@@ -2,7 +2,7 @@ version: '3'
 services:
   python3:
     build: .
-    container_name: 'python3'
+    container_name: 'python-fractals'
     stdin_open: true
     working_dir: '/usr/src/app'
     tty: true
