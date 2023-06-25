@@ -294,22 +294,24 @@ class App:
                 while z.real**2 + z.imag**2 <= 4 and step_num < self.max_iterations:
                     z = z**2 + c
                     step_num += 1
-                self.color_pixel(pixels, ix, iy, step_num)
+                self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def draw_julia(self, pixels, avail_wid, avail_hgt, dx, dy):
-        pass
+        c = -.1226 + .7449j # corabbit
+        for ix in range(avail_wid):
+            for iy in range(avail_hgt):
+                z = complex(self.wxmin + ix * dx, self.wymin + iy * dy)
+                step_num = 0
+                while z.real**2 + z.imag**2 <= 4 and step_num < self.max_iterations:
+                    z = z**2 + c
+                    step_num += 1
+                self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def draw_vortex(self, pixels, avail_wid, avail_hgt, dx, dy):
         pass
 
-    def color_pixel(self, pixels, ix, iy, step_num):
-        color = self.colors[0]
-        if step_num < self.max_iterations:
-            bucket_sz = math.ceil(self.max_iterations / (self.num_colors - 1))
-            ic = step_num // bucket_sz
-            assert(ic < len(self.colors) - 1)
-            color = self.colors[ic + 1]
-        pixels[ix, iy] = color
+    def color_pixel(self, pixels, ix, iy, z, c, step_num):
+        pixels[ix, iy] = self.colors[step_num % self.num_colors]
 
     def kill_callback(self):
         """A callback to destroy the tkinter window."""
