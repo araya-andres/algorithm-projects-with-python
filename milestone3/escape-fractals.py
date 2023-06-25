@@ -303,7 +303,13 @@ class App:
         pass
 
     def color_pixel(self, pixels, ix, iy, step_num):
-        pixels[ix, iy] = (255, 0, 0) if step_num < self.max_iterations else (0, 0, 0)
+        color = self.colors[0]
+        if step_num < self.max_iterations:
+            bucket_sz = math.ceil(self.max_iterations / (self.num_colors - 1))
+            ic = step_num // bucket_sz
+            assert(ic < len(self.colors) - 1)
+            color = self.colors[ic + 1]
+        pixels[ix, iy] = color
 
     def kill_callback(self):
         """A callback to destroy the tkinter window."""
