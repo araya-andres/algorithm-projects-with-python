@@ -307,7 +307,7 @@ class App:
                 self.color_pixel(pixels, ix, iy, z, self.c0, step_num)
 
     def draw_vortex(self, pixels, avail_wid, avail_hgt, dx, dy):
-        c = .6 - .9j
+        c = 0.62 - 0.55j
         for ix in range(avail_wid):
             for iy in range(avail_hgt):
                 z0 = complex(self.wxmin + ix * dx, self.wymin + iy * dy)
