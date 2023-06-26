@@ -297,16 +297,14 @@ class App:
                 self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def draw_julia(self, pixels, avail_wid, avail_hgt, dx, dy):
-        #c = -.1226 + .7449j # corabbit
-        c = .4 - .325j
         for ix in range(avail_wid):
             for iy in range(avail_hgt):
                 z = complex(self.wxmin + ix * dx, self.wymin + iy * dy)
                 step_num = 0
                 while z.real**2 + z.imag**2 <= 4 and step_num < self.max_iterations:
-                    z = z**2 + c
+                    z = z**2 + self.c0
                     step_num += 1
-                self.color_pixel(pixels, ix, iy, z, c, step_num)
+                self.color_pixel(pixels, ix, iy, z, self.c0, step_num)
 
     def draw_vortex(self, pixels, avail_wid, avail_hgt, dx, dy):
         c = .6 - .9j
