@@ -438,14 +438,19 @@ class App:
         self.window.bind_all("<Control-r>", self.ctrl_r_pressed)
 
     def show_current_image(self):
-        pass
+        self.current_tk_image = ImageTk.PhotoImage(self.current_pil_image)
+        self.canvas.create_image(0, 0, anchor=tk.NW, image=self.current_tk_image)
 
     # File menu.
     def ctrl_o_pressed(self, event):
         self.open()
 
     def open(self):
-        pass
+        if fname := tk.filedialog.askopenfilename():
+            self.original_pil_image = Image.open(fname)
+            self.current_pil_image = self.original_pil_image # FIXME
+            self.show_current_image()
+            self.enable_menus()
 
     def ctrl_s_pressed(self, event):
         self.save_as()
