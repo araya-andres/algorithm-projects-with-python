@@ -447,8 +447,11 @@ class App:
 
     def open(self):
         if fname := tk.filedialog.askopenfilename():
+            target_mode = "RGBA"
             self.original_pil_image = Image.open(fname)
-            self.current_pil_image = self.original_pil_image # FIXME
+            if self.original_pil_image.mode != target_mode:
+                self.original_pil_image = self.original_pil_image.convert(mode=target_mode)
+            self.current_pil_image = self.original_pil_image.copy()
             self.show_current_image()
             self.enable_menus()
 
