@@ -517,8 +517,7 @@ class App:
     def stretch(self):
         if s := simpledialog.askstring("Stretch", "Size", parent=self.window):
             try:
-                w, h = [int(x) for x in s.split(",")]
-                self.__resize(w, h)
+                self.__resize(*[int(x) for x in s.split(",")])
             except Exception as ex:
                 print(ex)
 
