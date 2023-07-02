@@ -456,9 +456,7 @@ class App:
             if self.original_pil_image.mode != MODE:
                 self.original_pil_image = self.original_pil_image.convert(mode=MODE)
             self.reset()
-            self.show_current_image()
             self.enable_menus()
-            self.image_arr = None
 
     def ctrl_s_pressed(self, event):
         self.save_as()
@@ -472,6 +470,7 @@ class App:
 
     def reset(self):
         self.current_pil_image = self.original_pil_image.copy()
+        self.show_current_image()
 
     def montage(self):
         if filenames := tk.filedialog.askopenfilenames():
@@ -496,15 +495,20 @@ class App:
                 max_height = max(max_height, img.size[1])
             y += max_height
         self.reset()
-        self.show_current_image()
         self.enable_menus()
 
     # Geometry menu.
     def rotate(self):
-        pass
+        if angle := get_integer(self.window, "Rotate", "Degrees:", "30", None, None):
+            self.current_pil_image = self.current_pil_image.rotate(angle)
+            self.show_current_image()
 
     def scale(self):
-        pass
+        if factor := get_float(self.window, "Scale", "Factor:", "1", 0.01, 100):
+            w, h = self.current_pil_image.size
+            new_sz = (int(w * factor), int(h * factor))
+            self.current_pil_image = self.current_pil_image.resize(size=new_sz)
+            self.show_current_image()
 
     def resize(self):
         pass
