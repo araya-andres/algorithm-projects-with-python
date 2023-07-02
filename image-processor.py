@@ -481,13 +481,11 @@ class App:
         # Make a montage of files, four per row.
         COLS = 4
         image_arr = [Image.open(f) for f in filenames]
-        width = max(
-            sum(w) for w in array_from_list([i.size[0] for i in image_arr], COLS)
+        sz = (
+            max(sum(w) for w in array_from_list([i.size[0] for i in image_arr], COLS)),
+            sum(max(h) for h in array_from_list([i.size[1] for i in image_arr], COLS)),
         )
-        height = sum(
-            max(h) for h in array_from_list([i.size[1] for i in image_arr], COLS)
-        )
-        self.original_pil_image = Image.new(mode="RGBA", size=(width, height))
+        self.original_pil_image = Image.new(mode="RGBA", size=sz)
         y = 0
         for row in array_from_list(image_arr, COLS):
             x = 0
