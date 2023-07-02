@@ -459,7 +459,8 @@ class App:
         self.save_as()
 
     def save_as(self):
-        pass
+        if fname := tk.filedialog.asksaveasfilename(defaultextension=".png"):
+            self.current_pil_image.save(fname)
 
     def ctrl_r_pressed(self, event):
         self.reset()
