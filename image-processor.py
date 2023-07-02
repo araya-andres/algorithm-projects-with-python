@@ -469,11 +469,13 @@ class App:
         self.current_pil_image = self.original_pil_image.copy()
 
     def montage(self):
-        pass
+        if filenames := tk.filedialog.askopenfilenames():
+            self.make_montage(filenames)
 
     def make_montage(self, filenames):
         # Make a montage of files, four per row.
-        pass
+        # TODO
+        print(filenames)
 
     # Geometry menu.
     def rotate(self):
