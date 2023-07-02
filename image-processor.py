@@ -511,7 +511,12 @@ class App:
             self.show_current_image()
 
     def resize(self):
-        pass
+        w, h = self.current_pil_image.size
+        if new_w := get_integer(self.window, "Resize", "Width:", w, 10, 1000):
+            aspect_ratio = w / h
+            new_sz = (new_w, int(new_w / aspect_ratio))
+            self.current_pil_image = self.current_pil_image.resize(size=new_sz)
+            self.show_current_image()
 
     def stretch(self):
         pass
