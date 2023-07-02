@@ -5,7 +5,7 @@ import math
 
 
 def array_from_list(lst, cols):
-    return [lst[cols*i:cols*(i+1)] for i in range(math.ceil(len(lst)/cols))]
+    return [lst[cols * i : cols * (i + 1)] for i in range(math.ceil(len(lst) / cols))]
 
 
 def get_integer(parent_window, title, prompt, default, min, max):
@@ -451,10 +451,10 @@ class App:
 
     def open(self):
         if fname := tk.filedialog.askopenfilename():
-            target_mode = "RGBA"
+            MODE = "RGBA"
             self.original_pil_image = Image.open(fname)
-            if self.original_pil_image.mode != target_mode:
-                self.original_pil_image = self.original_pil_image.convert(mode=target_mode)
+            if self.original_pil_image.mode != MODE:
+                self.original_pil_image = self.original_pil_image.convert(mode=MODE)
             self.reset()
             self.show_current_image()
             self.enable_menus()
@@ -481,15 +481,19 @@ class App:
         # Make a montage of files, four per row.
         COLS = 4
         image_arr = [Image.open(f) for f in filenames]
-        width = max([sum(w) for w in array_from_list([i.size[0] for i in image_arr], COLS)])
-        height = sum([max(h) for h in array_from_list([i.size[1] for i in image_arr], COLS)])
+        width = max(
+            sum(w) for w in array_from_list([i.size[0] for i in image_arr], COLS)
+        )
+        height = sum(
+            max(h) for h in array_from_list([i.size[1] for i in image_arr], COLS)
+        )
         self.original_pil_image = Image.new(mode="RGBA", size=(width, height))
         y = 0
         for row in array_from_list(image_arr, COLS):
             x = 0
             max_height = 0
             for img in row:
-                self.original_pil_image.paste(img, box=(x,y))
+                self.original_pil_image.paste(img, box=(x, y))
                 x += img.size[0]
                 max_height = max(max_height, img.size[1])
             y += max_height
