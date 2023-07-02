@@ -4,6 +4,10 @@ from PIL import ImageTk, Image, ImageFilter, ImageEnhance, ImageOps
 import math
 
 
+def array_from_list(lst, cols):
+    return [lst[cols*i:cols*(i+1)] for i in range(math.ceil(len(lst)/cols))]
+
+
 def get_integer(parent_window, title, prompt, default, min, max):
     # Let the user enter an integer.
     result = simpledialog.askstring(
@@ -454,6 +458,7 @@ class App:
             self.reset()
             self.show_current_image()
             self.enable_menus()
+            self.image_arr = None
 
     def ctrl_s_pressed(self, event):
         self.save_as()
@@ -474,8 +479,17 @@ class App:
 
     def make_montage(self, filenames):
         # Make a montage of files, four per row.
-        # TODO
-        print(filenames)
+        COLS = 4
+        self.image_arr = [ImageTk.PhotoImage(Image.open(f)) for f in filenames]
+        y = 0
+        for row in array_from_list(self.image_arr, COLS):
+            x = 0
+            max_height = 0
+            for img in row:
+                self.canvas.create_image(x, y, anchor=tk.NW, image=img)
+                x += img.width()
+                max_height = max(max_height, img.height())
+            y += max_height
 
     # Geometry menu.
     def rotate(self):
