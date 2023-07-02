@@ -506,20 +506,20 @@ class App:
     def scale(self):
         if factor := get_float(self.window, "Scale", "Factor:", "1", 0.01, 100):
             w, h = self.current_pil_image.size
-            new_sz = (int(w * factor), int(h * factor))
-            self.current_pil_image = self.current_pil_image.resize(size=new_sz)
-            self.show_current_image()
+            self.__resize(w * factor, h * factor)
 
     def resize(self):
         w, h = self.current_pil_image.size
         if new_w := get_integer(self.window, "Resize", "Width:", w, 10, 1000):
             aspect_ratio = w / h
-            new_sz = (new_w, int(new_w / aspect_ratio))
-            self.current_pil_image = self.current_pil_image.resize(size=new_sz)
-            self.show_current_image()
+            self.__resize(new_w, new_w / aspect_ratio)
 
     def stretch(self):
         pass
+
+    def __resize(self, w, h):
+        self.current_pil_image = self.current_pil_image.resize(size=(int(w), int(h)))
+        self.show_current_image()
 
     def spread(self):
         pass
