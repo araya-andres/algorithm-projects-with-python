@@ -480,16 +480,22 @@ class App:
     def make_montage(self, filenames):
         # Make a montage of files, four per row.
         COLS = 4
-        self.image_arr = [ImageTk.PhotoImage(Image.open(f)) for f in filenames]
+        image_arr = [Image.open(f) for f in filenames]
+        width = max([sum(w) for w in array_from_list([i.size[0] for i in image_arr], COLS)])
+        height = sum([max(h) for h in array_from_list([i.size[1] for i in image_arr], COLS)])
+        self.original_pil_image = Image.new(mode="RGBA", size=(width, height))
         y = 0
-        for row in array_from_list(self.image_arr, COLS):
+        for row in array_from_list(image_arr, COLS):
             x = 0
             max_height = 0
             for img in row:
-                self.canvas.create_image(x, y, anchor=tk.NW, image=img)
-                x += img.width()
-                max_height = max(max_height, img.height())
+                self.original_pil_image.paste(img, box=(x,y))
+                x += img.size[0]
+                max_height = max(max_height, img.size[1])
             y += max_height
+        self.reset()
+        self.show_current_image()
+        self.enable_menus()
 
     # Geometry menu.
     def rotate(self):
