@@ -451,7 +451,7 @@ class App:
             self.original_pil_image = Image.open(fname)
             if self.original_pil_image.mode != target_mode:
                 self.original_pil_image = self.original_pil_image.convert(mode=target_mode)
-            self.current_pil_image = self.original_pil_image.copy()
+            self.reset()
             self.show_current_image()
             self.enable_menus()
 
@@ -466,7 +466,7 @@ class App:
         self.reset()
 
     def reset(self):
-        pass
+        self.current_pil_image = self.original_pil_image.copy()
 
     def montage(self):
         pass
