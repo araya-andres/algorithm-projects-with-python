@@ -515,7 +515,12 @@ class App:
             self.__resize(new_w, new_w / aspect_ratio)
 
     def stretch(self):
-        pass
+        if s := simpledialog.askstring("Stretch", "Size", parent=self.window):
+            try:
+                w, h = [int(x) for x in s.split(",")]
+                self.__resize(w, h)
+            except Exception as ex:
+                print(ex)
 
     def __resize(self, w, h):
         self.current_pil_image = self.current_pil_image.resize(size=(int(w), int(h)))
