@@ -531,7 +531,17 @@ class App:
             self.show_current_image()
 
     def transpose(self):
-        pass
+        msg = "1) Flip Left/Right\n2) Flip Top/Bottom\n3) Rotate 90\n4) Rotate 180\n5) Rotate 270"
+        if idx := get_integer(self.window, "Transpose", msg, 1, 1, 5):
+            ops = (
+                Image.FLIP_LEFT_RIGHT,
+                Image.FLIP_TOP_BOTTOM,
+                Image.ROTATE_90,
+                Image.ROTATE_180,
+                Image.ROTATE_270,
+            )
+            self.current_pil_image = self.current_pil_image.transpose(ops[idx - 1])
+            self.show_current_image()
 
     def crop(self):
         pass
