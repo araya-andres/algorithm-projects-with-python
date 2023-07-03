@@ -526,7 +526,9 @@ class App:
         self.show_current_image()
 
     def spread(self):
-        pass
+        if spread_val := get_integer(self.window, "Spread", "Value:", 5, None, None):
+            self.current_pil_image = self.current_pil_image.effect_spread(spread_val)
+            self.show_current_image()
 
     def transpose(self):
         pass
