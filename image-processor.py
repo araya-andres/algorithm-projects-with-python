@@ -547,13 +547,16 @@ class App:
             self.current_pil_image = self.current_pil_image.transpose(ops[idx - 1])
             self.show_current_image()
 
-    def crop(self):
-        self.aspect_ratio = None
+    def crop(self, aspect_ratio=None):
+        self.aspect_ratio = aspect_ratio
         self.canvas.config(cursor="tcross")
         self.canvas.bind("<Button-1>", self.mouse_down)
 
     def crop_to_aspect(self):
-        pass
+        if aspect_ratio := get_float(
+            self.window, "Crop to aspect", "Aspect ratio:", "1.333", min=0.1, max=5
+        ):
+            self.crop(aspect_ratio)
 
     def mouse_down(self, event):
         self.canvas.unbind("<Button-1>")
@@ -571,8 +574,17 @@ class App:
         )
 
     def mouse_drag(self, event):
-        self.drag_x1 = clamp(event.x, 0, self.current_tk_image.width())
-        self.drag_y1 = clamp(event.y, 0, self.current_tk_image.height())
+        if self.aspect_ratio:
+            self.drag_x1, self.drag_y1 = adjust_aspect(
+                self.drag_x0,
+                self.drag_y0,
+                event.x,
+                event.y,
+                self.aspect_ratio,
+            )
+        else:
+            self.drag_x1 = clamp(event.x, 0, self.current_tk_image.width())
+            self.drag_y1 = clamp(event.y, 0, self.current_tk_image.height())
         self.canvas.coords(
             self.selection_rectangle,
             self.drag_x0,
