@@ -8,6 +8,10 @@ def array_from_list(lst, cols):
     return [lst[cols * i : cols * (i + 1)] for i in range(math.ceil(len(lst) / cols))]
 
 
+def clamp(v, lo, hi):
+    return max(lo, min(v, hi))
+
+
 def get_integer(parent_window, title, prompt, default, min, max):
     # Let the user enter an integer.
     result = simpledialog.askstring(
@@ -544,19 +548,52 @@ class App:
             self.show_current_image()
 
     def crop(self):
-        pass
+        self.aspect_ratio = None
+        self.canvas.config(cursor="tcross")
+        self.canvas.bind("<Button-1>", self.mouse_down)
 
     def crop_to_aspect(self):
         pass
 
     def mouse_down(self, event):
-        pass
+        self.canvas.unbind("<Button-1>")
+        self.canvas.bind("<B1-Motion>", self.mouse_drag)
+        self.canvas.bind("<ButtonRelease-1>", self.mouse_up)
+        self.drag_x0 = self.drag_x1 = event.x
+        self.drag_y0 = self.drag_y1 = event.y
+        self.selection_rectangle = self.canvas.create_rectangle(
+            self.drag_x0,
+            self.drag_y0,
+            self.drag_x1,
+            self.drag_y1,
+            dash=(2, 2),
+            outline="white",
+        )
 
     def mouse_drag(self, event):
-        pass
+        self.drag_x1 = clamp(event.x, 0, self.current_tk_image.width())
+        self.drag_y1 = clamp(event.y, 0, self.current_tk_image.height())
+        self.canvas.coords(
+            self.selection_rectangle,
+            self.drag_x0,
+            self.drag_y0,
+            self.drag_x1,
+            self.drag_y1,
+        )
 
     def mouse_up(self, event):
-        pass
+        self.canvas.unbind("<B1-Motion>")
+        self.canvas.unbind("<ButtonRelease-1>")
+        self.canvas.config(cursor="")
+        self.current_pil_image = self.current_pil_image.crop(
+            (
+                min(self.drag_x0, self.drag_x1),
+                min(self.drag_y0, self.drag_y1),
+                max(self.drag_x0, self.drag_x1),
+                max(self.drag_y0, self.drag_y1),
+            )
+        )
+        self.show_current_image()
 
     # Point Operations menu.
     def invert(self):
