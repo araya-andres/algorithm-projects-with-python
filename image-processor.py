@@ -656,7 +656,16 @@ class App:
         self.show_current_image()
 
     def color_tone(self):
-        pass
+        if c := colorchooser.askcolor():
+            width, height, input_pixels, result_image, result_pixels = prepare_pixels(
+                self.current_pil_image
+            )
+            for x in range(width):
+                for y in range(height):
+                    brightness = sum(input_pixels[x, y]) / (3 * 255)
+                    result_pixels[x, y] = tuple(int(brightness * x) for x in c[0])
+            self.current_pil_image = result_image
+            self.show_current_image()
 
     # Enhancements menu.
     def enhance_color(self):
