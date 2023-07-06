@@ -615,7 +615,12 @@ class App:
         self.show_current_image()
 
     def color_cutoff(self):
-        pass
+        if val := get_integer(self.window, "Color cutoff", "Value", 100, 0, 255):
+            self.current_pil_image = apply_func_to_pixels(
+                self.current_pil_image,
+                lambda px: tuple(0 if x < val else 255 for x in px),
+            )
+            self.show_current_image()
 
     def clear_red(self):
         pass
