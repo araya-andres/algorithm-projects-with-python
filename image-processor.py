@@ -638,13 +638,22 @@ class App:
         self.show_current_image()
 
     def average(self):
-        pass
+        self.current_pil_image = apply_func_to_pixels(
+            self.current_pil_image, lambda px: average_pixel(px)
+        )
+        self.show_current_image()
 
     def grayscale(self):
-        pass
+        self.current_pil_image = apply_func_to_pixels(
+            self.current_pil_image, lambda px: grayscale_pixel(px)
+        )
+        self.show_current_image()
 
     def sepia(self):
-        pass
+        self.current_pil_image = apply_func_to_pixels(
+            self.current_pil_image, lambda px: sepia_pixel(px)
+        )
+        self.show_current_image()
 
     def color_tone(self):
         pass
