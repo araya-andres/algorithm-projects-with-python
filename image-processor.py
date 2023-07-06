@@ -639,19 +639,19 @@ class App:
 
     def average(self):
         self.current_pil_image = apply_func_to_pixels(
-            self.current_pil_image, lambda px: average_pixel(px)
+            self.current_pil_image, average_pixel
         )
         self.show_current_image()
 
     def grayscale(self):
         self.current_pil_image = apply_func_to_pixels(
-            self.current_pil_image, lambda px: grayscale_pixel(px)
+            self.current_pil_image, grayscale_pixel
         )
         self.show_current_image()
 
     def sepia(self):
         self.current_pil_image = apply_func_to_pixels(
-            self.current_pil_image, lambda px: sepia_pixel(px)
+            self.current_pil_image, sepia_pixel
         )
         self.show_current_image()
 
