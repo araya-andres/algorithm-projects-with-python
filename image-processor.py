@@ -455,7 +455,7 @@ class App:
 
     def open(self):
         if fname := tk.filedialog.askopenfilename():
-            MODE = "RGBA"
+            MODE = "RGB"
             self.original_pil_image = Image.open(fname)
             if self.original_pil_image.mode != MODE:
                 self.original_pil_image = self.original_pil_image.convert(mode=MODE)
@@ -488,7 +488,7 @@ class App:
             max(sum(w) for w in array_from_list([i.size[0] for i in image_arr], COLS)),
             sum(max(h) for h in array_from_list([i.size[1] for i in image_arr], COLS)),
         )
-        self.original_pil_image = Image.new(mode="RGBA", size=sz)
+        self.original_pil_image = Image.new(mode="RGB", size=sz)
         y = 0
         for row in array_from_list(image_arr, COLS):
             x = 0
