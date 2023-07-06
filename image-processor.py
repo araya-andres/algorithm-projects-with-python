@@ -609,16 +609,13 @@ class App:
 
     # Point Operations menu.
     def invert(self):
-        self.current_pil_image = apply_func_to_pixels(
-            self.current_pil_image, lambda px: tuple(255 - x for x in px)
-        )
+        self.current_pil_image = Image.eval(self.current_pil_image, lambda x: 255 - x)
         self.show_current_image()
 
     def color_cutoff(self):
         if val := get_integer(self.window, "Color cutoff", "Value", 100, 0, 255):
-            self.current_pil_image = apply_func_to_pixels(
-                self.current_pil_image,
-                lambda px: tuple(0 if x < val else 255 for x in px),
+            self.current_pil_image = Image.eval(
+                self.current_pil_image, lambda x: 0 if x < val else 255
             )
             self.show_current_image()
 
