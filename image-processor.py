@@ -620,13 +620,22 @@ class App:
             self.show_current_image()
 
     def clear_red(self):
-        pass
+        self.current_pil_image = apply_func_to_pixels(
+            self.current_pil_image, lambda px: (0, px[1], px[2])
+        )
+        self.show_current_image()
 
     def clear_green(self):
-        pass
+        self.current_pil_image = apply_func_to_pixels(
+            self.current_pil_image, lambda px: (px[0], 0, px[2])
+        )
+        self.show_current_image()
 
     def clear_blue(self):
-        pass
+        self.current_pil_image = apply_func_to_pixels(
+            self.current_pil_image, lambda px: (px[0], px[1], 0)
+        )
+        self.show_current_image()
 
     def average(self):
         pass
