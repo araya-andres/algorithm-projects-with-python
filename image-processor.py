@@ -669,16 +669,36 @@ class App:
 
     # Enhancements menu.
     def enhance_color(self):
-        pass
+        if factor := get_float(
+            self.window, "Enhance Color", "Factor", "1.0", None, None
+        ):
+            new_img = ImageEnhance.Color(self.current_pil_image)
+            self.current_pil_image = new_img.enhance(factor)
+            self.show_current_image()
 
     def enhance_contrast(self):
-        pass
+        if factor := get_float(
+            self.window, "Enhance Contrast", "Factor", "1.0", None, None
+        ):
+            new_img = ImageEnhance.Contrast(self.current_pil_image)
+            self.current_pil_image = new_img.enhance(factor)
+            self.show_current_image()
 
     def enhance_brightness(self):
-        pass
+        if factor := get_float(
+            self.window, "Enhance Brightness", "Factor", "1.0", None, None
+        ):
+            new_img = ImageEnhance.Brightness(self.current_pil_image)
+            self.current_pil_image = new_img.enhance(factor)
+            self.show_current_image()
 
     def enhance_sharpness(self):
-        pass
+        if factor := get_float(
+            self.window, "Enhance Sharpness", "Factor", "1.0", None, None
+        ):
+            new_img = ImageEnhance.Sharpness(self.current_pil_image)
+            self.current_pil_image = new_img.enhance(factor)
+            self.show_current_image()
 
     # ImageOps menu.
     def auto_contrast(self):
