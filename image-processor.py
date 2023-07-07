@@ -12,7 +12,7 @@ def clamp(v, lo, hi):
     return max(lo, min(v, hi))
 
 
-def get_integer(parent_window, title, prompt, default, min, max):
+def get_integer(parent_window, title, prompt, default, min=None, max=None):
     # Let the user enter an integer.
     result = simpledialog.askstring(
         title, prompt, parent=parent_window, initialvalue=default
@@ -36,7 +36,7 @@ def get_integer(parent_window, title, prompt, default, min, max):
     return number
 
 
-def get_float(parent_window, title, prompt, default, min, max):
+def get_float(parent_window, title, prompt, default, min=None, max=None):
     # Let the user enter a float.
     result = simpledialog.askstring(
         title, prompt, parent=parent_window, initialvalue=default
@@ -503,7 +503,7 @@ class App:
 
     # Geometry menu.
     def rotate(self):
-        if angle := get_integer(self.window, "Rotate", "Degrees:", "30", None, None):
+        if angle := get_integer(self.window, "Rotate", "Degrees:", "30"):
             self.current_pil_image = self.current_pil_image.rotate(angle)
             self.show_current_image()
 
@@ -530,7 +530,7 @@ class App:
         self.show_current_image()
 
     def spread(self):
-        if spread_val := get_integer(self.window, "Spread", "Value:", 5, None, None):
+        if spread_val := get_integer(self.window, "Spread", "Value:", 5):
             self.current_pil_image = self.current_pil_image.effect_spread(spread_val)
             self.show_current_image()
 
@@ -669,33 +669,25 @@ class App:
 
     # Enhancements menu.
     def enhance_color(self):
-        if factor := get_float(
-            self.window, "Enhance Color", "Factor", "1.0", None, None
-        ):
+        if factor := get_float(self.window, "Enhance Color", "Factor", "1.0"):
             new_img = ImageEnhance.Color(self.current_pil_image)
             self.current_pil_image = new_img.enhance(factor)
             self.show_current_image()
 
     def enhance_contrast(self):
-        if factor := get_float(
-            self.window, "Enhance Contrast", "Factor", "1.0", None, None
-        ):
+        if factor := get_float(self.window, "Enhance Contrast", "Factor", "1.0"):
             new_img = ImageEnhance.Contrast(self.current_pil_image)
             self.current_pil_image = new_img.enhance(factor)
             self.show_current_image()
 
     def enhance_brightness(self):
-        if factor := get_float(
-            self.window, "Enhance Brightness", "Factor", "1.0", None, None
-        ):
+        if factor := get_float(self.window, "Enhance Brightness", "Factor", "1.0"):
             new_img = ImageEnhance.Brightness(self.current_pil_image)
             self.current_pil_image = new_img.enhance(factor)
             self.show_current_image()
 
     def enhance_sharpness(self):
-        if factor := get_float(
-            self.window, "Enhance Sharpness", "Factor", "1.0", None, None
-        ):
+        if factor := get_float(self.window, "Enhance Sharpness", "Factor", "1.0"):
             new_img = ImageEnhance.Sharpness(self.current_pil_image)
             self.current_pil_image = new_img.enhance(factor)
             self.show_current_image()
