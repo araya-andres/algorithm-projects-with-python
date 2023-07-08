@@ -1,0 +1,12 @@
+version: '3'
+services:
+  python3:
+    build: .
+    container_name: 'python-tk'
+    stdin_open: true
+    working_dir: '/usr/src/app'
+    tty: true
+    volumes:
+      - ${PWD}/src:/usr/src/app
+    environment:
+      - DISPLAY=${IP}:0
