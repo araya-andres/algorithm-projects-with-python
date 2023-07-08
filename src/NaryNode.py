@@ -9,9 +9,9 @@ class NaryNode:
     x_spacing = 20  # Horizontal distance between neighboring subtrees
     y_spacing = 20  # Vertical distance between parent and child subtrees
 
-    def __init__(self, value, children: List[NaryNode] = []):
+    def __init__(self, value, children: List[NaryNode] = None):
         self.value = value
-        self.children = children
+        self.children = children if children else []
 
         # Initialize drawing parameters.
         self.center = (0, 0)
@@ -51,10 +51,10 @@ class NaryNode:
             queue += node.children
 
     def __str__(self, level=0) -> str:
-        return "\n".join(
-            [f"{NaryNode.indent * level}{self.value}"]
-            + [child.__str__(level + 1) for child in self.children]
-        )
+        s = [f"{NaryNode.indent * level}{self.value}"]
+        for child in self.children:
+            s.append(child.__str__(level + 1))
+        return "\n".join(s)
 
     def arrange_subtree(self, xmin, ymin):
         """Position the node's subtree."""
