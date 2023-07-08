@@ -51,10 +51,10 @@ class NaryNode:
             queue += node.children
 
     def __str__(self, level=0) -> str:
-        s = [f"{NaryNode.indent * level}{self.value}"]
+        s = f"{NaryNode.indent * level}{self.value}:"
         for child in self.children:
-            s.append(child.__str__(level + 1))
-        return "\n".join(s)
+            s += f"\n{child.__str__(level + 1)}"
+        return s
 
     def arrange_subtree(self, xmin, ymin):
         """Position the node's subtree."""

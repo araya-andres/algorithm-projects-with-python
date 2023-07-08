@@ -77,12 +77,12 @@ class BinaryNode:
                 queue.append(node.right_child)
 
     def __str__(self, level=0) -> str:
-        s = [f"{BinaryNode.indent * level}{self.value}:"]
+        s = f"{BinaryNode.indent * level}{self.value}:"
         if self.left_child:
-            s.append(self.left_child.__str__(level + 1))
+            s += f"\n{self.left_child.__str__(level + 1)}"
         if self.right_child:
-            s.append(self.right_child.__str__(level + 1))
-        return "\n".join(s)
+            s += f"\n{self.right_child.__str__(level + 1)}"
+        return s
 
     def arrange_subtree(self, xmin, ymin):
         """Position the node's subtree."""
