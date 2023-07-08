@@ -694,10 +694,13 @@ class App:
 
     # ImageOps menu.
     def auto_contrast(self):
-        pass
+        if cutoff := get_integer(self.window, "Auto Contrast", "Cutoff", "1", 0, 49):
+            self.current_pil_image = ImageOps.autocontrast(self.current_pil_image, cutoff)
+            self.show_current_image()
 
     def equalize(self):
-        pass
+        self.current_pil_image = ImageOps.equalize(self.current_pil_image)
+        self.show_current_image()
 
     # Filters menu.
     def box_blur(self):
