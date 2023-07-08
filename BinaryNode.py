@@ -1,5 +1,5 @@
 class BinaryNode:
-    def __init__(self, value, left_child = None, right_child = None):
+    def __init__(self, value, left_child=None, right_child=None):
         self.value = value
         self.left_child = left_child
         self.right_child = right_child
@@ -13,18 +13,29 @@ class BinaryNode:
     def __str__(self):
         left_value = self.left_child.value if self.left_child else None
         right_value = self.right_child.value if self.right_child else None
-        return f'{self.value}: {left_value} {right_value}'
+        return f"{self.value}: {left_value} {right_value}"
 
 
 def main():
-    root = BinaryNode('Root',
-        BinaryNode('A', BinaryNode('C'), BinaryNode('D')),
-        BinaryNode('B', None, BinaryNode('E', BinaryNode('F')))
-    )
+    a = BinaryNode("A")
+    b = BinaryNode("B")
+    c = BinaryNode("C")
+    d = BinaryNode("D")
+    e = BinaryNode("E")
+    f = BinaryNode("F")
+    root = BinaryNode("Root", a, b)
+    a.add_left(c)
+    a.add_right(d)
+    b.add_right(e)
+    e.add_left(f)
     print(root)
-    print(root.left_child)
-    print(root.right_child)
+    print(a)
+    print(b)
+    print(c)
+    print(d)
+    print(e)
+    print(f)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
