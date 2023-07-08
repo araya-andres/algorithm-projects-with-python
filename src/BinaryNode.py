@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Optional
+import tkinter as tk
 
 
 def binary_tree_as_str(node: BinaryNode, level: int) -> str:
@@ -76,6 +77,68 @@ class BinaryNode:
     def __str__(self) -> str:
         return binary_tree_as_str(self, 0)
 
+    def arrange_subtree(self, xmin, ymin):
+        """Position the node's subtree."""
+        # Calculate cy, the Y coordinate for this node.
+        # This doesn't depend on the children.
+        # ...
+
+        # If the node has no children, just place it here and return.
+        # ...
+
+        # Set child_xmin and child_ymin to the
+        # start position for child subtrees.
+        # ...
+
+        # Position the child subtrees.
+        # ...
+
+        if self.right_child != None:
+            # Arrange the right child subtree.
+            # ...
+            pass
+
+        # Arrange this node depending on the number of children.
+        if (self.left_child != None) and (self.right_child != None):
+            # Two children. Center this node over the child nodes.
+            # Use the child subtree bounds to set our subtree bounds.
+            # ...
+            pass
+        elif self.left_child != None:
+            # We have only a left child.
+            # ...
+            pass
+        else:
+            # We have only a right child.
+            # ...
+            pass
+
+    def draw_subtree_links(self, canvas):
+        """Draw the subtree's links."""
+        # ...
+
+        # Outline the subtree for debugging.
+        # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
+
+    def draw_subtree_nodes(self, canvas):
+        """Draw the subtree's nodes."""
+        # Draw the node.
+        # ...
+
+        # Draw the descendants' nodes.
+        # ...
+        pass
+
+    def arrange_and_draw_subtree(self, canvas, xmin, ymin):
+        # Position the tree.
+        self.arrange_subtree(xmin, ymin)
+
+        # Draw the links.
+        self.draw_subtree_links(canvas)
+
+        # Draw the nodes.
+        self.draw_subtree_nodes(canvas)
+
 
 def find_value(root: BinaryNode, value) -> None:
     if root.find_node(value):
@@ -84,44 +147,48 @@ def find_value(root: BinaryNode, value) -> None:
         print(f"Value {value} not found")
 
 
-def main() -> None:
-    root = BinaryNode(
-        "Root",
-        BinaryNode("A", BinaryNode("C"), BinaryNode("D")),
-        BinaryNode("B", None, BinaryNode("E", BinaryNode("F"))),
-    )
+a = BinaryNode("A")
+b = BinaryNode("B")
+c = BinaryNode("C")
+d = BinaryNode("D")
+e = BinaryNode("E")
+f = BinaryNode("F")
+g = BinaryNode("G")
+h = BinaryNode("H")
+i = BinaryNode("I")
+j = BinaryNode("J")
+k = BinaryNode("K")
+l = BinaryNode("L")
 
-    print(root)
-    print(root.left_child)
-
-    print()
-
-    find_value(root, "Root")
-    find_value(root, "E")
-    find_value(root, "F")
-    find_value(root, "Q")
-    find_value(root.right_child, "F")
-
-    print("Preorder:  ", end="")
-    for node in root.traverse_preorder():
-        print(f"{node.value} ", end="")
-    print()
-
-    print("Inorder:  ", end="")
-    for node in root.traverse_inorder():
-        print(f"{node.value} ", end="")
-    print()
-
-    print("Postorder:  ", end="")
-    for node in root.traverse_postorder():
-        print(f"{node.value} ", end="")
-    print()
-
-    print("Breadth-First:  ", end="")
-    for node in root.traverse_breadth_first():
-        print(f"{node.value} ", end="")
-    print()
+a.add_left(b)
+a.add_right(c)
+b.add_left(d)
+b.add_right(e)
+c.add_left(f)
+c.add_right(g)
+e.add_left(h)
+e.add_right(i)
+g.add_left(j)
+j.add_left(k)
+j.add_right(l)
 
 
-if __name__ == "__main__":
-    main()
+def kill_callback():
+    """A callback to destroy the tkinter window."""
+    window.destroy()
+
+
+# Make the tkinter window.
+window = tk.Tk()
+window.title("binary_node5")
+window.protocol("WM_DELETE_WINDOW", kill_callback)
+window.geometry("260x220")
+
+canvas = tk.Canvas(window, bg="white", borderwidth=2, relief=tk.SUNKEN)
+canvas.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
+
+# Draw the tree.
+a.arrange_and_draw_subtree(canvas, 10, 10)
+
+window.focus_force()
+window.mainloop()
