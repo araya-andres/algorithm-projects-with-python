@@ -729,19 +729,50 @@ class App:
             self.show_current_image()
 
     def rank_filter(self):
-        pass
+        if s := simpledialog.askstring("Rank Filter", "Size,Rank", parent=self.window):
+            size, rank = [int(x) for x in s.split(",")]
+            if size % 2 == 0:
+                print("Size must be odd")
+                return
+            filter = ImageFilter.RankFilter(size, rank)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def median_filter(self):
-        pass
+        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
+            if size % 2 == 0:
+                print("size must be odd")
+                return
+            filter = ImageFilter.MedianFilter(size)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def min_filter(self):
-        pass
+        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
+            if size % 2 == 0:
+                print("size must be odd")
+                return
+            filter = ImageFilter.MinFilter(size)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def max_filter(self):
-        pass
+        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
+            if size % 2 == 0:
+                print("size must be odd")
+                return
+            filter = ImageFilter.MaxFilter(size)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def mode_filter(self):
-        pass
+        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
+            if size % 2 == 0:
+                print("size must be odd")
+                return
+            filter = ImageFilter.ModeFilter(size)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     # Custom Kernels menu.
     def user_entered_kernel(self):
