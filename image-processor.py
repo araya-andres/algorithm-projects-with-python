@@ -842,13 +842,19 @@ class App:
             "Mandelbrot", "Size,Quality", parent=self.window
         ):
             size, quality = (int(x) for x in s.split(","))
+            extent = (-2.0, -1.35, 0.7, 1.35)
             self.current_pil_image = Image.effect_mandelbrot(
-                size=(size, size), extent=(-2.0, -1.35, 0.7, 1.35), quality=quality
+                (size, size), extent, quality
             )
             self.show_current_image()
 
     def noise(self):
-        pass
+        if s := simpledialog.askstring("Noise", "Size,Sigma", parent=self.window):
+            values = s.split(",")
+            size = int(values[0])
+            sigma = float(values[1])
+            self.current_pil_image = Image.effect_noise((size, size), sigma)
+            self.show_current_image()
 
     def linear_gradient(self):
         pass
