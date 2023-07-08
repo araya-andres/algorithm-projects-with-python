@@ -739,39 +739,23 @@ class App:
             self.show_current_image()
 
     def median_filter(self):
-        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
-            if size % 2 == 0:
-                print("size must be odd")
-                return
-            filter = ImageFilter.MedianFilter(size)
-            self.current_pil_image = self.current_pil_image.filter(filter)
-            self.show_current_image()
+        self.__filter_helper("Median Filter", ImageFilter.MedianFilter)
 
     def min_filter(self):
-        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
-            if size % 2 == 0:
-                print("size must be odd")
-                return
-            filter = ImageFilter.MinFilter(size)
-            self.current_pil_image = self.current_pil_image.filter(filter)
-            self.show_current_image()
+        self.__filter_helper("Median Filter", ImageFilter.MinFilter)
 
     def max_filter(self):
-        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
-            if size % 2 == 0:
-                print("size must be odd")
-                return
-            filter = ImageFilter.MaxFilter(size)
-            self.current_pil_image = self.current_pil_image.filter(filter)
-            self.show_current_image()
+        self.__filter_helper("Max Filter", ImageFilter.MaxFilter)
 
     def mode_filter(self):
-        if size := get_integer(self.window, "Median Filter", "Size", "3", 3):
+        self.__filter_helper("Mode Filter", ImageFilter.ModeFilter)
+
+    def __filter_helper(self, window_title: str, filter):
+        if size := get_integer(self.window, window_title, "Size", "3", 3):
             if size % 2 == 0:
                 print("size must be odd")
                 return
-            filter = ImageFilter.ModeFilter(size)
-            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.current_pil_image = self.current_pil_image.filter(filter(size))
             self.show_current_image()
 
     # Custom Kernels menu.
