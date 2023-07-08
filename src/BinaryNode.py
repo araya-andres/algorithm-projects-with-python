@@ -3,19 +3,8 @@ from typing import Optional
 import tkinter as tk
 
 
-def binary_tree_as_str(node: BinaryNode, level: int) -> str:
-    indent = "  " * level
-    if node is None:
-        return f"{indent}{node}"
-    elif node.has_children():
-        left_child = binary_tree_as_str(node.left_child, level + 1)
-        right_child = binary_tree_as_str(node.right_child, level + 1)
-        return f"{indent}{node.value}:\n{left_child}\n{right_child}"
-    else:
-        return f"{indent}{node.value}:"
-
-
 class BinaryNode:
+    indent = "  "
     radius = 10  # Radius of a node’s circle
     x_spacing = 20  # Horizontal distance between neighboring subtrees
     y_spacing = 20  # Vertical distance between parent and child subtrees
@@ -87,8 +76,13 @@ class BinaryNode:
             if node.right_child:
                 queue.append(node.right_child)
 
-    def __str__(self) -> str:
-        return binary_tree_as_str(self, 0)
+    def __str__(self, level=0) -> str:
+        s = [f"{BinaryNode.indent * level}{self.value}:"]
+        if self.left_child:
+            s.append(self.left_child.__str__(level + 1))
+        if self.right_child:
+            s.append(self.right_child.__str__(level + 1))
+        return "\n".join(s)
 
     def arrange_subtree(self, xmin, ymin):
         """Position the node's subtree."""
@@ -184,6 +178,8 @@ e.add_right(i)
 g.add_left(j)
 j.add_left(k)
 j.add_right(l)
+
+print(a)
 
 
 def kill_callback():
