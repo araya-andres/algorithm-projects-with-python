@@ -3,20 +3,8 @@ from typing import List
 import tkinter as tk
 
 
-def nary_tree_as_str(node: NaryNode, level: int) -> str:
-    indent = "  " * level
-    if node is None:
-        return f"{indent}{node}"
-    elif len(node.children) > 0:
-        children = "\n".join(
-            nary_tree_as_str(child, level + 1) for child in node.children
-        )
-        return f"{indent}{node.value}:\n{children}"
-    else:
-        return f"{indent}{node.value}:"
-
-
 class NaryNode:
+    indent = "  "
     radius = 10  # Radius of a node’s circle
     x_spacing = 20  # Horizontal distance between neighboring subtrees
     y_spacing = 20  # Vertical distance between parent and child subtrees
@@ -62,8 +50,11 @@ class NaryNode:
             yield node
             queue += node.children
 
-    def __str__(self) -> str:
-        return nary_tree_as_str(self, 0)
+    def __str__(self, level=0) -> str:
+        return "\n".join(
+            [f"{NaryNode.indent * level}{self.value}"]
+            + [child.__str__(level + 1) for child in self.children]
+        )
 
     def arrange_subtree(self, xmin, ymin):
         """Position the node's subtree."""
@@ -173,6 +164,8 @@ e.add_child(h)
 g.add_child(i)
 g.add_child(j)
 g.add_child(k)
+
+print(a)
 
 
 def kill_callback():
