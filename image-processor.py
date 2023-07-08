@@ -169,7 +169,7 @@ class KernelDialog:
             kernel = kernel.replace(";", ",")
             kernel = kernel.split(",")
             kernel = list(filter(None, kernel))
-            kernel = list(map(float, kernel))
+            kernel = list(map(int, kernel))
             width = int(math.sqrt(len(kernel)))
             if ((width != 3) and (width != 5)) or (width * width != len(kernel)):
                 messagebox.showinfo(
@@ -760,7 +760,12 @@ class App:
 
     # Custom Kernels menu.
     def user_entered_kernel(self):
-        pass
+        KernelDialog(
+            self,
+            default_kernel="1, 1, 1\n1, 1, 1\n1, 1, 1",
+            default_scale=9,
+            default_offset=0,
+        )
 
     def emboss_kernel(self):
         pass
@@ -787,12 +792,9 @@ class App:
         pass
 
     def apply_kernel(self, size, kernel, scale, offset):
-        # print('apply_kernel')
-        # print(f'  size:{size}')
-        # print(f'  kernel:{kernel}')
-        # print(f'  scale:{scale}')
-        # print(f'  offset:{offset}')
-        pass
+        filter = ImageFilter.Kernel(size, kernel, scale, offset)
+        self.current_pil_image = self.current_pil_image.filter(filter)
+        self.show_current_image()
 
     # Special menu.
     def mandelbrot(self):
