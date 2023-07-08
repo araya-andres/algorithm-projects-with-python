@@ -7,28 +7,40 @@ class NaryNode:
         self.children.append(child_node)
 
     def __str__(self):
-        children = ' '.join(child.value for child in self.children)
-        return f'{self.value}: {children}'
+        children = " ".join(child.value for child in self.children)
+        return f"{self.value}: {children}"
 
 
 def main():
-    root = NaryNode('Root', [
-        NaryNode('A', [
-            NaryNode('D'),
-            NaryNode('E'),
-        ]),
-        NaryNode('B'),
-        NaryNode('C', [
-            NaryNode('F', [
-                NaryNode('H'),
-                NaryNode('I'),
-            ])
-        ]),
-    ])
+    root = NaryNode(
+        "Root",
+        [
+            NaryNode(
+                "A",
+                [
+                    NaryNode("D"),
+                    NaryNode("E"),
+                ],
+            ),
+            NaryNode("B"),
+            NaryNode(
+                "C",
+                [
+                    NaryNode(
+                        "F",
+                        [
+                            NaryNode("H"),
+                            NaryNode("I"),
+                        ],
+                    )
+                ],
+            ),
+        ],
+    )
     print(root)
     print(root.children[0])
     print(root.children[1])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
