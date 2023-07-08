@@ -838,7 +838,14 @@ class App:
 
     # Special menu.
     def mandelbrot(self):
-        pass
+        if s := simpledialog.askstring(
+            "Mandelbrot", "Size,Quality", parent=self.window
+        ):
+            size, quality = (int(x) for x in s.split(","))
+            self.current_pil_image = Image.effect_mandelbrot(
+                size=(size, size), extent=(-2.0, -1.35, 0.7, 1.35), quality=quality
+            )
+            self.show_current_image()
 
     def noise(self):
         pass
