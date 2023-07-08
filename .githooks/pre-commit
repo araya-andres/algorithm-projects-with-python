@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd `git rev-parse --show-toplevel`
+for file in `git diff --name-only --cached`; do
+    if [[ $file =~ py$ ]]; then
+        black $file
+    fi
+    git add $file
+done
+cd -
