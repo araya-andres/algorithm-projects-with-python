@@ -27,8 +27,7 @@ class NaryNode:
         if value == self.value:
             return self
         for child in self.children:
-            node = child.find_node(value)
-            if node:
+            if node := child.find_node(value):
                 return node
         return None
 

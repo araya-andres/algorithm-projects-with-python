@@ -35,12 +35,10 @@ class BinaryNode:
         if self.value == value:
             return self
         if self.left_child:
-            node = self.left_child.find_node(value)
-            if node:
+            if node := self.left_child.find_node(value):
                 return node
         if self.right_child:
-            node = self.right_child.find_node(value)
-            if node:
+            if node := self.right_child.find_node(value):
                 return node
         return None
 
