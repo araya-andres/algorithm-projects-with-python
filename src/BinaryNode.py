@@ -16,12 +16,25 @@ def binary_tree_as_str(node: BinaryNode, level: int) -> str:
 
 
 class BinaryNode:
+    radius = 10  # Radius of a node’s circle
+    x_spacing = 20  # Horizontal distance between neighboring subtrees
+    y_spacing = 20  # Vertical distance between parent and child subtrees
+
     def __init__(
         self, value, left_child: BinaryNode = None, right_child: BinaryNode = None
     ):
         self.value = value
         self.left_child = left_child
         self.right_child = right_child
+
+        # Initialize drawing parameters.
+        self.center = (0, 0)
+        self.subtree_bounds = (
+            -BinaryNode.radius,
+            -BinaryNode.radius,
+            BinaryNode.radius,
+            BinaryNode.radius,
+        )
 
     def add_left(self, left: BinaryNode):
         self.left_child = left

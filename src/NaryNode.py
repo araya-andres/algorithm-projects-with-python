@@ -17,11 +17,22 @@ def nary_tree_as_str(node: NaryNode, level: int) -> str:
 
 
 class NaryNode:
-    node_radius = 8  # FIXME
+    radius = 10  # Radius of a node’s circle
+    x_spacing = 20  # Horizontal distance between neighboring subtrees
+    y_spacing = 20  # Vertical distance between parent and child subtrees
 
     def __init__(self, value, children: List[NaryNode] = []):
         self.value = value
         self.children = children
+
+        # Initialize drawing parameters.
+        self.center = (0, 0)
+        self.subtree_bounds = (
+            -NaryNode.radius,
+            -NaryNode.radius,
+            NaryNode.radius,
+            NaryNode.radius,
+        )
 
     def add_child(self, child_node: NaryNode):
         self.children.append(child_node)
@@ -70,7 +81,7 @@ class NaryNode:
         # ...
 
         # Set ymax equal to the largest Y position used.
-        ymax = ymin + 2 * NaryNode.node_radius
+        ymax = ymin + 2 * NaryNode.radius
 
         # Position the child subtrees.
         for child in self.children:
