@@ -857,13 +857,19 @@ class App:
             self.show_current_image()
 
     def linear_gradient(self):
-        pass
+        self.current_pil_image = Image.linear_gradient("P").convert("RGB")
+        self.show_current_image()
 
     def radial_gradient(self):
-        pass
+        self.current_pil_image = Image.radial_gradient("P").convert("RGB")
+        self.show_current_image()
 
     def quantize(self):
-        pass
+        if value := get_integer(self.window, "Quantize", "Number of colors", "16"):
+            self.current_pil_image = self.current_pil_image.quantize(
+                colors=value
+            ).convert("RGB")
+            self.show_current_image()
 
 
 App()
