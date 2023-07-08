@@ -695,7 +695,9 @@ class App:
     # ImageOps menu.
     def auto_contrast(self):
         if cutoff := get_integer(self.window, "Auto Contrast", "Cutoff", "1", 0, 49):
-            self.current_pil_image = ImageOps.autocontrast(self.current_pil_image, cutoff)
+            self.current_pil_image = ImageOps.autocontrast(
+                self.current_pil_image, cutoff
+            )
             self.show_current_image()
 
     def equalize(self):
@@ -704,13 +706,25 @@ class App:
 
     # Filters menu.
     def box_blur(self):
-        pass
+        if r := get_integer(self.window, "Box Blur", "Radius", "3", 0):
+            filter = ImageFilter.BoxBlur(r)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def gaussian_blur(self):
-        pass
+        if r := get_integer(self.window, "Gaussian Blur", "Radius", "3", 0):
+            filter = ImageFilter.GaussianBlur(r)
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def unsharp_mask(self):
-        pass
+        if s := simpledialog.askstring(
+            "Unsharp Mask", "Radius,Percent,Threshold", parent=self.window
+        ):
+            radius, percent, threshold = s.split(",")
+            filter = ImageFilter.UnsharpMask(float(radius), int(percent), int())
+            self.current_pil_image = self.current_pil_image.filter(filter)
+            self.show_current_image()
 
     def rank_filter(self):
         pass
