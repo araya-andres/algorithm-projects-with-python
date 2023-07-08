@@ -768,28 +768,53 @@ class App:
         )
 
     def emboss_kernel(self):
-        pass
+        self.apply_kernel(
+            size=(3, 3), kernel=[-1, 0, 0, 0, 0, 0, 0, 0, -1], scale=1, offset=127
+        )
 
     def emboss_kernel2(self):
-        pass
+        self.apply_kernel(
+            size=(3, 3), kernel=[2, 0, 0, 0, -1, 0, 0, 0, -1], scale=1, offset=127
+        )
 
     def gaussian_5x5(self):
-        pass
+        self.apply_kernel(
+            size=(5, 5),
+            # fmt: off
+            kernel=[
+                1, 4, 7, 4, 1,
+                4, 16, 26, 16, 4,
+                7, 26, 41, 26, 7,
+                4, 16, 26, 16, 4,
+                1, 4, 7, 4, 1,
+            ],
+            # fmt: on
+            scale=273,
+            offset=0,
+        )
 
     def box_blur_5x5(self):
-        pass
+        self.apply_kernel(size=(5, 5), kernel=[1] * 25, scale=25, offset=0)
 
     def edge_detection_ul_to_lr(self):
-        pass
+        self.apply_kernel(
+            size=(3, 3), kernel=[-5, 0, 0, 0, 0, 0, 0, 0, 5], scale=1, offset=0
+        )
 
     def edge_detection_t_to_b(self):
-        pass
+        self.apply_kernel(
+            size=(3, 3), kernel=[-1, -1, -1, 0, 0, 0, 1, 1, 1], scale=1, offset=0
+        )
 
     def edge_detection_l_to_r(self):
-        pass
+        self.apply_kernel(
+            size=(3, 3), kernel=[-1, 0, 1, -1, 0, 1, -1, 0, 1], scale=1, offset=0
+        )
 
     def high_pass_3x3(self):
-        pass
+        self.apply_kernel(
+            size=(3, 3), kernel=[-1, 2, -1, -2, 12, -2, -1, 2, -1], scale=16, offset=127
+        )
 
     def apply_kernel(self, size, kernel, scale, offset):
         filter = ImageFilter.Kernel(size, kernel, scale, offset)
