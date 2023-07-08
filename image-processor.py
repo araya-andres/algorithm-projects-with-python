@@ -722,7 +722,9 @@ class App:
             "Unsharp Mask", "Radius,Percent,Threshold", parent=self.window
         ):
             radius, percent, threshold = s.split(",")
-            filter = ImageFilter.UnsharpMask(float(radius), int(percent), int())
+            filter = ImageFilter.UnsharpMask(
+                float(radius), int(percent), int(threshold)
+            )
             self.current_pil_image = self.current_pil_image.filter(filter)
             self.show_current_image()
 
