@@ -73,20 +73,25 @@ class NaryNode:
         return self.subtree_bounds
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
-        """Draw the subtree's links."""
-        # If we have exactly one child, just draw to it.
         if len(self.children) == 1:
-            # ...
-            pass
-
-        # Else if we have more than one child,
-        # draw vertical and horizontal branches.
-        elif len(self.children) > 0:
-            # ...
-            pass
-
-        # Recursively draw child subtree links.
-        # ...
+            x0, y0 = self.center
+            x1, y1 = self.children[0].center
+            canvas.create_line(x0, y0, x1, y1)
+            self.children[0].draw_subtree_links(canvas)
+        elif len(self.children) > 1:
+            # Horizonal line
+            cx, cy = self.center
+            x0, y0 = self.children[0].center
+            x1, y1 = self.children[-1].center
+            yh = (cy + y0) / 2
+            canvas.create_line(x0, yh, x1, yh)
+            # Center -> Horizontal line
+            canvas.create_line(cx, cy, cx, yh)
+            for child in self.children:
+                cx, cy = child.center
+                # Horizontal line -> Child
+                canvas.create_line(cx, yh, cx, cy)
+                child.draw_subtree_links(canvas)
 
     def draw_subtree_nodes(self, canvas: tk.Canvas) -> None:
         cx, cy = self.center
