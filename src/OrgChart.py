@@ -69,15 +69,15 @@ class NaryNode:
                 cy + NaryNode.box_half_height,
             )
         elif self.is_twig():
-            child_x = xmin + NaryNode.x_spacing
+            child_x = xmin + 2 * NaryNode.x_spacing
             child_y = cy + NaryNode.box_half_height + NaryNode.y_spacing
             for i, child in enumerate(self.children):
                 if i > 0:
                     child_y += NaryNode.y_spacing
                 child.arrange_subtree(child_x, child_y)
                 child_y += 2 * NaryNode.box_half_height
-            width = child_x + 2 * NaryNode.box_half_width - xmin
-            self.center = (xmin + width / 2, cy)
+            width = 2 * (NaryNode.box_half_width + NaryNode.x_spacing)
+            self.center = (xmin + NaryNode.box_half_width, cy)
             self.subtree_bounds = (xmin, ymin, xmin + width, child_y)
         else:
             child_height = 0
