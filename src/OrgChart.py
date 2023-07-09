@@ -69,10 +69,6 @@ class NaryNode:
                 cx + NaryNode.box_half_width,
                 cy + NaryNode.box_half_height,
             )
-        elif len(self.children) == 1:
-            _, _, x1, y1 = self.children[0].arrange_subtree(xmin, child_y)
-            self.center = (cx, cy)
-            self.subtree_bounds = (xmin, ymin, x1, y1)
         elif self.is_twig():
             child_x = xmin + 2 * NaryNode.x_spacing
             for i, child in enumerate(self.children):
@@ -97,10 +93,7 @@ class NaryNode:
         return self.subtree_bounds
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
-        if len(self.children) == 1:
-            canvas.create_line(*self.center, *self.children[0].center)
-            self.children[0].draw_subtree_links(canvas)
-        elif self.is_twig():
+        if self.is_twig():
             xv, y0, _, y1 = self.subtree_bounds
             xv += NaryNode.x_spacing
             canvas.create_line(xv, y0, xv, y1 - NaryNode.box_half_height)
