@@ -10,7 +10,10 @@ class BinaryNode:
     y_spacing = 20  # Vertical distance between parent and child subtrees
 
     def __init__(
-        self, value, left_child: BinaryNode = None, right_child: BinaryNode = None
+        self,
+        value,
+        left_child: Optional[BinaryNode] = None,
+        right_child: Optional[BinaryNode] = None,
     ):
         self.value = value
         self.left_child = left_child
