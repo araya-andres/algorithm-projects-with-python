@@ -126,8 +126,22 @@ class BinaryNode:
             self.subtree_bounds = (x0, ymin, x1, child_ymin + y1 - y0)
 
     def draw_subtree_links(self, canvas: tk.Canvas):
-        """Draw the subtree's links."""
-        # ...
+        if self.left_child:
+            canvas.create_line(
+                self.center[0],
+                self.center[1],
+                self.left_child.center[0],
+                self.left_child.center[1],
+            )
+            self.left_child.draw_subtree_links(canvas)
+        if self.right_child:
+            canvas.create_line(
+                self.center[0],
+                self.center[1],
+                self.right_child.center[0],
+                self.right_child.center[1],
+            )
+            self.right_child.draw_subtree_links(canvas)
 
         # Outline the subtree for debugging.
         # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
@@ -139,6 +153,7 @@ class BinaryNode:
             cy - BinaryNode.radius,
             cx + BinaryNode.radius,
             cy + BinaryNode.radius,
+            fill="white",
         )
         canvas.create_text(cx, cy, text=str(self.value))
 
