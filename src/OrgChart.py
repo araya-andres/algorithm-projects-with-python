@@ -58,6 +58,7 @@ class NaryNode:
         self, xmin: float, ymin: float
     ) -> Tuple[float, float, float, float]:
         cy = NaryNode.box_half_height + ymin
+        child_y = cy + NaryNode.box_half_height + NaryNode.y_spacing
 
         if self.is_leaf():
             cx = NaryNode.box_half_width + xmin
@@ -69,14 +70,11 @@ class NaryNode:
                 cy + NaryNode.box_half_height,
             )
         elif len(self.children) == 1:
-            _, _, x1, y1 = self.children[0].arrange_subtree(
-                xmin, cy + NaryNode.box_half_height + NaryNode.y_spacing
-            )
+            _, _, x1, y1 = self.children[0].arrange_subtree(xmin, child_y)
             self.center = (xmin + NaryNode.box_half_width, cy)
             self.subtree_bounds = (xmin, ymin, x1, y1)
         elif self.is_twig():
             child_x = xmin + 2 * NaryNode.x_spacing
-            child_y = cy + NaryNode.box_half_height + NaryNode.y_spacing
             for i, child in enumerate(self.children):
                 if i > 0:
                     child_y += NaryNode.y_spacing
@@ -87,16 +85,15 @@ class NaryNode:
             self.subtree_bounds = (xmin, ymin, xmin + width, child_y)
         else:
             child_height = 0
-            child_ymin = cy + NaryNode.box_half_height + NaryNode.y_spacing
             width = 0
             for i, child in enumerate(self.children):
                 if i > 0:
                     width += NaryNode.x_spacing
-                _, y0, x1, y1 = child.arrange_subtree(xmin + width, child_ymin)
+                _, y0, x1, y1 = child.arrange_subtree(xmin + width, child_y)
                 child_height = max(child_height, y1 - y0)
                 width = x1 - xmin
             self.center = (xmin + width / 2, cy)
-            self.subtree_bounds = (xmin, ymin, xmin + width, child_ymin + child_height)
+            self.subtree_bounds = (xmin, ymin, xmin + width, child_y + child_height)
 
         return self.subtree_bounds
 
@@ -204,7 +201,7 @@ a = NaryNode(
                 NaryNode(
                     "Legal",
                     [
-                        NaryNode("Compliance", [NaryNode("Foo")]),
+                        NaryNode("Compliance"),
                         NaryNode("Progress\nPrevention"),
                         NaryNode("Bail\nServices"),
                     ],
