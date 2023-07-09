@@ -150,20 +150,61 @@ def find_value(root: NaryNode, value) -> None:
         print(f"Value {value} not found")
 
 
-a = NaryNode("Generi Gloop")
-b = NaryNode("R&D")
-c = NaryNode("Sales")
-d = NaryNode("Professional\nServices")
-e = NaryNode("HR")
-f = NaryNode("Accounting")
-g = NaryNode("Legal")
-
-a.add_child(b)
-a.add_child(c)
-a.add_child(d)
-d.add_child(e)
-d.add_child(f)
-d.add_child(g)
+a = NaryNode(
+    "Generi Gloop",
+    [
+        NaryNode(
+            "R&D",
+            [
+                NaryNode("Applied"),
+                NaryNode("Basic"),
+                NaryNode("Advanced"),
+                NaryNode("Sci Fi"),
+            ],
+        ),
+        NaryNode(
+            "Sales",
+            [
+                NaryNode("Inside\nSales"),
+                NaryNode("Outside\nSales"),
+                NaryNode("B2B"),
+                NaryNode("Consumer"),
+                NaryNode("Account\nManagement"),
+            ],
+        ),
+        NaryNode(
+            "Professional\nServices",
+            [
+                NaryNode(
+                    "HR",
+                    [
+                        NaryNode("Training"),
+                        NaryNode("Hiring"),
+                        NaryNode("Equity"),
+                        NaryNode("Discipline"),
+                    ],
+                ),
+                NaryNode(
+                    "Accounting",
+                    [
+                        NaryNode("Payroll"),
+                        NaryNode("Billing"),
+                        NaryNode("Reporting"),
+                        NaryNode("Opacity"),
+                    ],
+                ),
+                NaryNode(
+                    "Legal",
+                    [
+                        NaryNode("Compliance"),
+                        NaryNode("Progress\nPrevention"),
+                        NaryNode("Bail\nServices"),
+                    ],
+                ),
+            ],
+        ),
+    ],
+)
 
 print(a)
 
@@ -175,9 +216,9 @@ def kill_callback():
 
 # Make the tkinter window.
 window = tk.Tk()
-window.title("nary_node5")
+window.title("org_chart")
 window.protocol("WM_DELETE_WINDOW", kill_callback)
-window.geometry("600x300")
+window.geometry("720x440")
 
 canvas = tk.Canvas(window, bg="white", borderwidth=2, relief=tk.SUNKEN)
 canvas.pack(padx=10, pady=10, fill=tk.BOTH, expand=True)
