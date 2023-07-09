@@ -106,7 +106,7 @@ class NaryNode:
             cy - NaryNode.box_half_height,
             cx + NaryNode.box_half_width,
             cy + NaryNode.box_half_height,
-            fill="white",
+            fill="white" if self.is_leaf() else "salmon",
         )
         canvas.create_text(cx, cy, text=str(self.value))
         for child in self.children:
