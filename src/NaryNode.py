@@ -52,12 +52,25 @@ class NaryNode:
     ) -> Tuple[float, float, float, float]:
         r = NaryNode.radius
         cy = r + ymin
+        child_ymin = NaryNode.y_spacing + cy + r
 
         if len(self.children) == 0:
             cx = r + xmin
             self.center = (cx, cy)
             self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
-            return self.subtree_bounds
+        else:
+            child_height = 0
+            width = 0
+            for i, child in enumerate(self.children):
+                if i > 0:
+                    width += NaryNode.x_spacing
+                _, y0, x1, y1 = child.arrange_subtree(xmin + width, child_ymin)
+                child_height = max(child_height, y1 - y0)
+                width = x1 - xmin
+            self.center = (xmin + width / 2, cy)
+            self.subtree_bounds = (xmin, ymin, xmin + width, child_ymin + child_height)
+
+        return self.subtree_bounds
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
         """Draw the subtree's links."""
@@ -75,15 +88,15 @@ class NaryNode:
         # Recursively draw child subtree links.
         # ...
 
-        # Outline the subtree for debugging.
-        # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
-
     def draw_subtree_nodes(self, canvas: tk.Canvas) -> None:
         cx, cy = self.center
         r = NaryNode.radius
         canvas.create_oval(cx - r, cy - r, cx + r, cy + r, fill="white")
         canvas.create_text(cx, cy, text=str(self.value))
-        # TODO: draw children
+        for child in self.children:
+            child.draw_subtree_nodes(canvas)
+        # Outline the subtree for debugging.
+        canvas.create_rectangle(self.subtree_bounds, outline="red")
 
     def arrange_and_draw_subtree(
         self, canvas: tk.Canvas, xmin: float, ymin: float
@@ -112,16 +125,16 @@ i = NaryNode("I")
 j = NaryNode("J")
 k = NaryNode("K")
 
-# a.add_child(b)
-# a.add_child(c)
-# a.add_child(d)
-# b.add_child(e)
-# b.add_child(f)
-# d.add_child(g)
-# e.add_child(h)
-# g.add_child(i)
-# g.add_child(j)
-# g.add_child(k)
+a.add_child(b)
+a.add_child(c)
+a.add_child(d)
+b.add_child(e)
+b.add_child(f)
+d.add_child(g)
+e.add_child(h)
+g.add_child(i)
+g.add_child(j)
+g.add_child(k)
 
 print(a)
 
