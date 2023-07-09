@@ -69,19 +69,11 @@ class NaryNode:
                 cy + NaryNode.box_half_height,
             )
         elif len(self.children) == 1:
-            self.children[0].arrange_subtree(
+            _, _, x1, y1 = self.children[0].arrange_subtree(
                 xmin, cy + NaryNode.box_half_height + NaryNode.y_spacing
             )
-            self.center = (
-                xmin + NaryNode.box_half_width,
-                ymin + NaryNode.box_half_height,
-            )
-            self.subtree_bounds = (
-                xmin,
-                ymin,
-                xmin + 2 * NaryNode.box_half_width,
-                ymin + 2 * NaryNode.box_half_height + NaryNode.y_spacing,
-            )
+            self.center = (xmin + NaryNode.box_half_width, cy)
+            self.subtree_bounds = (xmin, ymin, x1, y1)
         elif self.is_twig():
             child_x = xmin + 2 * NaryNode.x_spacing
             child_y = cy + NaryNode.box_half_height + NaryNode.y_spacing
