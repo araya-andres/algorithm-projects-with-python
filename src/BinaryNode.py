@@ -85,31 +85,35 @@ class BinaryNode:
         return s
 
     def arrange_subtree(self, xmin, ymin):
-        """Position the node's subtree."""
-        # Calculate cy, the Y coordinate for this node.
-        # This doesn't depend on the children.
-        cy = BinaryNode.radius + ymin
+        r = BinaryNode.radius
+        cy = r + ymin
 
-        # If the node has no children, just place it here and return.
         if not self.has_children():
-            r = BinaryNode.radius
             cx = r + xmin
             self.center = (cx, cy)
             self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
             return
 
-        # Set child_xmin and child_ymin to the
-        # start position for child subtrees.
-        child_ymin = BinaryNode.radius + BinaryNode.y_spacing + cy
+        child_ymin = BinaryNode.y_spacing + cy + r
         child_xmin = xmin
 
-        # Position the child subtrees.
-
-        # Arrange this node depending on the number of children.
         if self.left_child and self.right_child:
-            # Two children. Center this node over the child nodes.
-            # Use the child subtree bounds to set our subtree bounds.
-            pass
+            self.left_child.arrange_subtree(child_xmin, child_ymin)
+            self.right_child.arrange_subtree(child_xmin, child_ymin)
+            xl0, yl0, xl1, yl1 = self.left_child.subtree_bounds
+            xr0, yr0, xr1, yr1 = self.right_child.subtree_bounds
+            w = (xl1 - xl0) + (xr1 - xr0) + BinaryNode.x_spacing
+            self.center = (xmin + w // 2, cy)
+            self.subtree_bounds = (
+                xmin,
+                ymin,
+                xmin + w,
+                child_ymin + max(yl1 - yl0, yr1 - yr0),
+            )
+            self.left_child.arrange_subtree(xmin, child_ymin)
+            self.right_child.arrange_subtree(
+                xmin + xl1 - xl0 + BinaryNode.x_spacing, child_ymin
+            )
         elif self.left_child:
             self.left_child.arrange_subtree(child_xmin, child_ymin)
             x0, y0, x1, y1 = self.left_child.subtree_bounds
@@ -175,16 +179,16 @@ k = BinaryNode("K")
 l = BinaryNode("L")
 
 a.add_left(b)
-# a.add_right(c)
-# b.add_left(d)
+a.add_right(c)
+b.add_left(d)
 b.add_right(e)
-# c.add_left(f)
-# c.add_right(g)
-# e.add_left(h)
-# e.add_right(i)
-# g.add_left(j)
-# j.add_left(k)
-# j.add_right(l)
+c.add_left(f)
+c.add_right(g)
+e.add_left(h)
+e.add_right(i)
+g.add_left(j)
+j.add_left(k)
+j.add_right(l)
 
 print(a)
 
