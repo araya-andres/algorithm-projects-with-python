@@ -7,6 +7,6 @@ services:
     working_dir: '/usr/src/app'
     tty: true
     volumes:
-      - ${PWD}/src:/usr/src/app
+      - ${PWD}:/usr/src/app
     environment:
       - DISPLAY=${IP}:0
