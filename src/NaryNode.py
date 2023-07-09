@@ -50,10 +50,14 @@ class NaryNode:
     def arrange_subtree(
         self, xmin: float, ymin: float
     ) -> Tuple[float, float, float, float]:
-        # If the node has no children, just place it here and return.
+        r = NaryNode.radius
+        cy = r + ymin
+
         if len(self.children) == 0:
-            # ...
-            return
+            cx = r + xmin
+            self.center = (cx, cy)
+            self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
+            return self.subtree_bounds
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
         """Draw the subtree's links."""
@@ -75,12 +79,11 @@ class NaryNode:
         # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
 
     def draw_subtree_nodes(self, canvas: tk.Canvas) -> None:
-        """Draw the subtree's nodes."""
-        # Draw the node.
-        # ...
-
-        # Draw the descendants' nodes.
-        # ...
+        cx, cy = self.center
+        r = NaryNode.radius
+        canvas.create_oval(cx - r, cy - r, cx + r, cy + r, fill="white")
+        canvas.create_text(cx, cy, text=str(self.value))
+        # TODO: draw children
 
     def arrange_and_draw_subtree(
         self, canvas: tk.Canvas, xmin: float, ymin: float
@@ -109,16 +112,16 @@ i = NaryNode("I")
 j = NaryNode("J")
 k = NaryNode("K")
 
-a.add_child(b)
-a.add_child(c)
-a.add_child(d)
-b.add_child(e)
-b.add_child(f)
-d.add_child(g)
-e.add_child(h)
-g.add_child(i)
-g.add_child(j)
-g.add_child(k)
+# a.add_child(b)
+# a.add_child(c)
+# a.add_child(d)
+# b.add_child(e)
+# b.add_child(f)
+# d.add_child(g)
+# e.add_child(h)
+# g.add_child(i)
+# g.add_child(j)
+# g.add_child(k)
 
 print(a)
 
