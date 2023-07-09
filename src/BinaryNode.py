@@ -16,15 +16,6 @@ class BinaryNode:
         self.left_child = left_child
         self.right_child = right_child
 
-        # Initialize drawing parameters.
-        self.center = (0, 0)
-        self.subtree_bounds = (
-            -BinaryNode.radius,
-            -BinaryNode.radius,
-            BinaryNode.radius,
-            BinaryNode.radius,
-        )
-
     def add_left(self, left: BinaryNode):
         self.left_child = left
 
@@ -89,6 +80,7 @@ class BinaryNode:
         cy = r + ymin
 
         if not self.has_children():
+            # No children, just place it here and return.
             cx = r + xmin
             self.center = (cx, cy)
             self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
@@ -98,12 +90,14 @@ class BinaryNode:
         child_xmin = xmin
 
         if self.left_child and self.right_child:
+            # Two children
             x_spacing = BinaryNode.x_spacing
             self.left_child.arrange_subtree(child_xmin, child_ymin)
-            self.right_child.arrange_subtree(child_xmin, child_ymin)
             xl0, yl0, xl1, yl1 = self.left_child.subtree_bounds
+            wl = xl1 - xl0
+            self.right_child.arrange_subtree(xmin + wl + x_spacing, child_ymin)
             xr0, yr0, xr1, yr1 = self.right_child.subtree_bounds
-            wl, wr = xl1 - xl0, xr1 - xr0
+            wr = xr1 - xr0
             w = wl + wr + x_spacing
             self.center = (xmin + w // 2, cy)
             self.subtree_bounds = (
@@ -112,15 +106,11 @@ class BinaryNode:
                 xmin + w,
                 child_ymin + max(yl1 - yl0, yr1 - yr0),
             )
-            self.right_child.arrange_subtree(xmin + wl + x_spacing, child_ymin)
-        elif self.left_child:
-            self.left_child.arrange_subtree(child_xmin, child_ymin)
-            x0, y0, x1, y1 = self.left_child.subtree_bounds
-            self.center = ((x0 + x1) // 2, cy)
-            self.subtree_bounds = (x0, ymin, x1, child_ymin + y1 - y0)
         else:
-            self.right_child.arrange_subtree(child_xmin, child_ymin)
-            x0, y0, x1, y1 = self.right_child.subtree_bounds
+            # Only one child
+            child = self.left_child if self.left_child else self.right_child
+            child.arrange_subtree(child_xmin, child_ymin)
+            x0, y0, x1, y1 = child.subtree_bounds
             self.center = ((x0 + x1) // 2, cy)
             self.subtree_bounds = (x0, ymin, x1, child_ymin + y1 - y0)
 
@@ -143,7 +133,7 @@ class BinaryNode:
             self.right_child.draw_subtree_links(canvas)
 
         # Outline the subtree for debugging.
-        # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
+        # canvas.create_rectangle(self.subtree_bounds, fill="", outline="red")
 
     def draw_subtree_nodes(self, canvas: tk.Canvas):
         cx, cy = self.center
