@@ -129,11 +129,13 @@ class NaryNode:
             cy + NaryNode.box_half_height,
             fill="white" if self.is_leaf() else "salmon",
         )
-        canvas.create_text(cx, cy, text=str(self.value))
+        canvas.create_text(
+            cx, cy, text=str(self.value), justify="center", font=("arial", 8)
+        )
         for child in self.children:
             child.draw_subtree_nodes(canvas)
         # Outline the subtree for debugging.
-        canvas.create_rectangle(self.subtree_bounds, outline="red")
+        # canvas.create_rectangle(self.subtree_bounds, outline="red")
 
     def arrange_and_draw_subtree(
         self, canvas: tk.Canvas, xmin: float, ymin: float
