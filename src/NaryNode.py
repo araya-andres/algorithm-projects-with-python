@@ -74,14 +74,12 @@ class NaryNode:
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
         if len(self.children) == 1:
-            x0, y0 = self.center
-            x1, y1 = self.children[0].center
-            canvas.create_line(x0, y0, x1, y1)
+            canvas.create_line(*self.center, *self.children[0].center)
             self.children[0].draw_subtree_links(canvas)
         elif len(self.children) > 1:
             cx, cy = self.center
             x0, y0 = self.children[0].center
-            x1, y1 = self.children[-1].center
+            x1, _ = self.children[-1].center
             yh = (cy + y0) / 2
             # Horizonal line
             canvas.create_line(x0, yh, x1, yh)

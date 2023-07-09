@@ -114,20 +114,10 @@ class BinaryNode:
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
         if self.left_child:
-            canvas.create_line(
-                self.center[0],
-                self.center[1],
-                self.left_child.center[0],
-                self.left_child.center[1],
-            )
+            canvas.create_line(*self.center, *self.left_child.center)
             self.left_child.draw_subtree_links(canvas)
         if self.right_child:
-            canvas.create_line(
-                self.center[0],
-                self.center[1],
-                self.right_child.center[0],
-                self.right_child.center[1],
-            )
+            canvas.create_line(*self.center, *self.right_child.center)
             self.right_child.draw_subtree_links(canvas)
 
         # Outline the subtree for debugging.
