@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List
+from typing import List, Optional, Tuple
 import tkinter as tk
 
 
@@ -12,15 +12,6 @@ class NaryNode:
     def __init__(self, value, children: List[NaryNode] = None):
         self.value = value
         self.children = children if children else []
-
-        # Initialize drawing parameters.
-        self.center = (0, 0)
-        self.subtree_bounds = (
-            -NaryNode.radius,
-            -NaryNode.radius,
-            NaryNode.radius,
-            NaryNode.radius,
-        )
 
     def add_child(self, child_node: NaryNode):
         self.children.append(child_node)
@@ -56,48 +47,15 @@ class NaryNode:
             s += f"\n{child.__str__(level + 1)}"
         return s
 
-    def arrange_subtree(self, xmin, ymin):
-        """Position the node's subtree."""
-        # Calculate cy, the Y coordinate for this node.
-        # This doesn't depend on the children.
-        # ...
-
+    def arrange_subtree(
+        self, xmin: float, ymin: float
+    ) -> Tuple[float, float, float, float]:
         # If the node has no children, just place it here and return.
         if len(self.children) == 0:
             # ...
             return
 
-        # Set child_xmin and child_ymin to the
-        # start position for child subtrees.
-        # ...
-
-        # Set ymax equal to the largest Y position used.
-        ymax = ymin + 2 * NaryNode.radius
-
-        # Position the child subtrees.
-        for child in self.children:
-            # ...
-            # Position this child subtree.
-            ...
-
-            # Update child_xmin to allow room for the subtree
-            # and space between the subtrees.
-            ...
-
-            # Update the subtree bottom ymax.
-            # ...
-
-        # Set xmax equal to child_xmin minus the horizontal
-        # spacing we added after the last subtree.
-        # ...
-
-        # Use xmin, ymin, xmax, and ymax to set our subtree bounds.
-        # ...
-
-        # Center this node over the subtree bounds.
-        # ...
-
-    def draw_subtree_links(self, canvas):
+    def draw_subtree_links(self, canvas: tk.Canvas) -> None:
         """Draw the subtree's links."""
         # If we have exactly one child, just draw to it.
         if len(self.children) == 1:
@@ -116,7 +74,7 @@ class NaryNode:
         # Outline the subtree for debugging.
         # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
 
-    def draw_subtree_nodes(self, canvas):
+    def draw_subtree_nodes(self, canvas: tk.Canvas) -> None:
         """Draw the subtree's nodes."""
         # Draw the node.
         # ...
@@ -124,14 +82,11 @@ class NaryNode:
         # Draw the descendants' nodes.
         # ...
 
-    def arrange_and_draw_subtree(self, canvas, xmin, ymin):
-        # Position the tree.
+    def arrange_and_draw_subtree(
+        self, canvas: tk.Canvas, xmin: float, ymin: float
+    ) -> None:
         self.arrange_subtree(xmin, ymin)
-
-        # Draw the links.
         self.draw_subtree_links(canvas)
-
-        # Draw the nodes.
         self.draw_subtree_nodes(canvas)
 
 
