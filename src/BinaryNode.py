@@ -88,30 +88,38 @@ class BinaryNode:
         """Position the node's subtree."""
         # Calculate cy, the Y coordinate for this node.
         # This doesn't depend on the children.
-        # ...
+        cy = BinaryNode.radius + ymin
 
         # If the node has no children, just place it here and return.
-        # ...
+        if not self.has_children():
+            cx = BinaryNode.radius + xmin
+            self.center = (cx, cy)
+            self.subtree_bounds = (
+                cx - BinaryNode.radius,
+                cy - BinaryNode.radius,
+                cx + BinaryNode.radius,
+                cy + BinaryNode.radius,
+            )
+            return
 
         # Set child_xmin and child_ymin to the
         # start position for child subtrees.
-        # ...
 
         # Position the child subtrees.
         # ...
 
-        if self.right_child != None:
+        if self.right_child:
             # Arrange the right child subtree.
             # ...
             pass
 
         # Arrange this node depending on the number of children.
-        if (self.left_child != None) and (self.right_child != None):
+        if self.left_child and self.right_child:
             # Two children. Center this node over the child nodes.
             # Use the child subtree bounds to set our subtree bounds.
             # ...
             pass
-        elif self.left_child != None:
+        elif self.left_child:
             # We have only a left child.
             # ...
             pass
@@ -120,17 +128,24 @@ class BinaryNode:
             # ...
             pass
 
-    def draw_subtree_links(self, canvas):
+    def draw_subtree_links(self, canvas: tk.Canvas):
         """Draw the subtree's links."""
         # ...
 
         # Outline the subtree for debugging.
         # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
 
-    def draw_subtree_nodes(self, canvas):
+    def draw_subtree_nodes(self, canvas: tk.Canvas):
         """Draw the subtree's nodes."""
         # Draw the node.
-        # ...
+        cx, cy = self.center
+        canvas.create_oval(
+            cx - BinaryNode.radius,
+            cy - BinaryNode.radius,
+            cx + BinaryNode.radius,
+            cy + BinaryNode.radius,
+        )
+        canvas.create_text(cx, cy, text=str(self.value))
 
         # Draw the descendants' nodes.
         # ...
@@ -167,19 +182,19 @@ j = BinaryNode("J")
 k = BinaryNode("K")
 l = BinaryNode("L")
 
-a.add_left(b)
-a.add_right(c)
-b.add_left(d)
-b.add_right(e)
-c.add_left(f)
-c.add_right(g)
-e.add_left(h)
-e.add_right(i)
-g.add_left(j)
-j.add_left(k)
-j.add_right(l)
+# a.add_left(b)
+# a.add_right(c)
+# b.add_left(d)
+# b.add_right(e)
+# c.add_left(f)
+# c.add_right(g)
+# e.add_left(h)
+# e.add_right(i)
+# g.add_left(j)
+# j.add_left(k)
+# j.add_right(l)
 
-print(a)
+# print(a)
 
 
 def kill_callback():
