@@ -92,41 +92,34 @@ class BinaryNode:
 
         # If the node has no children, just place it here and return.
         if not self.has_children():
-            cx = BinaryNode.radius + xmin
+            r = BinaryNode.radius
+            cx = r + xmin
             self.center = (cx, cy)
-            self.subtree_bounds = (
-                cx - BinaryNode.radius,
-                cy - BinaryNode.radius,
-                cx + BinaryNode.radius,
-                cy + BinaryNode.radius,
-            )
+            self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
             return
 
         # Set child_xmin and child_ymin to the
         # start position for child subtrees.
+        child_ymin = BinaryNode.radius + BinaryNode.y_spacing + cy
+        child_xmin = xmin
 
         # Position the child subtrees.
-        # ...
-
-        if self.right_child:
-            # Arrange the right child subtree.
-            # ...
-            pass
 
         # Arrange this node depending on the number of children.
         if self.left_child and self.right_child:
             # Two children. Center this node over the child nodes.
             # Use the child subtree bounds to set our subtree bounds.
-            # ...
             pass
         elif self.left_child:
-            # We have only a left child.
-            # ...
-            pass
+            self.left_child.arrange_subtree(child_xmin, child_ymin)
+            x0, y0, x1, y1 = self.left_child.subtree_bounds
+            self.center = ((x0 + x1) // 2, cy)
+            self.subtree_bounds = (x0, ymin, x1, child_ymin + y1 - y0)
         else:
-            # We have only a right child.
-            # ...
-            pass
+            self.right_child.arrange_subtree(child_xmin, child_ymin)
+            x0, y0, x1, y1 = self.right_child.subtree_bounds
+            self.center = ((x0 + x1) // 2, cy)
+            self.subtree_bounds = (x0, ymin, x1, child_ymin + y1 - y0)
 
     def draw_subtree_links(self, canvas: tk.Canvas):
         """Draw the subtree's links."""
@@ -136,8 +129,6 @@ class BinaryNode:
         # canvas.create_rectangle(self.subtree_bounds, fill='', outline='red')
 
     def draw_subtree_nodes(self, canvas: tk.Canvas):
-        """Draw the subtree's nodes."""
-        # Draw the node.
         cx, cy = self.center
         canvas.create_oval(
             cx - BinaryNode.radius,
@@ -147,9 +138,10 @@ class BinaryNode:
         )
         canvas.create_text(cx, cy, text=str(self.value))
 
-        # Draw the descendants' nodes.
-        # ...
-        pass
+        if self.left_child:
+            self.left_child.draw_subtree_nodes(canvas)
+        if self.right_child:
+            self.right_child.draw_subtree_nodes(canvas)
 
     def arrange_and_draw_subtree(self, canvas, xmin, ymin):
         # Position the tree.
@@ -182,10 +174,10 @@ j = BinaryNode("J")
 k = BinaryNode("K")
 l = BinaryNode("L")
 
-# a.add_left(b)
+a.add_left(b)
 # a.add_right(c)
 # b.add_left(d)
-# b.add_right(e)
+b.add_right(e)
 # c.add_left(f)
 # c.add_right(g)
 # e.add_left(h)
@@ -194,7 +186,7 @@ l = BinaryNode("L")
 # j.add_left(k)
 # j.add_right(l)
 
-# print(a)
+print(a)
 
 
 def kill_callback():
