@@ -10,7 +10,7 @@ class NaryNode:
     x_spacing = 20  # Horizontal distance between neighboring subtrees
     y_spacing = 20  # Vertical distance between parent and child subtrees
 
-    def __init__(self, value, children: List[NaryNode] = None):
+    def __init__(self, value, children: Optional[List[NaryNode]] = None):
         self.value = value
         self.children = children if children else []
 
