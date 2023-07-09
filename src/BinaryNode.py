@@ -87,12 +87,11 @@ class BinaryNode:
             return
 
         child_ymin = BinaryNode.y_spacing + cy + r
-        child_xmin = xmin
 
         if self.left_child and self.right_child:
             # Two children
             x_spacing = BinaryNode.x_spacing
-            self.left_child.arrange_subtree(child_xmin, child_ymin)
+            self.left_child.arrange_subtree(xmin, child_ymin)
             xl0, yl0, xl1, yl1 = self.left_child.subtree_bounds
             wl = xl1 - xl0
             self.right_child.arrange_subtree(xmin + wl + x_spacing, child_ymin)
@@ -109,7 +108,7 @@ class BinaryNode:
         else:
             # Only one child
             child = self.left_child if self.left_child else self.right_child
-            child.arrange_subtree(child_xmin, child_ymin)
+            child.arrange_subtree(xmin, child_ymin)
             x0, y0, x1, y1 = child.subtree_bounds
             self.center = ((x0 + x1) // 2, cy)
             self.subtree_bounds = (x0, ymin, x1, child_ymin + y1 - y0)
