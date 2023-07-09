@@ -102,6 +102,9 @@ class NaryNode:
             xv, y0, _, y1 = self.subtree_bounds
             xv += NaryNode.x_spacing
             canvas.create_line(xv, y0, xv, y1 - NaryNode.box_half_height)
+            for child in self.children:
+                cx, cy = child.center
+                canvas.create_line(xv, cy, cx, cy)
         else:
             cx, cy = self.center
             x0, y0 = self.children[0].center
