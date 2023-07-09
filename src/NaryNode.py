@@ -52,7 +52,6 @@ class NaryNode:
     ) -> Tuple[float, float, float, float]:
         r = NaryNode.radius
         cy = r + ymin
-        child_ymin = NaryNode.y_spacing + cy + r
 
         if len(self.children) == 0:
             cx = r + xmin
@@ -60,6 +59,7 @@ class NaryNode:
             self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
         else:
             child_height = 0
+            child_ymin = NaryNode.y_spacing + cy + r
             width = 0
             for i, child in enumerate(self.children):
                 if i > 0:
