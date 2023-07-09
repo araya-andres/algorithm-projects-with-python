@@ -98,7 +98,11 @@ class NaryNode:
         if len(self.children) == 1:
             canvas.create_line(*self.center, *self.children[0].center)
             self.children[0].draw_subtree_links(canvas)
-        elif len(self.children) > 1:
+        elif self.is_twig():
+            xv, y0, _, y1 = self.subtree_bounds
+            xv += NaryNode.x_spacing
+            canvas.create_line(xv, y0, xv, y1 - NaryNode.box_half_height)
+        else:
             cx, cy = self.center
             x0, y0 = self.children[0].center
             x1, _ = self.children[-1].center
