@@ -98,11 +98,13 @@ class BinaryNode:
         child_xmin = xmin
 
         if self.left_child and self.right_child:
+            x_spacing = BinaryNode.x_spacing
             self.left_child.arrange_subtree(child_xmin, child_ymin)
             self.right_child.arrange_subtree(child_xmin, child_ymin)
             xl0, yl0, xl1, yl1 = self.left_child.subtree_bounds
             xr0, yr0, xr1, yr1 = self.right_child.subtree_bounds
-            w = (xl1 - xl0) + (xr1 - xr0) + BinaryNode.x_spacing
+            wl, wr = xl1 - xl0, xr1 - xr0
+            w = wl + wr + x_spacing
             self.center = (xmin + w // 2, cy)
             self.subtree_bounds = (
                 xmin,
@@ -111,9 +113,7 @@ class BinaryNode:
                 child_ymin + max(yl1 - yl0, yr1 - yr0),
             )
             self.left_child.arrange_subtree(xmin, child_ymin)
-            self.right_child.arrange_subtree(
-                xmin + xl1 - xl0 + BinaryNode.x_spacing, child_ymin
-            )
+            self.right_child.arrange_subtree(xmin + wl + x_spacing, child_ymin)
         elif self.left_child:
             self.left_child.arrange_subtree(child_xmin, child_ymin)
             x0, y0, x1, y1 = self.left_child.subtree_bounds
@@ -148,15 +148,9 @@ class BinaryNode:
 
     def draw_subtree_nodes(self, canvas: tk.Canvas):
         cx, cy = self.center
-        canvas.create_oval(
-            cx - BinaryNode.radius,
-            cy - BinaryNode.radius,
-            cx + BinaryNode.radius,
-            cy + BinaryNode.radius,
-            fill="white",
-        )
+        r = BinaryNode.radius
+        canvas.create_oval(cx - r, cy - r, cx + r, cy + r, fill="white")
         canvas.create_text(cx, cy, text=str(self.value))
-
         if self.left_child:
             self.left_child.draw_subtree_nodes(canvas)
         if self.right_child:
