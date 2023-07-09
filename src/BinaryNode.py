@@ -112,7 +112,6 @@ class BinaryNode:
                 xmin + w,
                 child_ymin + max(yl1 - yl0, yr1 - yr0),
             )
-            self.left_child.arrange_subtree(xmin, child_ymin)
             self.right_child.arrange_subtree(xmin + wl + x_spacing, child_ymin)
         elif self.left_child:
             self.left_child.arrange_subtree(child_xmin, child_ymin)
