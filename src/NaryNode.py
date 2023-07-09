@@ -79,11 +79,11 @@ class NaryNode:
             canvas.create_line(x0, y0, x1, y1)
             self.children[0].draw_subtree_links(canvas)
         elif len(self.children) > 1:
-            # Horizonal line
             cx, cy = self.center
             x0, y0 = self.children[0].center
             x1, y1 = self.children[-1].center
             yh = (cy + y0) / 2
+            # Horizonal line
             canvas.create_line(x0, yh, x1, yh)
             # Center -> Horizontal line
             canvas.create_line(cx, cy, cx, yh)
