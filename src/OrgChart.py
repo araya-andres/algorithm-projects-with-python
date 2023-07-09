@@ -45,6 +45,9 @@ class NaryNode:
     def is_leaf(self) -> bool:
         return len(self.children) == 0
 
+    def is_twig(self) -> bool:
+        return all(c.is_leaf() for c in self.children)
+
     def __str__(self, level=0) -> str:
         s = f"{NaryNode.indent * level}{self.value}:"
         for child in self.children:
