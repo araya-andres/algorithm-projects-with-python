@@ -57,11 +57,11 @@ class NaryNode:
     def arrange_subtree(
         self, xmin: float, ymin: float
     ) -> Tuple[float, float, float, float]:
+        cx = NaryNode.box_half_width + xmin
         cy = NaryNode.box_half_height + ymin
         child_y = cy + NaryNode.box_half_height + NaryNode.y_spacing
 
         if self.is_leaf():
-            cx = NaryNode.box_half_width + xmin
             self.center = (cx, cy)
             self.subtree_bounds = (
                 cx - NaryNode.box_half_width,
@@ -71,29 +71,28 @@ class NaryNode:
             )
         elif len(self.children) == 1:
             _, _, x1, y1 = self.children[0].arrange_subtree(xmin, child_y)
-            self.center = (xmin + NaryNode.box_half_width, cy)
+            self.center = (cx, cy)
             self.subtree_bounds = (xmin, ymin, x1, y1)
         elif self.is_twig():
             child_x = xmin + 2 * NaryNode.x_spacing
             for i, child in enumerate(self.children):
                 if i > 0:
                     child_y += NaryNode.y_spacing
-                child.arrange_subtree(child_x, child_y)
+                _, _, x1, y1 = child.arrange_subtree(child_x, child_y)
                 child_y += 2 * NaryNode.box_half_height
-            width = 2 * (NaryNode.box_half_width + NaryNode.x_spacing)
-            self.center = (xmin + NaryNode.box_half_width, cy)
-            self.subtree_bounds = (xmin, ymin, xmin + width, child_y)
+            self.center = (cx, cy)
+            self.subtree_bounds = (xmin, ymin, x1, y1)
         else:
-            child_height = 0
+            subtree_height = 0
             width = 0
             for i, child in enumerate(self.children):
                 if i > 0:
                     width += NaryNode.x_spacing
                 _, y0, x1, y1 = child.arrange_subtree(xmin + width, child_y)
-                child_height = max(child_height, y1 - y0)
+                subtree_height = max(subtree_height, y1 - y0)
                 width = x1 - xmin
             self.center = (xmin + width / 2, cy)
-            self.subtree_bounds = (xmin, ymin, xmin + width, child_y + child_height)
+            self.subtree_bounds = (xmin, ymin, xmin + width, child_y + subtree_height)
 
         return self.subtree_bounds
 
