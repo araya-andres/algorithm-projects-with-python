@@ -16,14 +16,29 @@ class SortedBinaryNode:
         self.left_child = None
         self.right_child = None
 
-    def add_node(self, child: SortedBinaryNode) -> None:
-        pass
+    def add_node(self, node: SortedBinaryNode) -> None:
+        if node.value < self.value:
+            if self.left_child:
+                self.left_child.add_node(node)
+            else:
+                self.left_child = node
+        if node.value > self.value:
+            if self.right_child:
+                self.right_child.add_node(node)
+            else:
+                self.right_child = node
 
     def is_leaf(self) -> bool:
         return self.left_child is None and self.right_child is None
 
     def find_node(self, value) -> Optional[SortedBinaryNode]:
-        pass
+        if value == self.value:
+            return self
+        if value < self.value and self.left_child is not None:
+            return self.left_child.find_node(value)
+        if value > self.value and self.right_child is not None:
+            return self.right_child.find_node(value)
+        return None
 
     def pop(self, target):
         pass
