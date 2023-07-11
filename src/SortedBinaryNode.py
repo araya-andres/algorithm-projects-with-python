@@ -15,18 +15,125 @@ class SortedBinaryNode:
         self.value = value
         self.left_child = None
         self.right_child = None
+        self.h_left = 0
+        self.h_right = 0
 
-    def add_node(self, node: SortedBinaryNode) -> None:
+    def add_node(self, node: SortedBinaryNode) -> Tuple(SortedBinaryNode, int):
         if node.value < self.value:
             if self.left_child:
-                self.left_child.add_node(node)
+                self.left_child, h_left = self.left_child.add_node(node)
+                self.h_left = max(h_left + 1, self.h_left)
             else:
                 self.left_child = node
+                self.h_left = 1
         if node.value > self.value:
             if self.right_child:
-                self.right_child.add_node(node)
+                self.right_child, h_right = self.right_child.add_node(node)
+                self.h_right = max(h_right + 1, self.h_right)
             else:
                 self.right_child = node
+                self.h_right = 1
+        if self.bf() < -1 or self.bf() > 1:
+            return self.__rebalance()
+        else:
+            return (self, self.height())
+
+    def height(self):
+        return max(self.h_left, self.h_right)
+
+    def bf(self):
+        return self.h_left - self.h_right
+
+    def __get_new_hight(self):
+        if self.is_leaf():
+            self.h_left = self.h_right = 0
+            return 0
+        else:
+            self.h_left = (
+                self.left_child.__get_new_hight() + 1 if self.left_child else 0
+            )
+            self.h_right = (
+                self.right_child.__get_new_hight() + 1 if self.right_child else 0
+            )
+            return max(self.h_left, self.h_right)
+
+    def __rebalance(self):
+        bf = self.bf()
+        bf_right = self.right_child.bf() if self.right_child else 0
+        bf_left = self.left_child.bf() if self.left_child else 0
+        if bf == -2 and bf_right == -1:
+            new_root = self.single_left_rotation(self)
+        elif bf == 2 and bf_left == 1:
+            new_root = self.single_right_rotation(self)
+        elif bf == 2 and bf_left == -1:
+            new_root = self.left_right_rotation(self)
+        elif bf == -2 and bf_right == 1:
+            new_root = self.right_left_rotation(self)
+        return (new_root, new_root.__get_new_hight())
+
+    #
+    #  p (1) bf = -2               q (2)
+    #    / \                         / \
+    #  pl   \                       /   \
+    #        \                     /     \
+    #      q (2) bf = -1       p (1)   r (3)
+    #        / \                 / \
+    #      ql   \              pl   ql
+    #            \
+    #          r (3) bf = 0
+    #
+    def single_left_rotation(self, p: SortedBinaryNode) -> SortedBinaryNode:
+        q = p.right_child
+        p.right_child = q.left_child
+        q.left_child = p
+        return q
+
+    #
+    #          p (3) bf = 2        q (2)
+    #            / \                 / \
+    #           /   pr              /   \
+    #          /                   /     \
+    #      q (2) bf = 1        r (1)   p (3)
+    #        / \                         / \
+    #       /   qr                     qr   pr
+    #      /
+    #  r (1) bf = 0
+    #
+    def single_right_rotation(self, p: SortedBinaryNode) -> SortedBinaryNode:
+        q = p.left_child
+        p.left_child = q.right_child
+        q.right_child = p
+        return q
+
+    #
+    #          p (3) bf = 2            p (3) bf = 2        r (2)
+    #            /                       /                   / \
+    #           /                       /                   /   \
+    #          /                       /                   /     \
+    #      q (1) bf = -1           r (2) bf = 1        q (1)   p (3)
+    #          \                     /
+    #           \                   /
+    #            \                 /
+    #          r (2) bf = 0    q (1) bf = 0
+    #
+    def left_right_rotation(self, p: SortedBinaryNode) -> SortedBinaryNode:
+        p.left_child = self.single_left_rotation(p.left_child)
+        return self.single_right_rotation(p)
+
+    #
+    #  p (1) bf = -2       p (1) bf = -2               r (2)
+    #    / \                   \                         / \
+    #  pl   \                   \                       /   \
+    #        \                   \                     /     \
+    #      q (3) bf = 1        r (2) bf = -1       q (1)   p (3)
+    #        /                     \
+    #       /                       \
+    #      /                         \
+    #  r (2) bf = 0                q (3) bf = 0
+    #
+    def right_left_rotation(self, p: SortedBinaryNode) -> SortedBinaryNode:
+        p.right_child = self.single_right_rotation(p.right_child)
+        return self.single_left_rotation(p)
 
     def is_leaf(self) -> bool:
         return self.left_child is None and self.right_child is None
@@ -147,7 +254,7 @@ class SortedBinaryNode:
 class App:
     def __init__(self):
         # Make a sentinel root.
-        self.root = SortedBinaryNode(-1)
+        self.root = None
         self.run_tests()
 
         # Make the tkinter window.
@@ -228,7 +335,10 @@ class App:
 
         try:
             new_node = SortedBinaryNode(new_value)
-            self.root.add_node(new_node)
+            if self.root:
+                self.root, _ = self.root.add_node(new_node)
+            else:
+                self.root = new_node
         except Exception as e:
             messagebox.showinfo(
                 "Add Error", f"Error adding value {new_value} to the tree.\n{e}"
