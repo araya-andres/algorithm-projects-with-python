@@ -201,23 +201,18 @@ class SortedBinaryNode:
             self.subtree_bounds = (cx - r, cy - r, cx + r, cy + r)
             return self.subtree_bounds
 
-        child_x = xmin
-        child_y = SortedBinaryNode.y_spacing + cy + r
-        subtree_width = 0
-        subtree_height = 0
+        child_x, child_y = xmin, SortedBinaryNode.y_spacing + cy + r
+        xmax, ymax = 0, 0
 
         if self.left_child:
-            _, _, x1, y1 = self.left_child.arrange_subtree(child_x, child_y)
-            subtree_width = x1 - xmin
-            subtree_height = y1 - ymin
-            child_x = x1 + SortedBinaryNode.x_spacing
+            _, _, xmax, ymax = self.left_child.arrange_subtree(child_x, child_y)
+            child_x = xmax + SortedBinaryNode.x_spacing
         if self.right_child:
-            _, _, x1, y1 = self.right_child.arrange_subtree(child_x, child_y)
-            subtree_width = x1 - xmin
-            subtree_height = max(subtree_height, y1 - ymin)
+            _, _, xmax, y = self.right_child.arrange_subtree(child_x, child_y)
+            ymax = max(ymax, y)
 
-        self.center = (xmin + subtree_width / 2, cy)
-        self.subtree_bounds = (xmin, ymin, xmin + subtree_width, ymin + subtree_height)
+        self.center = ((xmax + xmin) / 2, cy)
+        self.subtree_bounds = (xmin, ymin, xmax, ymax)
         return self.subtree_bounds
 
     def draw_subtree_links(self, canvas: tk.Canvas) -> None:
