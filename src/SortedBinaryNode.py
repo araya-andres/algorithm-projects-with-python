@@ -45,16 +45,14 @@ class SortedBinaryNode:
         return self.h_left - self.h_right
 
     def __get_new_hight(self):
+        self.h_left = self.h_right = 0
         if self.is_leaf():
-            self.h_left = self.h_right = 0
             return 0
         else:
-            self.h_left = (
-                self.left_child.__get_new_hight() + 1 if self.left_child else 0
-            )
-            self.h_right = (
-                self.right_child.__get_new_hight() + 1 if self.right_child else 0
-            )
+            if self.h_left:
+                self.left_child = self.left_child.__get_new_hight() + 1
+            if self.h_right:
+                self.h_right = self.right_child.__get_new_hight() + 1
             return max(self.h_left, self.h_right)
 
     def __rebalance(self):
