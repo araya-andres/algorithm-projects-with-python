@@ -296,39 +296,25 @@ class App:
 
     def add_value(self):
         # Add a value to the tree.
-        new_string = self.value_entry.get()
-        if not new_string:
-            return
-
-        self.value_entry.delete(0, "end")
-        self.value_entry.focus_set()
-
-        try:
-            new_value = int(new_string)
-        except Exception as e:
-            messagebox.showinfo(
-                "Find Error", f"Value {new_string} must be an integer.\n{e}"
-            )
-            return
-
-        if new_value <= 0:
-            messagebox.showinfo(
-                "Add Error", f"Value {new_value} must be a positive integer."
-            )
-            return
-
-        try:
-            new_node = SortedBinaryNode(new_value)
-            if self.root:
-                self.root, _ = self.root.add_node(new_node)
-            else:
-                self.root = new_node
-        except Exception as e:
-            messagebox.showinfo(
-                "Add Error", f"Error adding value {new_value} to the tree.\n{e}"
-            )
-
-        self.draw_tree()
+        if new_string := self.value_entry.get():
+            self.value_entry.delete(0, "end")
+            self.value_entry.focus_set()
+            try:
+                new_value = int(new_string)
+                new_node = SortedBinaryNode(new_value)
+                if self.root:
+                    self.root, _ = self.root.add_node(new_node)
+                else:
+                    self.root = new_node
+                self.draw_tree()
+            except ValueError as e:
+                messagebox.showinfo(
+                    "Find Error", f"Value {new_string} must be an integer.\n{e}"
+                )
+            except Exception as e:
+                messagebox.showinfo(
+                    "Add Error", f"Error adding value {new_value} to the tree.\n{e}"
+                )
 
     def ctrl_p_pressed(self, event):
         self.pop_value()
