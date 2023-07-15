@@ -62,10 +62,10 @@ def put(root: Optional[SortedBinaryNode], value) -> Tuple(SortedBinaryNode, int)
     if value > root.value:
         root.right, h_right = put(root.right, value)
         root.h_right = max(h_right + 1, root.h_right)
-    if balance_factor(root) < -1 or balance_factor(root) > 1:
-        return rebalance(root)
-    else:
+    if -2 < balance_factor(root) < 2:
         return (root, height(root))
+    else:
+        return rebalance(root)
 
 
 def balance_factor(p: SortedBinaryNode):
