@@ -53,16 +53,14 @@ def children(node: SortedBinaryNode) -> int:
     return n
 
 
-def add_node(
-    root: Optional[SortedBinaryNode], new_node: SortedBinaryNode
-) -> Tuple(SortedBinaryNode, int):
+def put(root: Optional[SortedBinaryNode], value) -> Tuple(SortedBinaryNode, int):
     if root is None:
-        return (new_node, 1)
-    if new_node.value < root.value:
-        root.left, h_left = add_node(root.left, new_node)
+        return (SortedBinaryNode(value), 1)
+    if value < root.value:
+        root.left, h_left = put(root.left, value)
         root.h_left = max(h_left + 1, root.h_left)
-    if new_node.value > root.value:
-        root.right, h_right = add_node(root.right, new_node)
+    if value > root.value:
+        root.right, h_right = put(root.right, value)
         root.h_right = max(h_right + 1, root.h_right)
     if balance_factor(root) < -1 or balance_factor(root) > 1:
         return rebalance(root)
@@ -345,8 +343,7 @@ class App:
             self.value_entry.focus_set()
             try:
                 new_value = int(new_string)
-                new_node = SortedBinaryNode(new_value)
-                self.root, _ = add_node(self.root, new_node)
+                self.root, _ = put(self.root, new_value)
                 self.draw_tree()
             except ValueError as e:
                 messagebox.showinfo(
@@ -418,7 +415,7 @@ class App:
     def run_tests(self):
         values = [60, 35, 76, 21, 42, 71, 89, 17, 24, 74, 11, 23, 72, 75]
         for x in values:
-            self.root, _ = add_node(self.root, SortedBinaryNode(x))
+            self.root, _ = put(self.root, x)
         print(self.root)
         print(",".join(str(x.value) for x in traverse_preorder(self.root)))
         print(",".join(str(x.value) for x in traverse_inorder(self.root)))
