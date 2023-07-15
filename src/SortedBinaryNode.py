@@ -14,51 +14,55 @@ class SortedBinaryNode:
 
     def __init__(self, value):
         self.value = value
-        self.left_child = None
-        self.right_child = None
+        self.left = None
+        self.right = None
         self.h_left = 0
         self.h_right = 0
 
     def __str__(self, level=0) -> str:
-        s = f"{SortedBinaryNode.indent * level}{self.value}:"
-        if self.left_child:
-            s += f"\n{self.left_child.__str__(level + 1)}"
-        if self.right_child:
-            s += f"\n{self.right_child.__str__(level + 1)}"
+        s = f"{SortedBinaryNode.indent * level}{self.value}"
+        if not is_leaf(self):
+            s += ":"
+            if self.left:
+                s += f"\n{self.left.__str__(level + 1)}"
+            if self.right:
+                s += f"\n{self.right.__str__(level + 1)}"
         return s
 
 
 def find(
-    value, node: SortedBinaryNode, parent: Optional[SortedBinaryNode] = None
+    value,
+    current_node: Optional[SortedBinaryNode],
+    parent: Optional[SortedBinaryNode] = None,
 ) -> Tuple(Optional[SortedBinaryNode], Optional[SortedBinaryNode]):
-    if node is None:
+    if current_node is None:
         return (None, None)
-    if node.value > value:
-        return find(value, node.left_child, node)
-    if node.value < value:
-        return find(value, node.right_child, node)
-    return (node, parent)
+    if current_node.value > value:
+        return find(value, current_node.left, current_node)
+    if current_node.value < value:
+        return find(value, current_node.right, current_node)
+    return (current_node, parent)
 
 
 def children(node: SortedBinaryNode) -> int:
     n = 0
-    if node.left_child:
+    if node.left:
         n += 1
-    if node.right_child:
+    if node.right:
         n += 1
     return n
 
 
 def add_node(
-    root: Optional[SortedBinaryNode], node: SortedBinaryNode
+    root: Optional[SortedBinaryNode], new_node: SortedBinaryNode
 ) -> Tuple(SortedBinaryNode, int):
     if root is None:
-        return (node, 1)
-    if node.value < root.value:
-        root.left_child, h_left = add_node(root.left_child, node)
+        return (new_node, 1)
+    if new_node.value < root.value:
+        root.left, h_left = add_node(root.left, new_node)
         root.h_left = max(h_left + 1, root.h_left)
-    if node.value > root.value:
-        root.right_child, h_right = add_node(root.right_child, node)
+    if new_node.value > root.value:
+        root.right, h_right = add_node(root.right, new_node)
         root.h_right = max(h_right + 1, root.h_right)
     if balance_factor(root) < -1 or balance_factor(root) > 1:
         return rebalance(root)
@@ -72,8 +76,8 @@ def balance_factor(p: SortedBinaryNode):
 
 def rebalance(p: SortedBinaryNode):
     bf = balance_factor(p)
-    bf_right = balance_factor(p.right_child)
-    bf_left = balance_factor(p.left_child)
+    bf_right = balance_factor(p.right)
+    bf_left = balance_factor(p.left)
     if bf == -2 and bf_right == -1:
         p = single_left_rotation(p)
     elif bf == 2 and bf_left == 1:
@@ -97,9 +101,9 @@ def rebalance(p: SortedBinaryNode):
 #          r (3) bf = 0
 #
 def single_left_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
-    q = p.right_child
-    p.right_child = q.left_child
-    q.left_child = p
+    q = p.right
+    p.right = q.left
+    q.left = p
     return q
 
 
@@ -115,9 +119,9 @@ def single_left_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
 #  r (1) bf = 0
 #
 def single_right_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
-    q = p.left_child
-    p.left_child = q.right_child
-    q.right_child = p
+    q = p.left
+    p.left = q.right
+    q.right = p
     return q
 
 
@@ -133,7 +137,7 @@ def single_right_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
 #          r (2) bf = 0    q (1) bf = 0
 #
 def left_right_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
-    p.left_child = single_left_rotation(p.left_child)
+    p.left = single_left_rotation(p.left)
     return single_right_rotation(p)
 
 
@@ -149,75 +153,75 @@ def left_right_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
 #  r (2) bf = 0                q (3) bf = 0
 #
 def right_left_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
-    p.right_child = single_right_rotation(p.right_child)
+    p.right = single_right_rotation(p.right)
     return single_left_rotation(p)
 
 
 def height(p: SortedBinaryNode):
     if p is None:
         return 0
-    p.h_left = height(p.left_child) + 1
-    p.h_right = height(p.right_child) + 1
+    p.h_left = height(p.left) + 1
+    p.h_right = height(p.right) + 1
     return max(p.h_left, p.h_right)
 
 
 def is_leaf(p: SortedBinaryNode) -> bool:
-    return p.left_child is None and p.right_child is None
+    return p.left is None and p.right is None
 
 
-def pop(t: SortedBinaryNode, p: Optional[SortedBinaryNode]):
-    if t is None:
+def pop(target: SortedBinaryNode, parent: Optional[SortedBinaryNode]):
+    if target is None:
         return
-    n = children(t)
+    n = children(target)
     if n == 0:
-        if p.left_child == t:
-            p.left_child = None
+        if parent.left == target:
+            parent.left = None
         else:
-            p.right_child = None
+            parent.right = None
     elif n == 1:
-        s = t.left_child if t.left_child else t.right_child
-        if p.left_child == t:
-            p.left_child = s
+        subtree = target.left if target.left else target.right
+        if parent.left == target:
+            parent.left = subtree
         else:
-            p.right_child = s
-        t.left_child = t.right_child = None
+            parent.right = subtree
+        target.left = target.right = None
     else:
         pass
 
 
 def traverse_preorder(p: SortedBinaryNode):
     yield p
-    if p.left_child:
-        yield from traverse_preorder(p.left_child)
-    if p.right_child:
-        yield from traverse_preorder(p.right_child)
+    if p.left:
+        yield from traverse_preorder(p.left)
+    if p.right:
+        yield from traverse_preorder(p.right)
 
 
 def traverse_inorder(p: SortedBinaryNode):
-    if p.left_child:
-        yield from traverse_inorder(p.left_child)
+    if p.left:
+        yield from traverse_inorder(p.left)
     yield p
-    if p.right_child:
-        yield from traverse_inorder(p.right_child)
+    if p.right:
+        yield from traverse_inorder(p.right)
 
 
 def traverse_postorder(p: SortedBinaryNode):
-    if p.left_child:
-        yield from traverse_postorder(p.left_child)
-    if p.right_child:
-        yield from traverse_postorder(p.right_child)
+    if p.left:
+        yield from traverse_postorder(p.left)
+    if p.right:
+        yield from traverse_postorder(p.right)
     yield p
 
 
 def traverse_breadth_first(p: SortedBinaryNode):
     queue = [p]
     while queue:
-        q = queue.pop(0)
-        yield q
-        if q.left_child:
-            queue.append(q.left_child)
-        if q.right_child:
-            queue.append(q.right_child)
+        p = queue.pop(0)
+        yield p
+        if p.left:
+            queue.append(p.left)
+        if p.right:
+            queue.append(p.right)
 
 
 def arrange_subtree(
@@ -235,11 +239,11 @@ def arrange_subtree(
     child_x, child_y = xmin, y_spacing + cy + r
     ymax = 0
 
-    if p.left_child:
-        _, _, xmax, ymax = arrange_subtree(p.left_child, child_x, child_y)
+    if p.left:
+        _, _, xmax, ymax = arrange_subtree(p.left, child_x, child_y)
         child_x = xmax + x_spacing
-    if p.right_child:
-        _, _, xmax, y = arrange_subtree(p.right_child, child_x, child_y)
+    if p.right:
+        _, _, xmax, y = arrange_subtree(p.right, child_x, child_y)
         ymax = max(ymax, y)
 
     p.center = ((xmax + xmin) / 2, cy)
@@ -248,12 +252,12 @@ def arrange_subtree(
 
 
 def draw_subtree_links(p: SortedBinaryNode, canvas: tk.Canvas) -> None:
-    if p.left_child:
-        canvas.create_line(*p.center, *p.left_child.center)
-        draw_subtree_links(p.left_child, canvas)
-    if p.right_child:
-        canvas.create_line(*p.center, *p.right_child.center)
-        draw_subtree_links(p.right_child, canvas)
+    if p.left:
+        canvas.create_line(*p.center, *p.left.center)
+        draw_subtree_links(p.left, canvas)
+    if p.right:
+        canvas.create_line(*p.center, *p.right.center)
+        draw_subtree_links(p.right, canvas)
 
 
 def draw_subtree_nodes(p: SortedBinaryNode, canvas: tk.Canvas) -> None:
@@ -263,8 +267,8 @@ def draw_subtree_nodes(p: SortedBinaryNode, canvas: tk.Canvas) -> None:
     r = radius
     canvas.create_oval(cx - r, cy - r, cx + r, cy + r, fill="white")
     canvas.create_text(cx, cy, text=str(p.value))
-    draw_subtree_nodes(p.left_child, canvas)
-    draw_subtree_nodes(p.right_child, canvas)
+    draw_subtree_nodes(p.left, canvas)
+    draw_subtree_nodes(p.right, canvas)
     # Outline the subtree for debugging.
     canvas.create_rectangle(p.subtree_bounds, fill="", outline="red")
 
