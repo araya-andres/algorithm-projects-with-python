@@ -19,6 +19,9 @@ class SortedBinaryNode:
         self.h_left = 0
         self.h_right = 0
 
+    def __len__(self):
+        return size(self)
+
     def __str__(self, level=0) -> str:
         s = f"{SortedBinaryNode.indent * level}{self.value}"
         if not is_leaf(self):
@@ -30,32 +33,29 @@ class SortedBinaryNode:
         return s
 
 
-def find(
-    value,
-    current_node: Optional[SortedBinaryNode],
-    parent: Optional[SortedBinaryNode] = None,
-) -> Tuple(Optional[SortedBinaryNode], Optional[SortedBinaryNode]):
+def size(p: SortedBinaryNode):
+    if p is None:
+        return 0
+    return 1 + size(p.left) + size(p.right)
+
+
+def find(value, current_node: Optional[SortedBinaryNode]) -> Optional[SortedBinaryNode]:
     if current_node is None:
-        return (None, None)
+        return None
     if current_node.value > value:
-        return find(value, current_node.left, current_node)
+        return find(value, current_node.left)
     if current_node.value < value:
-        return find(value, current_node.right, current_node)
-    return (current_node, parent)
+        return find(value, current_node.right)
+    return current_node
 
 
-def children(node: SortedBinaryNode) -> int:
-    n = 0
-    if node.left:
-        n += 1
-    if node.right:
-        n += 1
-    return n
+def node_min(p: SortedBinaryNode):
+    return p if p.left is None else node_min(p.left)
 
 
 def put(root: Optional[SortedBinaryNode], value) -> Tuple(SortedBinaryNode, int):
     if root is None:
-        return (SortedBinaryNode(value), 1)
+        return (SortedBinaryNode(value), 0)
     if value < root.value:
         root.left, h_left = put(root.left, value)
         root.h_left = max(h_left + 1, root.h_left)
@@ -157,7 +157,7 @@ def right_left_rotation(p: SortedBinaryNode) -> SortedBinaryNode:
 
 def height(p: SortedBinaryNode):
     if p is None:
-        return 0
+        return -1
     p.h_left = height(p.left) + 1
     p.h_right = height(p.right) + 1
     return max(p.h_left, p.h_right)
@@ -167,24 +167,31 @@ def is_leaf(p: SortedBinaryNode) -> bool:
     return p.left is None and p.right is None
 
 
-def pop(target: SortedBinaryNode, parent: Optional[SortedBinaryNode]):
-    if target is None:
-        return
-    n = children(target)
-    if n == 0:
-        if parent.left == target:
-            parent.left = None
-        else:
-            parent.right = None
-    elif n == 1:
-        subtree = target.left if target.left else target.right
-        if parent.left == target:
-            parent.left = subtree
-        else:
-            parent.right = subtree
-        target.left = target.right = None
+def pop(p: SortedBinaryNode, value):
+    if p is None:
+        return None
+    if value < p.value:
+        p.left = pop(p.left, value)
+    elif value > p.value:
+        p.right = pop(p.right, value)
     else:
-        pass
+        if p.right is None:
+            return p.left
+        if p.left is None:
+            return p.right
+        t = p
+        p = node_min(t.right)
+        p.right = delete_min(t.right)
+        p.left = t.left
+        t.right = t.left = None
+    return p
+
+
+def delete_min(p: SortedBinaryNode):
+    if p.left is None:
+        return p.right
+    p.left = delete_min(p.left)
+    return p
 
 
 def traverse_preorder(p: SortedBinaryNode):
@@ -275,6 +282,8 @@ def arrange_and_draw_subtree(root, canvas: tk.Canvas, xmin: float, ymin: float) 
     arrange_subtree(root, xmin, ymin)
     draw_subtree_links(root, canvas)
     draw_subtree_nodes(root, canvas)
+    print(f"size={len(root)}")
+    print(",".join(str(x.value) for x in traverse_inorder(root)))
 
 
 class App:
@@ -359,31 +368,24 @@ class App:
 
     def pop_value(self):
         # Remove a value from the tree.
-        target_string = self.value_entry.get()
-        if not target_string:
-            return
+        if target_string := self.value_entry.get():
+            self.value_entry.delete(0, "end")
+            self.value_entry.focus_set()
 
-        self.value_entry.delete(0, "end")
-        self.value_entry.focus_set()
-
-        try:
-            target = int(target_string)
-        except Exception as e:
-            messagebox.showinfo(
-                "Pop Error", f"Value {target_string} must be an integer.\n{e}"
-            )
-            return
-
-        try:
-            node, parent = find(target, self.root)
-            if node:
-                pop(node, parent)
-        except Exception as e:
-            messagebox.showinfo(
-                "Pop Error", f"Error removing value {target} from the tree.\n{e}"
-            )
-
-        self.draw_tree()
+            try:
+                print("deleting " + target_string)
+                target = int(target_string)
+                self.root = pop(self.root, target)
+                height(self.root)
+                self.draw_tree()
+            except ValueError as e:
+                messagebox.showinfo(
+                    "Pop Error", f"Value {target_string} must be an integer.\n{e}"
+                )
+            except Exception as e:
+                messagebox.showinfo(
+                    "Pop Error", f"Error removing value {target} from the tree.\n{e}"
+                )
 
     def ctrl_f_pressed(self, event):
         self.find_value()
