@@ -1,7 +1,9 @@
 version: '3'
 services:
   python3:
-    build: .
+    build:
+      context: .
+      target: dev
     container_name: 'python-tk'
     stdin_open: true
     working_dir: '/usr/src/app'

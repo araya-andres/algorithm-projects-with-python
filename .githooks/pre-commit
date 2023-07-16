@@ -2,7 +2,7 @@
 
 cd `git rev-parse --show-toplevel`
 for file in `git diff --name-only --cached`; do
-    if [[ $file =~ py$ ]]; then
+    if echo $file | grep py$; then
         black $file
     fi
     git add $file
