@@ -280,15 +280,13 @@ def draw_subtree_nodes(p: SortedBinaryNode, canvas: tk.Canvas) -> None:
     draw_subtree_nodes(p.left, canvas)
     draw_subtree_nodes(p.right, canvas)
     # Outline the subtree for debugging.
-    canvas.create_rectangle(p.subtree_bounds, fill="", outline="red")
+    # canvas.create_rectangle(p.subtree_bounds, fill="", outline="red")
 
 
 def arrange_and_draw_subtree(root, canvas: tk.Canvas, xmin: float, ymin: float) -> None:
     arrange_subtree(root, xmin, ymin)
     draw_subtree_links(root, canvas)
     draw_subtree_nodes(root, canvas)
-    print(f"size={len(root)}")
-    print(",".join(str(x.value) for x in traverse_inorder(root)))
 
 
 class App:
@@ -378,7 +376,6 @@ class App:
             self.value_entry.focus_set()
 
             try:
-                print("deleting " + target_string)
                 target = int(target_string)
                 self.root = pop(self.root, target)
                 height(self.root)
@@ -420,14 +417,8 @@ class App:
                 )
 
     def run_tests(self):
-        values = [60, 35, 76, 21, 42, 71, 89, 17, 24, 74, 11, 23, 72, 75]
-        for x in values:
+        for x in [60, 35, 76, 21, 42, 71, 89, 17, 24, 74, 11, 23, 72, 75]:
             self.root = put(self.root, x)
-        print(self.root)
-        print(",".join(str(x.value) for x in traverse_preorder(self.root)))
-        print(",".join(str(x.value) for x in traverse_inorder(self.root)))
-        print(",".join(str(x.value) for x in traverse_postorder(self.root)))
-        print(",".join(str(x.value) for x in traverse_breadth_first(self.root)))
 
 
 if __name__ == "__main__":
