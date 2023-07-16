@@ -22,14 +22,14 @@ def test_find_a_value():
     for x in values:
         root = SortedBinaryNode.put(root, x)
     for x in values:
-        assert SortedBinaryNode.find(x, root) is not None
+        assert SortedBinaryNode.find(root, x) is not None
 
 
 def test_find_returns_none_if_the_value_is_not_present():
     root = None
     for x in [2, 1, 3]:
         root = SortedBinaryNode.put(root, x)
-    assert SortedBinaryNode.find(666, root) is None
+    assert SortedBinaryNode.find(root, 666) is None
 
 
 def test_traverse_in_order_when_the_values_are_inserted_in_order():

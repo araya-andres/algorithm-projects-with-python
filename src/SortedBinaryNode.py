@@ -39,13 +39,13 @@ def size(p: SortedBinaryNode):
     return 1 + size(p.left) + size(p.right)
 
 
-def find(value, current_node: Optional[SortedBinaryNode]) -> Optional[SortedBinaryNode]:
+def find(current_node: Optional[SortedBinaryNode], value) -> Optional[SortedBinaryNode]:
     if current_node is None:
         return None
     if current_node.value > value:
-        return find(value, current_node.left)
+        return find(current_node.left, value)
     if current_node.value < value:
-        return find(value, current_node.right)
+        return find(current_node.right, value)
     return current_node
 
 
@@ -403,7 +403,7 @@ class App:
 
             try:
                 target = int(target_string)
-                node, _ = find(target, self.root)
+                node, _ = find(self.root, target)
                 if node is None:
                     messagebox.showinfo(
                         "Not Found", f"The value {target} is not in the tree."
