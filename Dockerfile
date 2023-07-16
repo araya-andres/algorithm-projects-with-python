@@ -6,7 +6,8 @@ COPY . .
 
 FROM base AS dev
 RUN apt update -y && \
-    apt install less tig vim -y
+    apt install less tig vim -y &&
+    git config --global core.editor vim
 RUN pip install -r requirements.dev.txt
 CMD [ "sh" ]
 
