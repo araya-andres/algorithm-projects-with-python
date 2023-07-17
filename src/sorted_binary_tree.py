@@ -6,6 +6,8 @@ from tkinter import messagebox
 from typing import Optional, Tuple
 import tkinter as tk
 
+from draw_binary_tree import arrange_and_draw_subtree
+
 RADIUS = 10  # Radius of a node’s circle.
 X_SPACING = 20  # Horizontal distance between neighboring subtrees.
 Y_SPACING = 20  # Vertical distance between parent and child subtrees.
@@ -24,6 +26,12 @@ class Node:
         self.right = None
         self.h_left = 0
         self.h_right = 0
+
+    def is_leaf(self) -> bool:
+        """
+        Return true if the node is a leaf. False otherwise.
+        """
+        return self.left is None and self.right is None
 
     def __len__(self):
         return size(self)
@@ -46,13 +54,6 @@ def size(node: Node):
     if node is None:
         return 0
     return 1 + size(node.left) + size(node.right)
-
-
-def is_leaf(node: Node) -> bool:
-    """
-    Return true if the node is a leaf. False otherwise.
-    """
-    return node.left is None and node.right is None
 
 
 def put(root: Optional[Node], value) -> Node:
@@ -283,78 +284,6 @@ def _left_right_rotation(node_p: Node) -> Node:
 def _right_left_rotation(node_p: Node) -> Node:
     node_p.right = _single_right_rotation(node_p.right)
     return _single_left_rotation(node_p)
-
-
-# Draw subtree
-
-
-def arrange_subtree(
-    node: Node, x_min: float, y_min: float
-) -> Tuple[float, float, float, float]:
-    """
-    Calculate the position of the nodes of the subtree.
-    """
-    c_y = RADIUS + y_min
-
-    if is_leaf(node):
-        c_x = RADIUS + x_min
-        node.center = (c_x, c_y)
-        node.subtree_bounds = (c_x - RADIUS, c_y - RADIUS, c_x + RADIUS, c_y + RADIUS)
-        return node.subtree_bounds
-
-    child_x, child_y = x_min, Y_SPACING + c_y + RADIUS
-    y_max = 0
-
-    if node.left:
-        _, _, x_max, y_max = arrange_subtree(node.left, child_x, child_y)
-        child_x = x_max + X_SPACING
-    if node.right:
-        _, _, x_max, y_right = arrange_subtree(node.right, child_x, child_y)
-        y_max = max(y_max, y_right)
-
-    node.center = ((x_max + x_min) / 2, c_y)
-    node.subtree_bounds = (x_min, y_min, x_max, y_max)
-    return node.subtree_bounds
-
-
-def draw_subtree_links(node: Node, canvas: tk.Canvas) -> None:
-    """
-    Draw subtree links.
-    """
-    if node.left:
-        canvas.create_line(*node.center, *node.left.center)
-        draw_subtree_links(node.left, canvas)
-    if node.right:
-        canvas.create_line(*node.center, *node.right.center)
-        draw_subtree_links(node.right, canvas)
-
-
-def draw_subtree_nodes(node: Node, canvas: tk.Canvas) -> None:
-    """
-    Draw subtree nodes.
-    """
-    if node is None:
-        return
-    c_x, c_y = node.center
-    canvas.create_oval(
-        c_x - RADIUS, c_y - RADIUS, c_x + RADIUS, c_y + RADIUS, fill="white"
-    )
-    canvas.create_text(c_x, c_y, text=str(node.value))
-    draw_subtree_nodes(node.left, canvas)
-    draw_subtree_nodes(node.right, canvas)
-    # Outline the subtree for debugging.
-    # canvas.create_rectangle(p.subtree_bounds, fill="", outline="red")
-
-
-def arrange_and_draw_subtree(
-    root, canvas: tk.Canvas, x_min: float, y_min: float
-) -> None:
-    """
-    Draw subtree.
-    """
-    arrange_subtree(root, x_min, y_min)
-    draw_subtree_links(root, canvas)
-    draw_subtree_nodes(root, canvas)
 
 
 # GUI
