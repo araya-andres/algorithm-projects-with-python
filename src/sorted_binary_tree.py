@@ -117,53 +117,6 @@ def delete_min(node: Node) -> Node:
     return node
 
 
-def traverse_preorder(node: Node):
-    """
-    Pre-order traversal.
-    """
-    yield node
-    if node.left:
-        yield from traverse_preorder(node.left)
-    if node.right:
-        yield from traverse_preorder(node.right)
-
-
-def traverse_inorder(node: Node):
-    """
-    In-order traversal.
-    """
-    if node.left:
-        yield from traverse_inorder(node.left)
-    yield node
-    if node.right:
-        yield from traverse_inorder(node.right)
-
-
-def traverse_postorder(node: Node):
-    """
-    Post-order traversal.
-    """
-    if node.left:
-        yield from traverse_postorder(node.left)
-    if node.right:
-        yield from traverse_postorder(node.right)
-    yield node
-
-
-def traverse_breadth_first(node: Node):
-    """
-    Breadth-First traversal.
-    """
-    queue = [node]
-    while queue:
-        node = queue.pop(0)
-        yield node
-        if node.left:
-            queue.append(node.left)
-        if node.right:
-            queue.append(node.right)
-
-
 def is_bst(node: Node) -> bool:
     """
     Return True if node is the root of a binary search tree.

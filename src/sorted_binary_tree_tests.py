@@ -2,6 +2,7 @@
 Unit tests for sort_binary_tree.
 """
 import sorted_binary_tree
+import traverse
 
 
 def test_the_size_of_an_empty_tree_is_zero():
@@ -50,3 +51,14 @@ def test_tree_is_bst_after_interting_values_in_reversed_order():
         root = sorted_binary_tree.put(root, value)
     assert len(root) == size
     assert sorted_binary_tree.is_bst(root)
+
+
+def test_traverse_tree_in_order():
+    size = 100
+    root = None
+    for value in reversed(range(size)):
+        root = sorted_binary_tree.put(root, value)
+    expected_value = 0
+    for node in traverse.inorder(root):
+        assert node.value == expected_value
+        expected_value += 1

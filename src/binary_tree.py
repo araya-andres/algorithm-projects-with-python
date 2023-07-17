@@ -38,37 +38,6 @@ class Node:
                 return node
         return None
 
-    def traverse_preorder(self):
-        yield self
-        if self.left:
-            yield from self.left.traverse_preorder()
-        if self.right:
-            yield from self.right.traverse_preorder()
-
-    def traverse_inorder(self):
-        if self.left:
-            yield from self.left.traverse_inorder()
-        yield self
-        if self.right:
-            yield from self.right.traverse_inorder()
-
-    def traverse_postorder(self):
-        if self.left:
-            yield from self.left.traverse_postorder()
-        if self.right:
-            yield from self.right.traverse_postorder()
-        yield self
-
-    def traverse_breadth_first(self):
-        queue = [self]
-        while queue:
-            node = queue.pop(0)
-            yield node
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
-
     def __str__(self, level=0) -> str:
         s = f"{Node.indent * level}{self.value}:"
         if self.left:
