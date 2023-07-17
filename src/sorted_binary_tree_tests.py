@@ -34,27 +34,19 @@ def test_find_returns_none_if_the_value_is_not_present():
     assert sorted_binary_tree.find(root, 666) is None
 
 
-def test_traverse_in_order_when_the_values_are_inserted_in_order():
+def test_tree_is_bst_after_inserting_values_in_order():
     size = 100
     root = None
     for value in range(size):
         root = sorted_binary_tree.put(root, value)
     assert len(root) == size
-    prev = None
-    for node in sorted_binary_tree.traverse_inorder(root):
-        if prev:
-            assert prev.value < node.value
-        prev = node
+    assert sorted_binary_tree.is_bst(root)
 
 
-def test_traverse_in_order_when_the_values_are_inserted_reversed_in_order():
+def test_tree_is_bst_after_interting_values_in_reversed_order():
     size = 100
     root = None
     for value in reversed(range(size)):
         root = sorted_binary_tree.put(root, value)
     assert len(root) == size
-    prev = None
-    for node in sorted_binary_tree.traverse_inorder(root):
-        if prev:
-            assert prev.value < node.value
-        prev = node
+    assert sorted_binary_tree.is_bst(root)

@@ -163,6 +163,19 @@ def traverse_breadth_first(node: Node):
             queue.append(node.right)
 
 
+def is_bst(node: Node) -> bool:
+    """
+    Return True if node is the root of a binary search tree.
+    """
+    if node is None:
+        return True
+    if node.left is not None and node.value < node.left.value:
+        return False
+    if node.right is not None and node.value > node.right.value:
+        return False
+    return is_bst(node.left) and is_bst(node.right)
+
+
 def _put_helper(root: Optional[Node], value) -> Tuple(Node, int):
     if root is None:
         return (Node(value), 0)
