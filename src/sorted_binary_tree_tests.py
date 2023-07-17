@@ -1,5 +1,5 @@
 """
-Unit tests for sort_binary_node.
+Unit tests for sort_binary_tree.
 """
 import sorted_binary_tree
 
