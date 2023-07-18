@@ -10,5 +10,6 @@ services:
     tty: true
     volumes:
       - ${PWD}:/usr/src/app
+      - ${HOME}/.ssh:/root/.ssh
     environment:
       - DISPLAY=${IP}:0

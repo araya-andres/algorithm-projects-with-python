@@ -9,6 +9,7 @@ RUN apt update -y && \
     apt install less tig vim -y
 RUN git config --global core.editor vim && \
     git config --global core.hooksPath .githooks
+RUN mkdir /root/.ssh
 RUN pip install -r requirements.dev.txt
 CMD [ "sh" ]
 
