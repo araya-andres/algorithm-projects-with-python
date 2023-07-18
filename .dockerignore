@@ -1,8 +1,7 @@
+**/__pycache__
 *_tests.py
 .*
 Dockerfile
 README.md
-__pycache__
 docker-compose.yml
 images/
-requirements.dev.txt
