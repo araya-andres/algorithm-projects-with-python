@@ -8,10 +8,6 @@ import tkinter as tk
 
 from draw_binary_tree import arrange_and_draw_subtree
 
-RADIUS = 10  # Radius of a node’s circle.
-X_SPACING = 20  # Horizontal distance between neighboring subtrees.
-Y_SPACING = 20  # Vertical distance between parent and child subtrees.
-
 
 class Node:
     """
