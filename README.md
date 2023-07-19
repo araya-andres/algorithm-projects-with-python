@@ -1,1 +1,1 @@
-Repository for [Algorithm Projects with Python - Trees](https://www.manning.com/liveproject/trees). To start, run `docker-compose up -d`.
+Repository for [Six Small Algorithm Projects with Python](https://www.manning.com/liveprojectseries/algorithm-projects-python-ser). To start, run `docker-compose up -d`.
