@@ -1,7 +1,7 @@
+**/*_tests.py
 **/__pycache__
-*_tests.py
+**/screenshots
 .*
 Dockerfile
 README.md
 docker-compose.yml
-images/
