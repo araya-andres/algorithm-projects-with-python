@@ -24,14 +24,14 @@ VORTEX_BOUNDS = (-1.5, -1.5, 2, 1.5)
 
 
 # Define our colors as RGB tuples.
-black   = (  0,   0,   0)
-red     = (255,   0,   0)
-orange  = (255, 128,   0)
-yellow  = (255, 255,   0)
-green   = (  0, 192,   0)
-cyan    = (  0, 255, 255)
-blue    = (  0,   0, 255)
-fuchsia = (255,   0, 255)
+black = (0, 0, 0)
+red = (255, 0, 0)
+orange = (255, 128, 0)
+yellow = (255, 255, 0)
+green = (0, 192, 0)
+cyan = (0, 255, 255)
+blue = (0, 0, 255)
+fuchsia = (255, 0, 255)
 
 
 class App:
@@ -58,48 +58,78 @@ class App:
 
         # Make the main interface.
         self.window = tk.Tk()
-        self.window.title('escape_fractals')
-        self.window.protocol('WM_DELETE_WINDOW', self.kill_callback)
-        self.window.geometry('300x300')
+        self.window.title("escape_fractals")
+        self.window.protocol("WM_DELETE_WINDOW", self.kill_callback)
+        self.window.geometry("300x300")
 
         # Build the menu.
         self.menubar = tk.Menu(self.window)
 
         self.menu_file = tk.Menu(self.menubar, tearoff=False)
-        self.menu_file.add_command(label='Save As...', command=self.save_image, accelerator="Ctrl+S")
+        self.menu_file.add_command(
+            label="Save As...", command=self.save_image, accelerator="Ctrl+S"
+        )
         self.menu_file.add_separator()
-        self.menu_file.add_command(label='Exit', command=self.kill_callback)
-        self.menubar.add_cascade(label='File', menu=self.menu_file)
+        self.menu_file.add_command(label="Exit", command=self.kill_callback)
+        self.menubar.add_cascade(label="File", menu=self.menu_file)
 
         self.menu_settings = tk.Menu(self.menubar, tearoff=False)
         self.fractal_type = tk.IntVar(value=MANDELBROT_SET)
-        self.menu_settings.add_radiobutton(label='Mandelbrot Set',
-            variable=self.fractal_type, value=MANDELBROT_SET, command=self.changed_fractal)
-        self.menu_settings.add_radiobutton(label='Julia Set',
-            variable=self.fractal_type, value=JULIA_SET, command=self.changed_fractal)
-        self.menu_settings.add_radiobutton(label='Vortex Fractal',
-            variable=self.fractal_type, value=VORTEX_FRACTAL, command=self.changed_fractal)
+        self.menu_settings.add_radiobutton(
+            label="Mandelbrot Set",
+            variable=self.fractal_type,
+            value=MANDELBROT_SET,
+            command=self.changed_fractal,
+        )
+        self.menu_settings.add_radiobutton(
+            label="Julia Set",
+            variable=self.fractal_type,
+            value=JULIA_SET,
+            command=self.changed_fractal,
+        )
+        self.menu_settings.add_radiobutton(
+            label="Vortex Fractal",
+            variable=self.fractal_type,
+            value=VORTEX_FRACTAL,
+            command=self.changed_fractal,
+        )
         self.menu_settings.add_separator()
         self.smooth_type = tk.IntVar(value=SMOOTH_NOT)
-        self.menu_settings.add_radiobutton(label='No Smoothing',
-            variable=self.smooth_type, value=SMOOTH_NOT, command=self.changed_smooth_type)
-        self.menu_settings.add_radiobutton(label='Smooth 1',
-            variable=self.smooth_type, value=SMOOTH_1, command=self.changed_smooth_type)
-        self.menu_settings.add_radiobutton(label='Smooth 2',
-            variable=self.smooth_type, value=SMOOTH_2, command=self.changed_smooth_type)
+        self.menu_settings.add_radiobutton(
+            label="No Smoothing",
+            variable=self.smooth_type,
+            value=SMOOTH_NOT,
+            command=self.changed_smooth_type,
+        )
+        self.menu_settings.add_radiobutton(
+            label="Smooth 1",
+            variable=self.smooth_type,
+            value=SMOOTH_1,
+            command=self.changed_smooth_type,
+        )
+        self.menu_settings.add_radiobutton(
+            label="Smooth 2",
+            variable=self.smooth_type,
+            value=SMOOTH_2,
+            command=self.changed_smooth_type,
+        )
         self.menu_settings.add_separator()
-        self.menu_settings.add_command(label='Change Max Iterations', command=self.change_max_iterations)
-        self.menubar.add_cascade(label='Settings', menu=self.menu_settings)
-        
+        self.menu_settings.add_command(
+            label="Change Max Iterations", command=self.change_max_iterations
+        )
+        self.menubar.add_cascade(label="Settings", menu=self.menu_settings)
+
         self.menu_scale = tk.Menu(self.menubar, tearoff=False)
-        self.menu_scale.add_command(label='Redraw', command=self.redraw)
-        self.menu_scale.add_command(label='Scale x2', command=self.scale_2x)
-        self.menu_scale.add_command(label='Scale x4', command=self.scale_4x)
-        self.menu_scale.add_command(label='Scale x8', command=self.scale_8x)
-        self.menu_scale.add_command(label='Full Scale', command=self.scale_full)
+        self.menu_scale.add_command(label="Redraw", command=self.redraw)
+        self.menu_scale.add_command(label="Scale x2", command=self.scale_2x)
+        self.menu_scale.add_command(label="Scale x4", command=self.scale_4x)
+        self.menu_scale.add_command(label="Scale x8", command=self.scale_8x)
+        self.menu_scale.add_command(label="Full Scale", command=self.scale_full)
         self.menu_scale.add_separator()
-        self.menu_scale.add_command(label='Enter Selected Area', command=self.enter_selected_area)
-        self.menubar.add_cascade(label='Scale', menu=self.menu_scale)
+        self.menu_scale.add_command(
+            label="Enter Selected Area", command=self.enter_selected_area
+        )
+        self.menubar.add_cascade(label="Scale", menu=self.menu_scale)
 
         self.window.config(menu=self.menubar)
 
@@ -108,10 +138,12 @@ class App:
         self.window.bind_all("<Control-r>", self.ctrl_r_pressed)
 
         # Build the window surface.
-        self.canvas = tk.Canvas(self.window, bg='white',
-            borderwidth=2, relief=tk.SUNKEN, cursor="plus")
-        self.canvas.pack(padx=10, pady=(0,10),
-            side=tk.BOTTOM, fill=tk.BOTH, expand=True)
+        self.canvas = tk.Canvas(
+            self.window, bg="white", borderwidth=2, relief=tk.SUNKEN, cursor="plus"
+        )
+        self.canvas.pack(
+            padx=10, pady=(0, 10), side=tk.BOTTOM, fill=tk.BOTH, expand=True
+        )
         self.canvas.bind("<Button-1>", self.mouse_down)
 
         self.window.update()
@@ -170,23 +202,33 @@ class App:
 
     def enter_selected_area(self):
         # Let the user enter the selected area textually.
-        result = simpledialog.askstring('Enter Bounds',
-            'Enter bounds (xmin, ymin, xmax, ymax):',
-            parent=self.window)
-        if not result: return None
+        result = simpledialog.askstring(
+            "Enter Bounds", "Enter bounds (xmin, ymin, xmax, ymax):", parent=self.window
+        )
+        if not result:
+            return None
 
         # Parse the selected text, which should be in the format xmin, ymin, xmax, ymax.
         try:
-            self.wxmin, self.wymin, self.wxmax, self.wymax = [float(s) for s in result.split(',')]
+            self.wxmin, self.wymin, self.wxmax, self.wymax = [
+                float(s) for s in result.split(",")
+            ]
         except Exception as e:
-            messagebox.showinfo('Parse Error',
-                f'Area bounds should have the format "xmin, ymin, xmax, ymax"\n{e}')
+            messagebox.showinfo(
+                "Parse Error",
+                f'Area bounds should have the format "xmin, ymin, xmax, ymax"\n{e}',
+            )
         self.redraw()
 
     def change_max_iterations(self):
-        result = simpledialog.askstring('Max Iterations', 'Max Iterations',
-            initialvalue=self.max_iterations, parent=self.window)
-        if not result: return None
+        result = simpledialog.askstring(
+            "Max Iterations",
+            "Max Iterations",
+            initialvalue=self.max_iterations,
+            parent=self.window,
+        )
+        if not result:
+            return None
 
         self.max_iterations = int(result)
         self.redraw()
@@ -200,27 +242,33 @@ class App:
 
     def save_image(self):
         file_types = [
-            ('PNG', '*.png'),
-            ('JPG', '*.jpg'),
-            ('BMP', '*.bmp'),
-            ('GIF', '*.gif')]
+            ("PNG", "*.png"),
+            ("JPG", "*.jpg"),
+            ("BMP", "*.bmp"),
+            ("GIF", "*.gif"),
+        ]
         filename = filedialog.asksaveasfilename(
-            defaultextension='.png', filetypes=file_types,
-            initialdir='.',
-            title="Save As")
-        if not filename: return
+            defaultextension=".png",
+            filetypes=file_types,
+            initialdir=".",
+            title="Save As",
+        )
+        if not filename:
+            return
         try:
             self.fractal_image.save(filename)
         except Exception as e:
-            messagebox.showinfo('Error Saving Image', e)
+            messagebox.showinfo("Error Saving Image", e)
 
     def select_area(self):
         # Get the selected area in pixels.
         x0, y0, x1, y1 = self.canvas.coords(self.selection_rectangle)
 
         # Make sure the area is at least one pixel wide and tall.
-        if x1 <= x0: x1 = x0 + 1
-        if y1 <= y0: y1 = y0 + 1
+        if x1 <= x0:
+            x1 = x0 + 1
+        if y1 <= y0:
+            y1 = y0 + 1
 
         # Calculate scale factors to convert into world coordinates.
         avail_wid = self.canvas.winfo_width()
@@ -237,19 +285,19 @@ class App:
         self.wxmin, self.wymin, self.wxmax, self.wymax = wxmin, wymin, wxmax, wymax
         self.redraw()
 
-    def draw_fractal(self,  canvas):
+    def draw_fractal(self, canvas):
         self.canvas.delete(tk.ALL)
         self.canvas.update()
 
         # Create the new image.
         avail_wid = canvas.winfo_width()
         avail_hgt = canvas.winfo_height()
-        self.fractal_image = Image.new(mode='RGB', size=(avail_wid, avail_hgt))
+        self.fractal_image = Image.new(mode="RGB", size=(avail_wid, avail_hgt))
         pixels = self.fractal_image.load()
 
         # Adjust the selected area to match the canvas's size.
         self.adjust_aspect(avail_wid, avail_hgt)
-        print(f'{self.wxmin}, {self.wymin}, {self.wxmax}, {self.wymax}')
+        print(f"{self.wxmin}, {self.wymin}, {self.wxmax}, {self.wymax}")
 
         # Find scale factors to map pixels onto the selected area.
         dx = (self.wxmax - self.wxmin) / avail_wid
@@ -262,7 +310,7 @@ class App:
         else:
             self.draw_vortex(pixels, avail_wid, avail_hgt, dx, dy)
 
-        # Display the image on the canvas. 
+        # Display the image on the canvas.
         self.mandelbrot_photoimage = ImageTk.PhotoImage(self.fractal_image)
         self.canvas.create_image(0, 0, anchor=tk.NW, image=self.mandelbrot_photoimage)
 
@@ -272,7 +320,7 @@ class App:
         hgt = self.wymax - self.wymin
 
         # Compare aspect ratios.
-        if (wid / hgt > avail_wid / avail_hgt):
+        if wid / hgt > avail_wid / avail_hgt:
             # The area is too wide and short. Make it taller.
             hgt = wid / (avail_wid / avail_hgt)
             cy = (self.wymax + self.wymin) / 2
@@ -316,16 +364,22 @@ class App:
                 while step_num < self.max_iterations:
                     z = z1**2 + c.real + c.imag * z0
                     step_num += 1
-                    if z.real**2 + z.imag**2 > 4: break
+                    if z.real**2 + z.imag**2 > 4:
+                        break
                     z0 = z1
                     z1 = z
                 self.color_pixel(pixels, ix, iy, z, c, step_num)
 
     def color_pixel(self, pixels, ix, iy, z, c, step_num):
-        pixels[ix, iy] = self.colors[step_num % self.num_colors] if self.smooth_type.get() == SMOOTH_NOT else self.smooth_color(z, c, step_num)
+        pixels[ix, iy] = (
+            self.colors[step_num % self.num_colors]
+            if self.smooth_type.get() == SMOOTH_NOT
+            else self.smooth_color(z, c, step_num)
+        )
 
     def smooth_color(self, z, c, step_num):
-        if step_num == self.max_iterations: return self.colors[0]
+        if step_num == self.max_iterations:
+            return self.colors[0]
         for _ in range(3):
             z = z**2 + c
             step_num += 1
@@ -358,9 +412,13 @@ class App:
         self.drag_x1 = event.x
         self.drag_y1 = event.y
         self.selection_rectangle = self.canvas.create_rectangle(
-            self.drag_x0, self.drag_y0,
-            self.drag_x1, self.drag_y1,
-            dash=(2,2), outline='white')
+            self.drag_x0,
+            self.drag_y0,
+            self.drag_x1,
+            self.drag_y1,
+            dash=(2, 2),
+            outline="white",
+        )
 
     def mouse_up(self, event):
         self.canvas.unbind("<B1-Motion>")
