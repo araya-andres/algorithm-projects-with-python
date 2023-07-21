@@ -1,7 +1,8 @@
-from PIL import ImageTk, Image
 import math
 import random
 import tkinter as tk
+
+from PIL import Image, ImageTk
 
 
 class Point:

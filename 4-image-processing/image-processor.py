@@ -1,7 +1,8 @@
-import tkinter as tk
-from tkinter import messagebox, filedialog, simpledialog, colorchooser
-from PIL import ImageTk, Image, ImageFilter, ImageEnhance, ImageOps
 import math
+import tkinter as tk
+from tkinter import colorchooser, filedialog, messagebox, simpledialog
+
+from PIL import Image, ImageEnhance, ImageFilter, ImageOps, ImageTk
 
 
 def array_from_list(lst, cols):

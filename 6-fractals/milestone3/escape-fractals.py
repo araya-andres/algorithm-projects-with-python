@@ -1,10 +1,8 @@
-from PIL import Image, ImageTk
-from tkinter import filedialog
-from tkinter import messagebox
-from tkinter import simpledialog
 import math
 import tkinter as tk
+from tkinter import filedialog, messagebox, simpledialog
 
+from PIL import Image, ImageTk
 
 # Fractal types.
 MANDELBROT_SET = 0

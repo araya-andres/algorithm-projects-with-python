@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import List, Optional, Tuple
+
 import tkinter as tk
+from typing import List, Optional, Tuple
 
 
 class NaryNode:

@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import Optional, Tuple
+
 import tkinter as tk
+from typing import Optional, Tuple
 
 from draw_binary_tree import arrange_and_draw_subtree
 

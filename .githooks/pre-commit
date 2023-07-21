@@ -3,6 +3,7 @@
 cd `git rev-parse --show-toplevel`
 for file in `git diff --name-only --cached`; do
     if echo $file | grep py$; then
+        isort $file
         black $file
     fi
     git add $file

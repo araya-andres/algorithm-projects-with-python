@@ -2,9 +2,10 @@
 Sorted binary tree.
 """
 from __future__ import annotations
+
+import tkinter as tk
 from tkinter import messagebox
 from typing import Optional, Tuple
-import tkinter as tk
 
 from draw_binary_tree import arrange_and_draw_subtree
 

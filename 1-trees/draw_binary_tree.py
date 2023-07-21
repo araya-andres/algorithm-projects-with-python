@@ -2,6 +2,7 @@
 Draw binary tree.
 """
 from __future__ import annotations
+
 from tkinter import Canvas
 from typing import Tuple
 
