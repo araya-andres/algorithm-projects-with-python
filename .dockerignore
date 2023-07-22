@@ -1,6 +1,6 @@
-**/*_tests.py
 **/__pycache__
 **/screenshots
+**/test_*.py
 .*
 Dockerfile
 README.md

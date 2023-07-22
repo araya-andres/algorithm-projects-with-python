@@ -3,6 +3,8 @@ import serializer
 from network import Network
 from serializer import DeserializationException
 
+TEST_FILES_PATH = "2-shortest-paths/test-files/"
+
 
 @pytest.fixture
 def network() -> Network:
@@ -90,7 +92,7 @@ def test_parse_a_link_string_with_index_out_of_bounds_raises_an_exception(networ
 
 
 def test_save_and_load_from_file(network):
-    filename = "test.net"
+    filename = TEST_FILES_PATH + "test.net"
     serializer.save_into_file(network, filename)
     new_network = serializer.load_from_file(filename)
     assert len(new_network.nodes) == 2
@@ -100,17 +102,17 @@ def test_save_and_load_from_file(network):
 
 def test_load_an_empty_file_raises_an_exception():
     with pytest.raises(DeserializationException) as ex:
-        serializer.load_from_file("test-files/empty.txt")
+        serializer.load_from_file(TEST_FILES_PATH + "empty.txt")
     assert str(ex.value) == "Could not find the number of nodes"
 
 
 def test_load_a_file_with_only_commented_lines_raises_an_exception():
     with pytest.raises(DeserializationException) as ex:
-        serializer.load_from_file("test-files/only-commented-lines.txt")
+        serializer.load_from_file(TEST_FILES_PATH + "only-commented-lines.txt")
     assert str(ex.value) == "Could not find the number of nodes"
 
 
 def test_load_a_file_with_only_the_number_of_nodes_raises_an_exception():
     with pytest.raises(DeserializationException) as ex:
-        serializer.load_from_file("test-files/only-node-num.txt")
+        serializer.load_from_file(TEST_FILES_PATH + "only-node-num.txt")
     assert str(ex.value) == "Could not find the number of links"
