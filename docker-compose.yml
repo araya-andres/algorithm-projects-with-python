@@ -5,11 +5,9 @@ services:
       context: .
       target: dev
     container_name: 'python-tk'
-    stdin_open: true
-    working_dir: '/usr/src/app'
     tty: true
     volumes:
-      - ${PWD}:/usr/src/app
+      - .:/usr/src/algorithms
       - ${HOME}/.ssh:/root/.ssh
     environment:
       - DISPLAY=${IP}:0
