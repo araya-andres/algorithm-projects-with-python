@@ -1,10 +1,15 @@
+"""
+Serielizer for the Network class
+"""
 from network import Link, Network, Node
 
 COMMENT = "#"
 
 
 class DeserializationException(Exception):
-    pass
+    """
+    Exception for deserialization errors
+    """
 
 
 def _node_to_string(node: Node) -> str:
@@ -29,6 +34,9 @@ def _network_to_string(network) -> str:
 
 
 def save_into_file(network, filename: str):
+    """
+    Save the network to a file
+    """
     with open(filename, "w", encoding="utf-8") as writer:
         writer.writelines(_network_to_string(network))
 
@@ -37,8 +45,8 @@ def _add_node(network: Network, node_str: str) -> Node:
     try:
         pos_x, pos_y, text = node_str.split(",")
         return network.add_node(int(pos_x), int(pos_y), text)
-    except ValueError:
-        raise DeserializationException(f"Invalid node string: '{node_str}'")
+    except ValueError as ex:
+        raise DeserializationException(f"Invalid node string: '{node_str}'") from ex
 
 
 def _add_link(network: Network, link_str: str) -> Link:
@@ -52,8 +60,8 @@ def _add_link(network: Network, link_str: str) -> Link:
         from_node = network.nodes[from_index]
         to_node = network.nodes[to_index]
         return network.add_link(from_node, to_node, cost)
-    except ValueError:
-        raise DeserializationException(f"Invalid link string: '{link_str}'")
+    except ValueError as ex:
+        raise DeserializationException(f"Invalid link string: '{link_str}'") from ex
 
 
 def _parse(line: str) -> str:
@@ -64,6 +72,9 @@ def _parse(line: str) -> str:
 
 
 def load_from_file(filename: str) -> Network:
+    """
+    Load a network from a file
+    """
     network = Network()
     with open(filename, "r", encoding="utf-8") as reader:
         num_nodes = 0
