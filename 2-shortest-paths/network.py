@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import math
+from tkinter import Canvas
 from typing import List
 
 
@@ -13,6 +15,17 @@ class Node:
     def __str__(self) -> str:
         return f"[{self.text}]"
 
+    def draw(self, canvas: Canvas):
+        radius = 10
+        canvas.create_oval(
+            self.pos_x - radius,
+            self.pos_y - radius,
+            self.pos_x + radius,
+            self.pos_y + radius,
+            fill="white",
+        )
+        canvas.create_text(self.pos_x, self.pos_y, text=self.text)
+
 
 class Link:
     def __init__(self, from_node: Node, to_node: Node, cost: int):
@@ -22,6 +35,26 @@ class Link:
 
     def __str__(self) -> str:
         return f"{self.from_node} --> {self.to_node} ({self.cost})"
+
+    def draw(self, canvas: Canvas):
+        canvas.create_line(
+            self.from_node.pos_x,
+            self.from_node.pos_y,
+            self.to_node.pos_x,
+            self.to_node.pos_y,
+        )
+
+    def draw_label(self, canvas: Canvas):
+        _dx = self.to_node.pos_x - self.from_node.pos_x
+        _dy = self.to_node.pos_y - self.from_node.pos_y
+        angle = 180 * math.atan2(_dx, _dy) / math.pi - 90
+        _x = 0.667 * self.from_node.pos_x + 0.333 * self.to_node.pos_x
+        _y = 0.667 * self.from_node.pos_y + 0.333 * self.to_node.pos_y
+        radius = 10
+        canvas.create_oval(
+            _x - radius, _y - radius, _x + radius, _y + radius, fill="white", width=0
+        )
+        canvas.create_text(_x, _y, text=str(self.cost), angle=angle)
 
 
 class Network:
@@ -39,3 +72,11 @@ class Network:
         link = Link(from_node, to_node, cost)
         self.links.append(link)
         return link
+
+    def draw(self, canvas: Canvas):
+        for link in self.links:
+            link.draw(canvas)
+        for link in self.links:
+            link.draw_label(canvas)
+        for node in self.nodes:
+            node.draw(canvas)

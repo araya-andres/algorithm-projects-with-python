@@ -49,11 +49,14 @@ class App:
         if filename := tk.filedialog.askopenfilename():
             try:
                 self.network = serializer.load_from_file(filename)
+                self.draw_network()
             except Exception as ex:
                 messagebox.showinfo("", f"Could not open file '{filename}'\n{ex}")
 
     def draw_network(self):
-        pass
+        if self.network is not None:
+            self.canvas.delete(tk.ALL)
+            self.network.draw(self.canvas)
 
 
 App()
