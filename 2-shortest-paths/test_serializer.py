@@ -116,3 +116,21 @@ def test_load_a_file_with_only_the_number_of_nodes_raises_an_exception():
     with pytest.raises(DeserializationException) as ex:
         serializer.load_from_file(TEST_FILES_PATH + "only-node-num.txt")
     assert str(ex.value) == "Could not find the number of links"
+
+
+def test_load_a_file_with_zero_nodes():
+    network = serializer.load_from_file(TEST_FILES_PATH + "zero.txt")
+    assert len(network.nodes) == 0
+    assert len(network.links) == 0
+
+
+def test_load_a_file_with_less_nodes_than_expected_raises_an_exception():
+    with pytest.raises(DeserializationException) as ex:
+        serializer.load_from_file(TEST_FILES_PATH + "missing-nodes.txt")
+    assert str(ex.value) == "Could not find the number of nodes expected (1/2)"
+
+
+def test_load_a_file_with_less_links_than_expected_raises_an_exception():
+    with pytest.raises(DeserializationException) as ex:
+        serializer.load_from_file(TEST_FILES_PATH + "missing-links.txt")
+    assert str(ex.value) == "Could not find the number of links expected (0/1)"
