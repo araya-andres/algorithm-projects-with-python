@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox, simpledialog
 
+import serializer
+
 
 class App:
     # Create and manage the tkinter interface.
@@ -44,7 +46,14 @@ class App:
         self.open_network()
 
     def open_network(self):
-        pass
+        if filename := tk.filedialog.askopenfilename():
+            try:
+                self.network = serializer.load_from_file(filename)
+            except Exception as ex:
+                messagebox.showinfo("", f"Could not open file '{filename}'\n{ex}")
 
     def draw_network(self):
         pass
+
+
+App()
