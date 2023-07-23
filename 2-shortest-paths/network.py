@@ -6,6 +6,8 @@ from typing import List
 
 
 class Node:
+    RADIUS = 10
+
     def __init__(self, index: int, pos_x: int, pos_y: int, text: str):
         self.index = index
         self.pos_x = pos_x
@@ -16,15 +18,9 @@ class Node:
         return f"[{self.text}]"
 
     def draw(self, canvas: Canvas):
-        radius = 10
-        canvas.create_oval(
-            self.pos_x - radius,
-            self.pos_y - radius,
-            self.pos_x + radius,
-            self.pos_y + radius,
-            fill="white",
-        )
-        canvas.create_text(self.pos_x, self.pos_y, text=self.text)
+        _x, _y, _r = self.pos_x, self.pos_y, Node.RADIUS
+        canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill="white")
+        canvas.create_text(_x, _y, text=self.text)
 
 
 class Link:
@@ -50,10 +46,8 @@ class Link:
         angle = 180 * math.atan2(_dx, _dy) / math.pi - 90
         _x = 0.667 * self.from_node.pos_x + 0.333 * self.to_node.pos_x
         _y = 0.667 * self.from_node.pos_y + 0.333 * self.to_node.pos_y
-        radius = 10
-        canvas.create_oval(
-            _x - radius, _y - radius, _x + radius, _y + radius, fill="white", width=0
-        )
+        _r = Node.RADIUS
+        canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill="white", width=0)
         canvas.create_text(_x, _y, text=str(self.cost), angle=angle)
 
 
