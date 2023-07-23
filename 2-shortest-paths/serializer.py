@@ -79,29 +79,25 @@ def load_from_file(filename: str) -> Network:
             if line := reader.readline():
                 if parsed_line := _parse(line):
                     num_links = int(parsed_line)
-                break
+                    break
             else:
                 raise DeserializationException("Could not find the number of links")
-        i = 0
         if num_nodes == 0 and num_links > 0:
             raise DeserializationException("Can not have a link in an empty network")
-        while True:
+        i = 0
+        while i < num_nodes:
             if line := reader.readline():
                 if node_str := _parse(line):
                     _add_node(network, node_str)
                     i += 1
-                    if i >= num_nodes:
-                        break
             else:
                 raise DeserializationException()
         i = 0
-        while True:
+        while i < num_links:
             if line := reader.readline():
                 if link_str := _parse(line):
                     _add_link(network, link_str)
                     i += 1
-                    if i >= num_links:
-                        break
             else:
                 raise DeserializationException()
     return network
