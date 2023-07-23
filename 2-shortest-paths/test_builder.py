@@ -52,3 +52,13 @@ def test_build_three_by_three_grid():
     assert len(network.links) == 24
     assert network.nodes[-1].pos_x == 220
     assert network.nodes[-1].pos_y == 220
+
+
+def test_build_a_big_grid():
+    network = build_grid_network(220, 220, 10, 10)
+    assert len(network.nodes) == 100
+    assert len(network.links) == 360
+    assert network.nodes[0].pos_x == 10
+    assert network.nodes[0].pos_y == 10
+    assert network.nodes[-1].pos_x == 210
+    assert network.nodes[-1].pos_y == 210

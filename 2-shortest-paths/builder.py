@@ -5,8 +5,6 @@ import random
 
 from network import Network, Node
 
-BORDER = Node.RADIUS
-
 
 def _cost(lenght: int) -> int:
     return int(lenght * (1 + random.randint(0, 200) / 1000))
@@ -21,18 +19,18 @@ def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Netw
     network = Network()
 
     # Add nodes
-    _r = Node.RADIUS
-    _dx = (width - 2 * BORDER - 2 * _r) / (num_cols - 1) if num_cols > 1 else 0
-    _dy = (height - 2 * BORDER - 2 * _r) / (num_rows - 1) if num_rows > 1 else 0
-    pos_x = BORDER + _r
-    pos_y = BORDER + _r
+    _r = Node.LARGE_RADIUS if num_rows * num_cols < Network.BIG else Node.SMALL_RADIUS
+    _dx = (width - 4 * _r) / (num_cols - 1) if num_cols > 1 else 0
+    _dy = (height - 4 * _r) / (num_rows - 1) if num_rows > 1 else 0
+    pos_x = 2 * _r
+    pos_y = 2 * _r
     index = 0
     for _ in range(num_rows):
         for _ in range(num_cols):
             network.add_node(int(pos_x), int(pos_y), str(index))
             pos_x += _dx
             index += 1
-        pos_x = BORDER + _r
+        pos_x = 2 * _r
         pos_y += _dy
 
     # Link nodes

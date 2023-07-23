@@ -6,7 +6,8 @@ from typing import List
 
 
 class Node:
-    RADIUS = 10
+    LARGE_RADIUS = 10
+    SMALL_RADIUS = 5
 
     def __init__(self, index: int, pos_x: int, pos_y: int, text: str):
         self.index = index
@@ -17,10 +18,12 @@ class Node:
     def __str__(self) -> str:
         return f"[{self.text}]"
 
-    def draw(self, canvas: Canvas):
-        _x, _y, _r = self.pos_x, self.pos_y, Node.RADIUS
+    def draw(self, canvas: Canvas, draw_label: bool):
+        _x, _y = self.pos_x, self.pos_y
+        _r = Node.LARGE_RADIUS if draw_label else Node.SMALL_RADIUS
         canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill="white")
-        canvas.create_text(_x, _y, text=self.text)
+        if draw_label:
+            canvas.create_text(_x, _y, text=self.text)
 
 
 class Link:
@@ -46,12 +49,14 @@ class Link:
         angle = 180 * math.atan2(_dx, _dy) / math.pi - 90
         _x = 0.667 * self.from_node.pos_x + 0.333 * self.to_node.pos_x
         _y = 0.667 * self.from_node.pos_y + 0.333 * self.to_node.pos_y
-        _r = Node.RADIUS
+        _r = Node.LARGE_RADIUS
         canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill="white", width=0)
         canvas.create_text(_x, _y, text=str(self.cost), angle=angle)
 
 
 class Network:
+    BIG = 100
+
     def __init__(self):
         self.nodes: List[Node] = []
         self.links: List[Link] = []
@@ -68,9 +73,11 @@ class Network:
         return link
 
     def draw(self, canvas: Canvas):
+        draw_labels = len(self.nodes) < Network.BIG
         for link in self.links:
             link.draw(canvas)
-        for link in self.links:
-            link.draw_label(canvas)
+        if draw_labels:
+            for link in self.links:
+                link.draw_label(canvas)
         for node in self.nodes:
-            node.draw(canvas)
+            node.draw(canvas, draw_labels)
