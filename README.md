@@ -1,4 +1,4 @@
-Repository for [Six Small Algorithm Projects with Python](https://www.manning.com/liveprojectseries/algorithm-projects-python-ser). To start, run `./start.sh`.
+Repository for [Six Small Algorithm Projects with Python](https://www.manning.com/liveprojectseries/algorithm-projects-python-ser). To start, run `.scripts/start.sh`.
 
 ## Requirements (Mac)
 
