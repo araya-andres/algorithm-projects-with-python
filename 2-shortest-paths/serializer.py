@@ -64,31 +64,31 @@ def _add_link(network: Network, link_str: str) -> Link:
         raise DeserializationException(f"Invalid link string: '{link_str}'") from ex
 
 
-def _parse(line: str) -> str:
+def _remove_comments(line: str) -> str:
     pos = line.find(COMMENT)
     if pos > -1:
         line = line[:pos]
     return line.strip()
 
 
-def _read_value(reader, msg: str) -> int:
+def _get_value(reader, exception_msg):
     while True:
         if line := reader.readline():
-            if parsed_line := _parse(line):
-                return int(parsed_line)
+            if clean_line := _remove_comments(line):
+                return int(clean_line)
         else:
-            raise DeserializationException(msg)
+            raise DeserializationException(exception_msg)
 
 
-def _read_lines(reader, num_lines: int, callback, msg: str):
+def _parse_lines(reader, num_lines, parser, exception_msg):
     i = 0
     while i < num_lines:
         if line := reader.readline():
-            if parsed_lined := _parse(line):
-                callback(parsed_lined)
+            if clean_line := _remove_comments(line):
+                parser(clean_line)
                 i += 1
         else:
-            raise DeserializationException(f"{msg} ({i}/{num_lines})")
+            raise DeserializationException(f"{exception_msg} ({i}/{num_lines})")
 
 
 def load_from_file(filename: str) -> Network:
@@ -97,17 +97,17 @@ def load_from_file(filename: str) -> Network:
     """
     network = Network()
     with open(filename, "r", encoding="utf-8") as reader:
-        num_nodes = _read_value(reader, "Could not find the number of nodes")
+        num_nodes = _get_value(reader, "Could not find the number of nodes")
         if num_nodes == 0:
             return network
-        num_links = _read_value(reader, "Could not find the number of links")
-        _read_lines(
+        num_links = _get_value(reader, "Could not find the number of links")
+        _parse_lines(
             reader,
             num_nodes,
             lambda line: _add_node(network, line),
             "Could not find the number of nodes expected",
         )
-        _read_lines(
+        _parse_lines(
             reader,
             num_links,
             lambda line: _add_link(network, line),
