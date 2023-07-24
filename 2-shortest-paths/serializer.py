@@ -71,46 +71,46 @@ def _parse(line: str) -> str:
     return line.strip()
 
 
+def _read_value(reader, msg: str) -> int:
+    while True:
+        if line := reader.readline():
+            if parsed_line := _parse(line):
+                return int(parsed_line)
+        else:
+            raise DeserializationException(msg)
+
+
+def _read_lines(reader, num_lines: int, callback, msg: str):
+    i = 0
+    while i < num_lines:
+        if line := reader.readline():
+            if parsed_lined := _parse(line):
+                callback(parsed_lined)
+                i += 1
+        else:
+            raise DeserializationException(f"{msg} ({i}/{num_lines})")
+
+
 def load_from_file(filename: str) -> Network:
     """
     Load a network from a file
     """
     network = Network()
     with open(filename, "r", encoding="utf-8") as reader:
-        num_nodes = 0
-        while True:
-            if line := reader.readline():
-                if parsed_line := _parse(line):
-                    num_nodes = int(parsed_line)
-                    break
-            else:
-                raise DeserializationException("Could not find the number of nodes")
+        num_nodes = _read_value(reader, "Could not find the number of nodes")
         if num_nodes == 0:
             return network
-        num_links = 0
-        while True:
-            if line := reader.readline():
-                if parsed_line := _parse(line):
-                    num_links = int(parsed_line)
-                    break
-            else:
-                raise DeserializationException("Could not find the number of links")
-        i = 0
-        while i < num_nodes:
-            if line := reader.readline():
-                if node_str := _parse(line):
-                    _add_node(network, node_str)
-                    i += 1
-            else:
-                msg = f"Could not find the number of nodes expected ({i}/{num_nodes})"
-                raise DeserializationException(msg)
-        i = 0
-        while i < num_links:
-            if line := reader.readline():
-                if link_str := _parse(line):
-                    _add_link(network, link_str)
-                    i += 1
-            else:
-                msg = f"Could not find the number of links expected ({i}/{num_links})"
-                raise DeserializationException(msg)
+        num_links = _read_value(reader, "Could not find the number of links")
+        _read_lines(
+            reader,
+            num_nodes,
+            lambda line: _add_node(network, line),
+            "Could not find the number of nodes expected",
+        )
+        _read_lines(
+            reader,
+            num_links,
+            lambda line: _add_link(network, line),
+            "Could not find the number of links expected",
+        )
     return network
