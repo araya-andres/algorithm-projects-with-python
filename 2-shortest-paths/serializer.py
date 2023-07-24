@@ -50,8 +50,6 @@ def _add_node(network: Network, node_str: str) -> Node:
 
 
 def _add_link(network: Network, link_str: str) -> Link:
-    if len(network.nodes) == 0:
-        raise DeserializationException("Can not have a link in an empty network")
     try:
         from_index, to_index, cost = (int(value) for value in link_str.split(","))
         n_nodes = len(network.nodes)
@@ -97,20 +95,24 @@ def load_from_file(filename: str) -> Network:
     """
     network = Network()
     with open(filename, "r", encoding="utf-8") as reader:
-        num_nodes = _get_value(reader, "Could not find the number of nodes")
+        num_nodes = _get_value(
+            reader, exception_msg="Could not find the number of nodes"
+        )
         if num_nodes == 0:
             return network
-        num_links = _get_value(reader, "Could not find the number of links")
-        _parse_lines(
-            reader,
-            num_nodes,
-            lambda line: _add_node(network, line),
-            "Could not find the number of nodes expected",
+        num_links = _get_value(
+            reader, exception_msg="Could not find the number of links"
         )
         _parse_lines(
             reader,
-            num_links,
-            lambda line: _add_link(network, line),
-            "Could not find the number of links expected",
+            num_lines=num_nodes,
+            parser=lambda line: _add_node(network, line),
+            exception_msg="Could not find the number of nodes expected",
+        )
+        _parse_lines(
+            reader,
+            num_lines=num_links,
+            parser=lambda line: _add_link(network, line),
+            exception_msg="Could not find the number of links expected",
         )
     return network
