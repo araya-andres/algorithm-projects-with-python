@@ -12,7 +12,7 @@ class NaryNode:
 
     def __init__(self, value, children: Optional[List[NaryNode]] = None):
         self.value = value
-        self.children = children if children else []
+        self.children = children or []
 
     def add_child(self, child_node: NaryNode):
         self.children.append(child_node)
