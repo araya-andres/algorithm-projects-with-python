@@ -22,33 +22,31 @@ def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Netw
 
     # Add nodes
     num_nodes = num_rows * num_cols
-    _r = Node.LARGE_RADIUS if num_nodes < Network.BIG else Node.SMALL_RADIUS
-    _dx = (width - 4 * _r) / (num_cols - 1) if num_cols > 1 else 0
-    _dy = (height - 4 * _r) / (num_rows - 1) if num_rows > 1 else 0
-    pos_x = 2 * _r
-    pos_y = 2 * _r
-    index = 0
+    radius = Node.LARGE_RADIUS if num_nodes < Network.BIG else Node.SMALL_RADIUS
+    dist_x = (width - 4 * radius) / (num_cols - 1) if num_cols > 1 else 0
+    dist_y = (height - 4 * radius) / (num_rows - 1) if num_rows > 1 else 0
+    pos_x, pos_y = 2 * radius, 2 * radius
+    i = 0
     for _ in range(num_rows):
         for _ in range(num_cols):
-            network.add_node(int(pos_x), int(pos_y), str(index))
-            pos_x += _dx
-            index += 1
-        pos_x = 2 * _r
-        pos_y += _dy
+            network.add_node(int(pos_x), int(pos_y), str(i))
+            pos_x += dist_x
+            i += 1
+        pos_x = 2 * radius
+        pos_y += dist_y
 
     # Link nodes
-    col = 0
-    row = 0
+    col, row = 0, 0
     nodes = network.nodes
     for i in range(num_nodes):
         if col > 0:
-            network.add_link(nodes[i], nodes[i - 1], _cost(_dx))
+            network.add_link(nodes[i], nodes[i - 1], _cost(dist_x))
         if col < num_cols - 1:
-            network.add_link(nodes[i], nodes[i + 1], _cost(_dx))
+            network.add_link(nodes[i], nodes[i + 1], _cost(dist_x))
         if row > 0:
-            network.add_link(nodes[i], nodes[i - num_cols], _cost(_dy))
+            network.add_link(nodes[i], nodes[i - num_cols], _cost(dist_y))
         if row < num_rows - 1:
-            network.add_link(nodes[i], nodes[i + num_cols], _cost(_dy))
+            network.add_link(nodes[i], nodes[i + num_cols], _cost(dist_y))
         col += 1
         if col >= num_cols:
             col = 0
