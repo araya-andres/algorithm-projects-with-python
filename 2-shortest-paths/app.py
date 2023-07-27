@@ -34,6 +34,8 @@ class App:
             padx=10, pady=(0, 10), side=tk.BOTTOM, fill=tk.BOTH, expand=True
         )
         self.window.bind("<Control-o>", self.ctrl_o_pressed)
+        self.window.bind("<Button1-ButtonRelease>", self.select_start_node)
+        self.window.bind("<Button3-ButtonRelease>", self.select_end_node)
 
         # Display the window.
         self.window.focus_force()
@@ -44,6 +46,20 @@ class App:
 
     def ctrl_o_pressed(self, event):
         self.open_network()
+
+    def select_start_node(self, event):
+        if self.network is None:
+            return
+        for node in self.network.nodes:
+            node.is_start_node = _was_selected(node, event.x, event.y)
+        self.draw_network()
+
+    def select_end_node(self, event):
+        if self.network is None:
+            return
+        for node in self.network.nodes:
+            node.is_end_node = _was_selected(node, event.x, event.y)
+        self.draw_network()
 
     def open_network(self):
         if filename := tk.filedialog.askopenfilename():
@@ -57,6 +73,10 @@ class App:
         if self.network is not None:
             self.canvas.delete(tk.ALL)
             self.network.draw(self.canvas)
+
+
+def _was_selected(node, x, y):
+    return ((x - node.pos_x) ** 2 + (y - node.pos_y) ** 2) < node.radius**2
 
 
 App()

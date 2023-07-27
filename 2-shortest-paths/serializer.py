@@ -41,10 +41,10 @@ def save_into_file(network, filename: str):
         writer.writelines(_network_to_string(network))
 
 
-def _add_node(network: Network, node_str: str) -> Node:
+def _add_node(network: Network, node_str: str, radius: int = Node.LARGE_RADIUS) -> Node:
     try:
         pos_x, pos_y, text = node_str.split(",")
-        return network.add_node(int(pos_x), int(pos_y), text)
+        return network.add_node(int(pos_x), int(pos_y), text, radius=radius)
     except ValueError as ex:
         raise DeserializationException(f"Invalid node string: '{node_str}'") from ex
 
@@ -100,19 +100,22 @@ def load_from_file(filename: str) -> Network:
         )
         if num_nodes == 0:
             return network
+        radius = Node.LARGE_RADIUS
+        if num_nodes > Network.BIG:
+            radius = Node.SMALL_RADIUS
         num_links = _get_value(
             reader, exception_msg="Could not find the number of links"
         )
         _parse_lines(
             reader,
             num_lines=num_nodes,
-            parser=lambda line: _add_node(network, line),
+            parser=lambda line: _add_node(network, node_str=line, radius=radius),
             exception_msg="Could not find the number of nodes expected",
         )
         _parse_lines(
             reader,
             num_lines=num_links,
-            parser=lambda line: _add_link(network, line),
+            parser=lambda line: _add_link(network, link_str=line),
             exception_msg="Could not find the number of links expected",
         )
     return network
