@@ -16,12 +16,24 @@ class Node:
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.text = text
+        self.links: List[Link] = []
         self.is_start_node = False
         self.is_end_node = False
         self.radius = radius
 
     def __str__(self) -> str:
         return f"[{self.text}]"
+
+    def add_link(self, link: Link):
+        self.links.append(link)
+
+    def links_in_path(self, in_path: bool):
+        for link in self.links:
+            link.is_in_path = in_path
+
+    def links_in_tree(self, in_tree: bool):
+        for link in self.links:
+            link.is_in_tree = in_tree
 
     def draw(self, canvas: Canvas, draw_label: bool):
         color = "white"
@@ -43,13 +55,12 @@ class Link:
         self.cost = cost
         self.is_in_path = False
         self.is_in_tree = False
+        from_node.add_link(self)
 
     def __str__(self) -> str:
         return f"{self.from_node} --> {self.to_node} ({self.cost})"
 
     def draw(self, canvas: Canvas):
-        if self.from_node.index > self.to_node.index:
-            return
         witdh = 1
         color = "black"
         if self.is_in_path:
@@ -84,6 +95,8 @@ class Network:
     def __init__(self):
         self.nodes: List[Node] = []
         self.links: List[Link] = []
+        self.start_node = None
+        self.end_node = None
 
     def add_node(
         self, pos_x: int, pos_y: int, text: str, radius: int = Node.LARGE_RADIUS
@@ -97,6 +110,22 @@ class Network:
         link = Link(from_node, to_node, cost)
         self.links.append(link)
         return link
+
+    def select_start_node(self, start_node):
+        if self.start_node:
+            self.start_node.is_start_node = False
+            self.start_node.links_in_tree(False)
+        self.start_node = start_node
+        start_node.is_start_node = True
+        start_node.links_in_tree(True)
+
+    def select_end_node(self, end_node):
+        if self.end_node:
+            self.end_node.is_end_node = False
+            self.end_node.links_in_path(False)
+        self.end_node = end_node
+        end_node.is_end_node = True
+        end_node.links_in_path(True)
 
     def draw(self, canvas: Canvas):
         draw_labels = len(self.nodes) < Network.BIG

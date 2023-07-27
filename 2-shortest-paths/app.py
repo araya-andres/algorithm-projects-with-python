@@ -51,14 +51,16 @@ class App:
         if self.network is None:
             return
         for node in self.network.nodes:
-            node.is_start_node = _was_selected(node, event.x, event.y)
+            if _was_selected(node, event):
+                self.network.select_start_node(node)
         self.draw_network()
 
     def select_end_node(self, event):
         if self.network is None:
             return
         for node in self.network.nodes:
-            node.is_end_node = _was_selected(node, event.x, event.y)
+            if _was_selected(node, event):
+                self.network.select_end_node(node)
         self.draw_network()
 
     def open_network(self):
@@ -75,8 +77,9 @@ class App:
             self.network.draw(self.canvas)
 
 
-def _was_selected(node, x, y):
-    return ((x - node.pos_x) ** 2 + (y - node.pos_y) ** 2) < node.radius**2
+def _was_selected(node, event):
+    _x, _y = event.x, event.y
+    return ((_x - node.pos_x) ** 2 + (_y - node.pos_y) ** 2) <= node.radius**2
 
 
 App()
