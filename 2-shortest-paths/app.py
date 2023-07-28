@@ -53,7 +53,8 @@ class App:
         for node in self.network.nodes:
             if _was_selected(node, event):
                 self.network.select_start_node(node)
-        self.draw_network()
+                self.draw_network()
+                return
 
     def select_end_node(self, event):
         if self.network is None:
@@ -61,7 +62,8 @@ class App:
         for node in self.network.nodes:
             if _was_selected(node, event):
                 self.network.select_end_node(node)
-        self.draw_network()
+                self.draw_network()
+                return
 
     def open_network(self):
         if filename := tk.filedialog.askopenfilename():
