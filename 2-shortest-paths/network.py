@@ -70,7 +70,16 @@ class Link:
     def __str__(self) -> str:
         return f"{self.from_node} --> {self.to_node} ({self.cost})"
 
+    def is_visible(self):
+        return (
+            (self.from_node.index < self.to_node.index)
+            or self.is_in_path
+            or self.is_in_tree
+        )
+
     def draw(self, canvas: Canvas):
+        if not self.is_visible():
+            return
         witdh = 1
         color = "black"
         if self.is_in_path:
