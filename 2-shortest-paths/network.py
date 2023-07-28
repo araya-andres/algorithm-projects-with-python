@@ -88,14 +88,9 @@ class Link:
         elif self.is_in_tree:
             witdh = 5
             color = "green"
-        canvas.create_line(
-            self.from_node.pos_x,
-            self.from_node.pos_y,
-            self.to_node.pos_x,
-            self.to_node.pos_y,
-            width=witdh,
-            fill=color,
-        )
+        _x0, _y0 = self.from_node.pos_x, self.from_node.pos_y
+        _x1, _y1 = self.to_node.pos_x, self.to_node.pos_y
+        canvas.create_line(_x0, _y0, _x1, _y1, width=witdh, fill=color)
 
     def draw_label(self, canvas: Canvas):
         _dx = self.to_node.pos_x - self.from_node.pos_x
