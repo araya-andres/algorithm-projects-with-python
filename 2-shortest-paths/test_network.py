@@ -10,8 +10,6 @@ def network() -> Network:
     network.add_link(node_a, network.add_node(1, 1, "C"), 1)
     assert not any(node.is_start_node for node in network.nodes)
     assert not any(node.is_end_node for node in network.nodes)
-    assert not any(link.is_in_path for link in network.links)
-    assert not any(link.is_in_tree for link in network.links)
     return network
 
 
@@ -35,11 +33,9 @@ def test_start_point(network):
     node_a = network.nodes[0]
     network.select_start_node(node_a)
     assert node_a.is_start_node
-    assert all(link.is_in_tree for link in node_a.links)
 
 
 def test_end_point(network):
     node_a = network.nodes[0]
     network.select_end_node(node_a)
     assert node_a.is_end_node
-    assert all(link.is_in_path for link in node_a.links)

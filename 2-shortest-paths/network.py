@@ -27,24 +27,6 @@ class Node:
     def add_link(self, link: Link):
         self.links.append(link)
 
-    def links_in_path(self, in_path: bool):
-        for link in self.links:
-            link.is_in_path = in_path
-
-    def links_in_tree(self, in_tree: bool):
-        for link in self.links:
-            link.is_in_tree = in_tree
-
-    def set_as_start_node(self, is_start_node: bool) -> Node:
-        self.is_start_node = is_start_node
-        self.links_in_tree(in_tree=is_start_node)
-        return self
-
-    def set_as_end_node(self, is_end_node: bool) -> Node:
-        self.is_end_node = is_end_node
-        self.links_in_path(in_path=is_end_node)
-        return self
-
     def draw(self, canvas: Canvas, draw_label: bool):
         color = "white"
         if self.is_start_node:
@@ -126,14 +108,21 @@ class Network:
         return link
 
     def select_start_node(self, node: Node) -> Node:
+        node.is_start_node = True
         if self.start_node:
-            self.start_node.set_as_start_node(False)
-        self.start_node = node.set_as_start_node(True)
+            self.start_node.is_start_node = False
+        self.start_node = node
+        self.check_for_path()
 
     def select_end_node(self, node: Node) -> Node:
+        node.is_end_node = True
         if self.end_node:
-            self.end_node.set_as_end_node(False)
-        self.end_node = node.set_as_end_node(True)
+            self.end_node.is_end_node = False
+        self.end_node = node
+        self.check_for_path()
+
+    def check_for_path(self):
+        pass
 
     def draw(self, canvas: Canvas):
         draw_labels = len(self.nodes) < Network.BIG
