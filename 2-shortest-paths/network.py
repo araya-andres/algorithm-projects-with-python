@@ -167,10 +167,13 @@ class Network:
         return lowest_cost_node
 
     def find_path(self, links_in_tree: List[Optional[Link]]):
+        cost = 0
         link = links_in_tree[self.end_node.index]
         while link is not None:
+            cost += link.cost
             link.is_in_path = True
             link = links_in_tree[link.from_node.index]
+        print(f"cost={cost}")
 
     def draw(self, canvas: Canvas):
         draw_labels = len(self.nodes) < Network.BIG
