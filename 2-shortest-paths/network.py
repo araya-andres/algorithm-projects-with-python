@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 from tkinter import Canvas
-from typing import List
+from typing import List, Optional
 
 
 class Node:
@@ -64,12 +64,12 @@ class Link:
             return
         witdh = 1
         color = "black"
+        if self.is_in_tree:
+            witdh = 5
+            color = "green"
         if self.is_in_path:
             witdh = 5
             color = "red"
-        elif self.is_in_tree:
-            witdh = 5
-            color = "green"
         _x0, _y0 = self.from_node.pos_x, self.from_node.pos_y
         _x1, _y1 = self.to_node.pos_x, self.to_node.pos_y
         canvas.create_line(_x0, _y0, _x1, _y1, width=witdh, fill=color)
@@ -111,6 +111,9 @@ class Network:
         node.is_start_node = True
         if self.start_node:
             self.start_node.is_start_node = False
+            for link in self.links:
+                link.is_in_path = False
+                link.is_in_tree = False
         self.start_node = node
         self.check_for_path()
 
@@ -118,11 +121,56 @@ class Network:
         node.is_end_node = True
         if self.end_node:
             self.end_node.is_end_node = False
+            for link in self.links:
+                link.is_in_path = False
+                link.is_in_tree = False
         self.end_node = node
         self.check_for_path()
 
     def check_for_path(self):
-        pass
+        if self.start_node:
+            links_in_tree = self.find_path_tree_label_setting()
+            if self.end_node:
+                self.find_path(links_in_tree)
+
+    def find_path_tree_label_setting(self) -> List[Optional[Link]]:
+        processed: List[Node] = []
+        links: List[Optional[Link]] = [None] * len(self.nodes)
+        costs: List[float] = [float("inf")] * len(self.nodes)
+
+        node = self.start_node
+        costs[node.index] = 0
+        while node is not None:
+            cost = costs[node.index]
+            for link in node.links:
+                new_cost = cost + link.cost
+                i = link.to_node.index
+                if new_cost < costs[i]:
+                    link.is_in_tree = True
+                    if prev_link := links[i]:
+                        prev_link.is_in_tree = False
+                    links[i] = link
+                    costs[i] = new_cost
+            processed.append(node)
+            node = self.find_lowest_cost_node(costs, processed)
+
+        return links
+
+    def find_lowest_cost_node(self, costs, processed) -> Optional[Node]:
+        lowest_cost = float("inf")
+        lowest_cost_node = None
+        for i, cost in enumerate(costs):
+            node = self.nodes[i]
+            if cost < lowest_cost and node not in processed:
+                lowest_cost = cost
+                lowest_cost_node = node
+        return lowest_cost_node
+
+    def find_path(self, links_in_tree: List[Optional[Link]]):
+        link = links_in_tree[self.end_node.index]
+        while link is not None:
+            link.is_in_path = True
+            link = links_in_tree[link.from_node.index]
 
     def draw(self, canvas: Canvas):
         draw_labels = len(self.nodes) < Network.BIG
