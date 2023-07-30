@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox, simpledialog
+from tkinter import filedialog, messagebox
 
 import serializer
+from network import Network
 
 
 class App:
@@ -24,6 +25,23 @@ class App:
         self.menu_file.add_separator()
         self.menu_file.add_command(label="Exit", command=self.kill_callback)
         self.menubar.add_cascade(label="File", menu=self.menu_file)
+
+        self.menu_options = tk.Menu(self.menubar, tearoff=False)
+        self.shortest_path_algorithm = tk.IntVar(value=Network.LABEL_SETTING)
+        self.menu_options.add_radiobutton(
+            label="Label correcting",
+            variable=self.shortest_path_algorithm,
+            value=Network.LABEL_CORRECTING,
+            command=self.check_for_path,
+        )
+        self.menu_options.add_radiobutton(
+            label="Label setting",
+            variable=self.shortest_path_algorithm,
+            value=Network.LABEL_SETTING,
+            command=self.check_for_path,
+        )
+        self.menubar.add_cascade(label="Options", menu=self.menu_options)
+
         self.window.config(menu=self.menubar)
 
         # Build the window surface.
@@ -53,7 +71,7 @@ class App:
         for node in self.network.nodes:
             if _was_selected(node, event):
                 self.network.select_start_node(node)
-                self.draw_network()
+                self.check_for_path()
                 return
 
     def select_end_node(self, event):
@@ -62,11 +80,15 @@ class App:
         for node in self.network.nodes:
             if _was_selected(node, event):
                 self.network.select_end_node(node)
-                self.draw_network()
+                self.check_for_path()
                 return
 
+    def check_for_path(self):
+        self.network.check_for_path(self.shortest_path_algorithm.get())
+        self.draw_network()
+
     def open_network(self):
-        if filename := tk.filedialog.askopenfilename():
+        if filename := filedialog.askopenfilename():
             try:
                 self.network = serializer.load_from_file(filename)
                 self.draw_network()

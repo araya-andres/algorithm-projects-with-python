@@ -69,7 +69,7 @@ def _remove_comments(line: str) -> str:
     return line.strip()
 
 
-def _get_value(reader, exception_msg):
+def _get_value(reader, exception_msg) -> int:
     while True:
         if line := reader.readline():
             if clean_line := _remove_comments(line):

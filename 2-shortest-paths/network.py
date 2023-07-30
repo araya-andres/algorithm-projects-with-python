@@ -87,6 +87,8 @@ class Link:
 
 class Network:
     BIG: int = 100
+    LABEL_CORRECTING: int = 0
+    LABEL_SETTING: int = 1
 
     def __init__(self):
         self.nodes: List[Node] = []
@@ -102,7 +104,7 @@ class Network:
         self.nodes.append(node)
         return node
 
-    def add_link(self, from_node: Node, to_node: Node, cost: int):
+    def add_link(self, from_node: Node, to_node: Node, cost: int) -> Link:
         link = Link(from_node, to_node, cost)
         self.links.append(link)
         return link
@@ -112,22 +114,27 @@ class Network:
         if self.start_node:
             self.start_node.is_start_node = False
         self.start_node = node
-        self.check_for_path()
+        for link in self.links:
+            link.is_in_path = False
+            link.is_in_tree = False
 
     def select_end_node(self, node: Node) -> Node:
         node.is_end_node = True
         if self.end_node:
             self.end_node.is_end_node = False
         self.end_node = node
-        self.check_for_path()
-
-    def check_for_path(self):
-        if self.start_node is None:
-            return
         for link in self.links:
             link.is_in_path = False
             link.is_in_tree = False
-        links_in_tree = self.find_path_tree_label_setting()
+
+    def check_for_path(self, algorithm: int):
+        if self.start_node is None:
+            return
+        links_in_tree = (
+            self.find_path_tree_label_setting()
+            if algorithm == Network.LABEL_SETTING
+            else self.find_path_tree_label_correcting()
+        )
         if self.end_node:
             self.find_path(links_in_tree)
 
@@ -153,6 +160,9 @@ class Network:
             node = self.find_lowest_cost_node(costs, processed)
 
         return links
+
+    def find_path_tree_label_correcting(self):
+        pass
 
     def find_lowest_cost_node(
         self, costs: List[float], processed: List[Node]
