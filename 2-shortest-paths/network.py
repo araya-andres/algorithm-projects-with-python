@@ -127,14 +127,13 @@ class Network:
             link.is_in_path = False
             link.is_in_tree = False
 
-    def check_for_path(self, algorithm: int):
+    def check_for_path(self, algorithm_idx: int):
         if self.start_node is None:
             return
-        links_in_tree = (
-            self.find_path_tree_label_setting()
-            if algorithm == Network.LABEL_SETTING
-            else self.find_path_tree_label_correcting()
-        )
+        links_in_tree = [
+            self.find_path_tree_label_correcting,
+            self.find_path_tree_label_setting,
+        ][algorithm_idx]()
         if self.end_node:
             self.find_path(links_in_tree)
 
