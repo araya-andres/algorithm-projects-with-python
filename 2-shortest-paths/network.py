@@ -111,9 +111,6 @@ class Network:
         node.is_start_node = True
         if self.start_node:
             self.start_node.is_start_node = False
-            for link in self.links:
-                link.is_in_path = False
-                link.is_in_tree = False
         self.start_node = node
         self.check_for_path()
 
@@ -121,17 +118,18 @@ class Network:
         node.is_end_node = True
         if self.end_node:
             self.end_node.is_end_node = False
-            for link in self.links:
-                link.is_in_path = False
-                link.is_in_tree = False
         self.end_node = node
         self.check_for_path()
 
     def check_for_path(self):
-        if self.start_node:
-            links_in_tree = self.find_path_tree_label_setting()
-            if self.end_node:
-                self.find_path(links_in_tree)
+        if self.start_node is None:
+            return
+        for link in self.links:
+            link.is_in_path = False
+            link.is_in_tree = False
+        links_in_tree = self.find_path_tree_label_setting()
+        if self.end_node:
+            self.find_path(links_in_tree)
 
     def find_path_tree_label_setting(self) -> List[Optional[Link]]:
         processed: List[Node] = []
@@ -156,7 +154,9 @@ class Network:
 
         return links
 
-    def find_lowest_cost_node(self, costs, processed) -> Optional[Node]:
+    def find_lowest_cost_node(
+        self, costs: List[float], processed: List[Node]
+    ) -> Optional[Node]:
         lowest_cost = float("inf")
         lowest_cost_node = None
         for i, cost in enumerate(costs):
