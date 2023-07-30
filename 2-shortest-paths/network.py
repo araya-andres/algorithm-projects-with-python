@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+from heapq import heappop, heappush
 from tkinter import Canvas
 from typing import List, Optional
 
@@ -48,6 +49,9 @@ class Link:
         self.is_in_path = False
         self.is_in_tree = False
         from_node.add_link(self)
+
+    def __lt__(self, other: Link) -> bool:
+        return self.cost < other.cost
 
     def __str__(self) -> str:
         return f"{self.from_node} --> {self.to_node} ({self.cost})"
@@ -137,7 +141,7 @@ class Network:
         if self.end_node:
             self.find_path(links_in_tree)
 
-    def find_path_tree_label_setting(self) -> List[Optional[Link]]:
+    def find_path_tree_label_correcting(self):
         processed: List[Node] = []
         links: List[Optional[Link]] = [None] * len(self.nodes)
         costs: List[float] = [float("inf")] * len(self.nodes)
@@ -160,8 +164,29 @@ class Network:
 
         return links
 
-    def find_path_tree_label_correcting(self):
-        pass
+    def find_path_tree_label_setting(self) -> List[Optional[Link]]:
+        queue = []  # priority queue
+        links: List[Optional[Link]] = [None] * len(self.nodes)
+        visited: bool = [False] * len(self.nodes)
+
+        def visit(node: Node):
+            visited[node.index] = True
+            for link in node.links:
+                if not visited[link.to_node.index]:
+                    heappush(queue, link)
+
+        visit(self.start_node)
+
+        while queue:
+            link = heappop(queue)
+            node = link.to_node
+            if visited[node.index]:
+                continue
+            link.is_in_tree = True
+            links[node.index] = link
+            visit(node)
+
+        return links
 
     def find_lowest_cost_node(
         self, costs: List[float], processed: List[Node]

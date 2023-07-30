@@ -27,7 +27,7 @@ class App:
         self.menubar.add_cascade(label="File", menu=self.menu_file)
 
         self.menu_options = tk.Menu(self.menubar, tearoff=False)
-        self.shortest_path_algorithm = tk.IntVar(value=Network.LABEL_SETTING)
+        self.shortest_path_algorithm = tk.IntVar(value=Network.LABEL_CORRECTING)
         self.menu_options.add_radiobutton(
             label="Label correcting",
             variable=self.shortest_path_algorithm,
