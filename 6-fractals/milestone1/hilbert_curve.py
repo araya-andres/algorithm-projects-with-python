@@ -1,6 +1,8 @@
 import math
 import tkinter as tk
 
+from common.point import Point
+
 
 def get_string(n: int = 1) -> str:
     s = "a"
@@ -11,18 +13,6 @@ def get_string(n: int = 1) -> str:
     s = s.replace("a", "")
     s = s.replace("b", "")
     return s
-
-
-class Point:
-    def __init__(self, x: float = 0.0, y: float = 0.0):
-        self.x = x
-        self.y = y
-
-    def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
-
-    def __repr__(self):
-        return "Point(%i, %i)" % (self.x, self.y)
 
 
 class Turtle:

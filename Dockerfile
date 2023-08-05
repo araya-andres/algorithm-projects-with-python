@@ -1,5 +1,6 @@
 FROM python:3.11.4-bullseye AS base
 WORKDIR /usr/src/algorithms
+ENV PYTHONPATH=/usr/src/algorithms
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY . .

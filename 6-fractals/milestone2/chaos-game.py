@@ -4,21 +4,7 @@ import tkinter as tk
 
 from PIL import Image, ImageTk
 
-
-class Point:
-    def __init__(self, x: float = 0.0, y: float = 0.0):
-        self.x = x
-        self.y = y
-
-    def __add__(self, other):
-        return Point(self.x + other.x, self.y + other.y)
-
-    def __repr__(self):
-        return "Point(%f, %f)" % (self.x, self.y)
-
-
-def multiply(k: float, p: Point) -> Point:
-    return Point(k * p.x, k * p.y)
+from common.point import Point, multiply
 
 
 class App:
