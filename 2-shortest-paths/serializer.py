@@ -3,6 +3,8 @@ Serielizer for the Network class
 """
 from network import Link, Network, Node
 
+from common.point import Point
+
 COMMENT = "#"
 
 
@@ -13,7 +15,7 @@ class DeserializationException(Exception):
 
 
 def _node_to_string(node: Node) -> str:
-    return f"{node.pos_x},{node.pos_y},{node.text}"
+    return f"{int(node.pos.x)},{int(node.pos.y)},{node.text}"
 
 
 def _link_to_string(link: Link) -> str:
@@ -44,7 +46,7 @@ def save_into_file(network, filename: str):
 def _add_node(network: Network, node_str: str, radius: int = Node.LARGE_RADIUS) -> Node:
     try:
         pos_x, pos_y, text = node_str.split(",")
-        return network.add_node(int(pos_x), int(pos_y), text, radius=radius)
+        return network.add_node(Point(float(pos_x), float(pos_y)), text, radius=radius)
     except ValueError as ex:
         raise DeserializationException(f"Invalid node string: '{node_str}'") from ex
 

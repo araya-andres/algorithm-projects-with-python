@@ -7,6 +7,8 @@ import random
 from network import Network, Node
 from serializer import save_into_file
 
+from common.point import Point
+
 
 def _cost(lenght: int) -> int:
     return int(lenght * (1 + random.randint(0, 200) / 1000))
@@ -29,7 +31,7 @@ def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Netw
     i = 0
     for _ in range(num_rows):
         for _ in range(num_cols):
-            network.add_node(int(pos_x), int(pos_y), str(i))
+            network.add_node(Point(pos_x, pos_y), str(i))
             pos_x += dist_x
             i += 1
         pos_x = 2 * radius

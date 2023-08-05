@@ -18,3 +18,7 @@ class Point:
 
 def multiply(k: float, p: Point) -> Point:
     return Point(k * p.x, k * p.y)
+
+
+def squared_distance(p: Point, q: Point) -> float:
+    return (p.x - q.x) ** 2 + (p.y - q.y) ** 2

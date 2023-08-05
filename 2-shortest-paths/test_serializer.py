@@ -1,7 +1,10 @@
 import pytest
 import serializer
 from network import Network
+from pytest import approx
 from serializer import DeserializationException
+
+from common.point import Point
 
 TEST_FILES_PATH = "2-shortest-paths/test-files/"
 
@@ -9,8 +12,8 @@ TEST_FILES_PATH = "2-shortest-paths/test-files/"
 @pytest.fixture
 def network() -> Network:
     network = Network()
-    node_a = network.add_node(0, 0, "A")
-    node_b = network.add_node(1, 1, "B")
+    node_a = network.add_node(Point(0, 0), "A")
+    node_b = network.add_node(Point(1, 1), "B")
     network.add_link(node_a, node_b, 1)
     return network
 
@@ -40,8 +43,8 @@ def test_network_to_string(network):
 def test_node_from_string(network):
     node = serializer._add_node(network, "0,1,C")
     assert node.index == 2
-    assert node.pos_x == 0
-    assert node.pos_y == 1
+    assert node.pos.x == approx(0)
+    assert node.pos.y == approx(1)
     assert node.text == "C"
 
 

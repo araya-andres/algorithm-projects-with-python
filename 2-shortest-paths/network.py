@@ -5,22 +5,21 @@ from heapq import heappop, heappush
 from tkinter import Canvas
 from typing import List, Optional
 
+from common.point import Point
+
 
 class Node:
     LARGE_RADIUS: int = 10
     SMALL_RADIUS: int = 5
 
-    def __init__(
-        self, index: int, pos_x: int, pos_y: int, text: str, radius=LARGE_RADIUS
-    ):
-        self.index = index
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-        self.text = text
+    def __init__(self, index: int, pos: Point, text: str, radius=LARGE_RADIUS):
+        self.index: int = index
+        self.pos: Point = pos
+        self.text: str = text
         self.links: List[Link] = []
-        self.is_start_node = False
-        self.is_end_node = False
-        self.radius = radius
+        self.is_start_node: bool = False
+        self.is_end_node: bool = False
+        self.radius: int = radius
 
     def __str__(self) -> str:
         return f"[{self.text}]"
@@ -34,7 +33,7 @@ class Node:
             color = "pink"
         elif self.is_end_node:
             color = "lightblue1"
-        _x, _y = self.pos_x, self.pos_y
+        _x, _y = self.pos.x, self.pos.y
         _r = self.radius
         canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill=color)
         if draw_label:
@@ -74,16 +73,15 @@ class Link:
         if self.is_in_path:
             witdh = 5
             color = "red"
-        _x0, _y0 = self.from_node.pos_x, self.from_node.pos_y
-        _x1, _y1 = self.to_node.pos_x, self.to_node.pos_y
+        _x0, _y0 = self.from_node.pos.x, self.from_node.pos.y
+        _x1, _y1 = self.to_node.pos.x, self.to_node.pos.y
         canvas.create_line(_x0, _y0, _x1, _y1, width=witdh, fill=color)
 
     def draw_label(self, canvas: Canvas):
-        _dx = self.to_node.pos_x - self.from_node.pos_x
-        _dy = self.to_node.pos_y - self.from_node.pos_y
-        angle = 180 * math.atan2(_dx, _dy) / math.pi - 90
-        _x = 0.667 * self.from_node.pos_x + 0.333 * self.to_node.pos_x
-        _y = 0.667 * self.from_node.pos_y + 0.333 * self.to_node.pos_y
+        delta = self.to_node.pos - self.from_node.pos
+        angle = 180 * math.atan2(delta.x, delta.y) / math.pi - 90
+        _x = 0.667 * self.from_node.pos.x + 0.333 * self.to_node.pos.x
+        _y = 0.667 * self.from_node.pos.y + 0.333 * self.to_node.pos.y
         _r = Node.LARGE_RADIUS
         canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill="white", width=0)
         canvas.create_text(_x, _y, text=str(self.cost), angle=angle)
@@ -100,11 +98,9 @@ class Network:
         self.start_node = None
         self.end_node = None
 
-    def add_node(
-        self, pos_x: int, pos_y: int, text: str, radius: int = Node.LARGE_RADIUS
-    ) -> Node:
+    def add_node(self, pos: Point, text: str, radius: int = Node.LARGE_RADIUS) -> Node:
         index = len(self.nodes)
-        node = Node(index, pos_x, pos_y, text, radius)
+        node = Node(index, pos, text, radius)
         self.nodes.append(node)
         return node
 

@@ -4,6 +4,8 @@ from tkinter import filedialog, messagebox
 import serializer
 from network import Network
 
+from common.point import squared_distance
+
 
 class App:
     # Create and manage the tkinter interface.
@@ -102,8 +104,7 @@ class App:
 
 
 def _was_selected(node, event):
-    _x, _y = event.x, event.y
-    return ((_x - node.pos_x) ** 2 + (_y - node.pos_y) ** 2) <= node.radius**2
+    return squared_distance(node.pos, event) <= node.radius**2
 
 
 App()
