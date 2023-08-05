@@ -22,7 +22,7 @@ def arrange_subtree(
     if node.is_leaf():
         c_x = RADIUS + x_min
         node.center = (c_x, c_y)
-        node.subtree_bounds = (c_x - RADIUS, c_y - RADIUS, c_x + RADIUS, c_y + RADIUS)
+        node.subtree_bounds = (x_min, y_min, c_x + RADIUS, c_y + RADIUS)
         return node.subtree_bounds
 
     child_x, child_y = x_min, Y_SPACING + c_y + RADIUS
