@@ -22,7 +22,7 @@
 21, Install furnace and AC, [14, 20]
 22, Dig moat, []
 23, Install moat monster, [22]
-24, Finish roof, [3, 26]
+24, FinishpoSorter roof, [3, 26]
 25, Install siding, [3]
 26, Install roof deck, [3]
 27, Install auto lasers on roof, [26, 24, 19, 14]

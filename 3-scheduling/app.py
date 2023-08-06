@@ -1,13 +1,13 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
-from po_sorter import PoSorter
+import po_sorter
 
 
 class App:
     # Create and manage the tkinter interface.
     def __init__(self):
-        self.sorter = PoSorter()
+        self.sorter = None
 
         # Make the main interface.
         self.window = tk.Tk()
@@ -86,13 +86,17 @@ class App:
 
         self.unordered_list.delete(0, "end")
         self.ordered_list.delete(0, "end")
-        self.sorter.load_po_file(filename)
+        self.sorter = po_sorter.load_po_file(filename)
         self.unordered_list.insert("end", *self.sorter.tasks)
 
     def sort(self):
+        if not self.sorter:
+            return
         self.sorter.topo_sort()
         self.ordered_list.insert("end", *self.sorter.sorted_tasks)
-        messagebox.showinfo("Sort Result", self.sorter.verify_sort())
+        messagebox.showinfo(
+            "Sort Result", po_sorter.verify_sort(self.sorter.sorted_tasks)
+        )
 
 
 if __name__ == "__main__":
