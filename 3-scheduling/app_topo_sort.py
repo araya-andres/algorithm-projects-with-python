@@ -74,26 +74,21 @@ class App:
         self.open_po()
 
     def open_po(self):
-        file_types = [("Partial Ordering", "*.po")]
-        filename = filedialog.askopenfilename(
+        if filename := filedialog.askopenfilename(
             defaultextension=".po",
-            filetypes=file_types,
+            filetypes=[("Partial Ordering", "*.po")],
             initialdir=".",
             title="Open Partial Ordering",
-        )
-        if not filename:
-            return
-
-        self.unordered_list.delete(0, "end")
-        self.ordered_list.delete(0, "end")
-        self.unordered_tasks = po_sorter.load_po_file(filename)
-        self.unordered_list.insert("end", *self.unordered_tasks)
+        ):
+            self.unordered_list.delete(0, "end")
+            self.ordered_list.delete(0, "end")
+            self.unordered_tasks = po_sorter.load_po_file(filename)
+            self.unordered_list.insert("end", *self.unordered_tasks)
 
     def sort(self):
-        if not self.unordered_tasks:
-            return
-        sorted_tasks = po_sorter.topo_sort(self.unordered_tasks)
-        self.ordered_list.insert("end", *sorted_tasks)
+        if self.unordered_tasks:
+            sorted_tasks = po_sorter.topo_sort(self.unordered_tasks)
+            self.ordered_list.insert("end", *sorted_tasks)
 
 
 if __name__ == "__main__":
