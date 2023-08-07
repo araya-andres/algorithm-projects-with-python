@@ -4,7 +4,7 @@ import pytest
 from po_sorter import load_po_file, task_from_str, topo_sort, verify_sort
 from task import Task
 
-TEST_FILES_PATH = "3-scheduling/"
+TEST_FILES_PATH = "3-scheduling/test-files/"
 
 
 @pytest.fixture
@@ -64,3 +64,9 @@ def test_topo_sort():
 
 def test_topo_sort_with_a_sorted_list(sorted_tasks):
     assert verify_sort(topo_sort(sorted_tasks))
+
+
+def test_topo_sort_with_loop():
+    tasks = load_po_file(TEST_FILES_PATH + "impossible.po")
+    sorted_tasks = topo_sort(tasks)
+    assert len(sorted_tasks) == 3
