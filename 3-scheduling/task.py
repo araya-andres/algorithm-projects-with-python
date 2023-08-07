@@ -9,6 +9,8 @@ class Task:
         self.index: int = index
         self.prereq_numbers: List[int] = prereq_numbers
         self.prereq_tasks: List[Task] = []
+        self.prereq_count = 0
+        self.followers: List[Task] = []
 
     def __str__(self) -> str:
         return self.name

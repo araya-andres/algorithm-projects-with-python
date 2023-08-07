@@ -7,7 +7,7 @@ import po_sorter
 class App:
     # Create and manage the tkinter interface.
     def __init__(self):
-        self.sorter = None
+        self.unordered_tasks = None
 
         # Make the main interface.
         self.window = tk.Tk()
@@ -86,17 +86,14 @@ class App:
 
         self.unordered_list.delete(0, "end")
         self.ordered_list.delete(0, "end")
-        self.sorter = po_sorter.load_po_file(filename)
-        self.unordered_list.insert("end", *self.sorter.tasks)
+        self.unordered_tasks = po_sorter.load_po_file(filename)
+        self.unordered_list.insert("end", *self.unordered_tasks)
 
     def sort(self):
-        if not self.sorter:
+        if not self.unordered_tasks:
             return
-        self.sorter.topo_sort()
-        self.ordered_list.insert("end", *self.sorter.sorted_tasks)
-        messagebox.showinfo(
-            "Sort Result", po_sorter.verify_sort(self.sorter.sorted_tasks)
-        )
+        sorted_tasks = po_sorter.topo_sort(self.unordered_tasks)
+        self.ordered_list.insert("end", *sorted_tasks)
 
 
 if __name__ == "__main__":

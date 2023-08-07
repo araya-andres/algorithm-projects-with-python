@@ -29,7 +29,7 @@ def task_from_str(line: str) -> Task:
     return Task(name, index, prereq_numbers)
 
 
-def load_po_file(filename: str) -> PoSorter:
+def load_po_file(filename: str) -> List[Task]:
     """
     Load a .po file
     """
@@ -39,13 +39,30 @@ def load_po_file(filename: str) -> PoSorter:
             tasks.append(task_from_str(line.strip()))
     for task in tasks:
         task.numbers_to_tasks(tasks)
-    return PoSorter(tasks)
+    return tasks
 
 
-class PoSorter:
-    def __init__(self, tasks: List[Task]):
-        self.tasks: List[Task] = tasks
-        self.sorted_tasks: List[Task] = []
-
-    def topo_sort(self):
-        pass
+def topo_sort(tasks: List[Task]) -> List[Task]:
+    """
+    Performs topological sorting.
+    """
+    for task in tasks:
+        task.prereq_count = len(task.prereq_tasks)
+        for prereq in task.prereq_tasks:
+            prereq.followers.append(task)
+    sorted_tasks: List[Task] = []
+    ready_tasks: List[Task] = [task for task in tasks if task.prereq_count == 0]
+    while ready_tasks:
+        task = ready_tasks.pop(0)
+        for follower in task.followers:
+            follower.prereq_count -= 1
+            if follower.prereq_count == 0:
+                ready_tasks.append(follower)
+        sorted_tasks.append(task)
+    # rewired
+    for i, task in enumerate(sorted_tasks):
+        task.index = i
+        task.followers = []
+    for task in sorted_tasks:
+        task.prereq_numbers = [prereq.index for prereq in task.prereq_tasks]
+    return sorted_tasks
