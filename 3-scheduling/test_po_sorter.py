@@ -75,7 +75,7 @@ def test_topo_sort_with_loop():
 def test_build_pert_chart(sorted_tasks):
     columns = po_sorter.build_pert_chart(sorted_tasks)
     assert len(columns) == 3
-    assert all(len(row) == 1 for row in columns)
+    assert all(len(rows) == 1 for rows in columns)
     assert columns[0][0].name == "A"
     assert columns[1][0].name == "B"
     assert columns[2][0].name == "C"

@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 import re
+import tkinter as tk
 from typing import List
 
 from task import Task
+
+X_SPACING = 20
+Y_SPACING = 20
+SIDE = 20
 
 
 def verify_sort(sorted_tasks: List[Task]) -> bool:
@@ -78,6 +83,41 @@ def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
             new_ready_tasks = []
             columns.append(list(ready_tasks))
     return columns
+
+
+def arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 10):
+    _x = x_min
+    for rows in columns:
+        _y = y_min
+        for task in rows:
+            task.bounds = (_x, _y, _x + SIDE, _y + SIDE)
+            task.center = (_x + SIDE / 2, _y + SIDE / 2)
+            _y += SIDE + Y_SPACING
+        _x += SIDE + X_SPACING
+
+
+def draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
+    for rows in columns:
+        for task in rows:
+            px = task.center[0] + SIDE / 2
+            py = task.center[1]
+            for follower in task.followers:
+                qx = follower.center[0] - SIDE / 2
+                qy = follower.center[1]
+                canvas.create_line(px, py, qx, qy, arrow=tk.LAST)
+
+
+def draw_tasks(canvas: tk.Canvas, columns: List[List[Task]]):
+    for rows in columns:
+        for task in rows:
+            canvas.create_rectangle(task.bounds, fill="white")
+            canvas.create_text(*task.center, text=str(task.index))
+
+
+def draw_pert_chart(canvas: tk.Canvas, columns: List[List[Task]]):
+    arrange_tasks(columns)
+    draw_links(canvas, columns)
+    draw_tasks(canvas, columns)
 
 
 def _prepare(tasks: List[Task]):

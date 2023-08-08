@@ -43,16 +43,16 @@ class App:
         self.open_po()
 
     def open_po(self):
-        file_types = [("Partial Ordering", "*.po")]
         if filename := filedialog.askopenfilename(
             defaultextension=".po",
-            filetypes=file_types,
+            filetypes=[("Partial Ordering", "*.po")],
             initialdir=".",
             title="Open Partial Ordering",
         ):
             tasks = po_sorter.load_po_file(filename)
-            # po_sorter.build_pert_chart()
-            # po_sorter.draw_pert_chart(self.canvas)
+            columns = po_sorter.build_pert_chart(tasks)
+            self.canvas.delete("all")
+            po_sorter.draw_pert_chart(self.canvas, columns)
 
 
 if __name__ == "__main__":
