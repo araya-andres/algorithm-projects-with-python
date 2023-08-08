@@ -44,9 +44,9 @@ def load_po_file(filename: str) -> List[Task]:
 
 def topo_sort(tasks: List[Task]) -> List[Task]:
     """
-    Performs topological sorting.
+    Perform topological sorting.
     """
-    prepare(tasks)
+    _prepare(tasks)
     sorted_tasks: List[Task] = []
     ready_tasks: List[Task] = [task for task in tasks if task.prereq_count == 0]
     while ready_tasks:
@@ -56,17 +56,38 @@ def topo_sort(tasks: List[Task]) -> List[Task]:
             if follower.prereq_count == 0:
                 ready_tasks.append(follower)
         sorted_tasks.append(task)
-    return rewire(sorted_tasks)
+    return _rewire(sorted_tasks)
 
 
-def prepare(tasks: List[Task]):
+def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
+    """
+    Build a pert chart
+    """
+    _prepare(tasks)
+    ready_tasks: List[Task] = [task for task in tasks if task.prereq_count == 0]
+    new_ready_tasks: List[Task] = []
+    columns: List[List[Task]] = [list(ready_tasks)]
+    while ready_tasks:
+        task = ready_tasks.pop(0)
+        for follower in task.followers:
+            follower.prereq_count -= 1
+            if follower.prereq_count == 0:
+                new_ready_tasks.append(follower)
+        if not ready_tasks and new_ready_tasks:
+            ready_tasks = new_ready_tasks
+            new_ready_tasks = []
+            columns.append(list(ready_tasks))
+    return columns
+
+
+def _prepare(tasks: List[Task]):
     for task in tasks:
         task.prereq_count = len(task.prereq_tasks)
         for prereq in task.prereq_tasks:
             prereq.followers.append(task)
 
 
-def rewire(tasks: List[Task]) -> List[Task]:
+def _rewire(tasks: List[Task]) -> List[Task]:
     for i, task in enumerate(tasks):
         task.index = i
         task.followers = []
