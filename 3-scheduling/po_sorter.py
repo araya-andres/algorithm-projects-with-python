@@ -46,10 +46,7 @@ def topo_sort(tasks: List[Task]) -> List[Task]:
     """
     Performs topological sorting.
     """
-    for task in tasks:
-        task.prereq_count = len(task.prereq_tasks)
-        for prereq in task.prereq_tasks:
-            prereq.followers.append(task)
+    prepare(tasks)
     sorted_tasks: List[Task] = []
     ready_tasks: List[Task] = [task for task in tasks if task.prereq_count == 0]
     while ready_tasks:
@@ -59,10 +56,20 @@ def topo_sort(tasks: List[Task]) -> List[Task]:
             if follower.prereq_count == 0:
                 ready_tasks.append(follower)
         sorted_tasks.append(task)
-    # rewired
-    for i, task in enumerate(sorted_tasks):
+    return rewire(sorted_tasks)
+
+
+def prepare(tasks: List[Task]):
+    for task in tasks:
+        task.prereq_count = len(task.prereq_tasks)
+        for prereq in task.prereq_tasks:
+            prereq.followers.append(task)
+
+
+def rewire(tasks: List[Task]) -> List[Task]:
+    for i, task in enumerate(tasks):
         task.index = i
         task.followers = []
-    for task in sorted_tasks:
+    for task in tasks:
         task.prereq_numbers = [prereq.index for prereq in task.prereq_tasks]
-    return sorted_tasks
+    return tasks
