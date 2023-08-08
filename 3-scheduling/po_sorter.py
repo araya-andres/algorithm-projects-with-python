@@ -27,7 +27,7 @@ def task_from_str(line: str) -> Task:
     """
     Parse a line from a .po file
     """
-    pattern = re.compile(r"""(\d*), *([^,]*), *\[([^\]]*)]""")
+    pattern = re.compile(r"""(\d+),\s*([^,]*),\s*\[([^\]]*)]""")
     match = pattern.match(line)
     index = int(match.group(1))
     name = match.group(2)
