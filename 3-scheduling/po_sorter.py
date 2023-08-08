@@ -85,7 +85,7 @@ def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
     return columns
 
 
-def arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 10):
+def _arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 10):
     _x = x_min
     for rows in columns:
         _y = y_min
@@ -96,18 +96,18 @@ def arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 1
         _x += SIDE + X_SPACING
 
 
-def draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
+def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
     for rows in columns:
         for task in rows:
-            px = task.center[0] + SIDE / 2
-            py = task.center[1]
+            _x0 = task.center[0] + SIDE / 2
+            _y0 = task.center[1]
             for follower in task.followers:
-                qx = follower.center[0] - SIDE / 2
-                qy = follower.center[1]
-                canvas.create_line(px, py, qx, qy, arrow=tk.LAST)
+                _x1 = follower.center[0] - SIDE / 2
+                _y1 = follower.center[1]
+                canvas.create_line(_x0, _y0, _x1, _y1, arrow=tk.LAST)
 
 
-def draw_tasks(canvas: tk.Canvas, columns: List[List[Task]]):
+def _draw_tasks(canvas: tk.Canvas, columns: List[List[Task]]):
     for rows in columns:
         for task in rows:
             canvas.create_rectangle(task.bounds, fill="white")
@@ -115,9 +115,12 @@ def draw_tasks(canvas: tk.Canvas, columns: List[List[Task]]):
 
 
 def draw_pert_chart(canvas: tk.Canvas, columns: List[List[Task]]):
-    arrange_tasks(columns)
-    draw_links(canvas, columns)
-    draw_tasks(canvas, columns)
+    """
+    Draw a PERT chart.
+    """
+    _arrange_tasks(columns)
+    _draw_links(canvas, columns)
+    _draw_tasks(canvas, columns)
 
 
 def _prepare(tasks: List[Task]):
