@@ -9,6 +9,7 @@ from task import Task
 X_SPACING = 20
 Y_SPACING = 20
 SIDE = 20
+HALF_SIDE = 10
 
 
 def verify_sort(sorted_tasks: List[Task]) -> bool:
@@ -68,6 +69,8 @@ def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
     """
     Build a pert chart
     """
+    if not tasks:
+        return []
     _prepare(tasks)
     ready_tasks: List[Task] = [task for task in tasks if task.prereq_count == 0]
     new_ready_tasks: List[Task] = []
@@ -91,7 +94,7 @@ def _arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 
         _y = y_min
         for task in rows:
             task.bounds = (_x, _y, _x + SIDE, _y + SIDE)
-            task.center = (_x + SIDE / 2, _y + SIDE / 2)
+            task.center = (_x + HALF_SIDE, _y + HALF_SIDE)
             _y += SIDE + Y_SPACING
         _x += SIDE + X_SPACING
 
@@ -99,10 +102,10 @@ def _arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 
 def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
     for rows in columns:
         for task in rows:
-            _x0 = task.center[0] + SIDE / 2
+            _x0 = task.center[0] + HALF_SIDE
             _y0 = task.center[1]
             for follower in task.followers:
-                _x1 = follower.center[0] - SIDE / 2
+                _x1 = follower.center[0] - HALF_SIDE
                 _y1 = follower.center[1]
                 canvas.create_line(_x0, _y0, _x1, _y1, arrow=tk.LAST)
 
