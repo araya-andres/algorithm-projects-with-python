@@ -5,7 +5,7 @@ import pytest
 from po_sorter import HALF_SIDE, X_SPACING, Y_SPACING
 from task import Task
 
-TEST_FILES_PATH = "3-scheduling/test-files/"
+TEST_FILES_PATH = "3_scheduling/test_files/"
 
 
 @pytest.fixture

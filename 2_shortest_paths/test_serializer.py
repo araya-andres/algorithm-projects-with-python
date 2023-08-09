@@ -6,7 +6,7 @@ from serializer import DeserializationException
 
 from common.point import Point
 
-TEST_FILES_PATH = "2-shortest-paths/test-files/"
+TEST_FILES_PATH = "2_shortest_paths/test_files/"
 
 
 @pytest.fixture
