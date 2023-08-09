@@ -63,7 +63,7 @@ def topo_sort(tasks: List[Task]) -> List[Task]:
             if follower.prereq_count == 0:
                 ready_tasks.append(follower)
         sorted_tasks.append(task)
-    return _rewire(sorted_tasks)
+    return _update_indexes(sorted_tasks)
 
 
 def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
@@ -87,12 +87,8 @@ def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
             ready_tasks = new_ready_tasks
             new_ready_tasks = []
             columns.append(list(ready_tasks))
-    last_task(columns).mark_is_critical()
+    _last_task(columns).mark_is_critical()
     return columns
-
-
-def last_task(columns: List[List[Task]]):
-    return columns[-1][0]  # FIXME
 
 
 def _arrange_tasks(columns: List[List[Task]], x_min: float = 10, y_min: float = 10):
@@ -112,16 +108,12 @@ def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
             _x0 = task.center[0] + HALF_SIDE
             _y0 = task.center[1]
             for follower in task.followers:
-                if (
-                    task.is_critical
-                    and follower.is_critical
-                    and task.end_time() == follower.start_time
-                ):
-                    fill = "red"
-                    width = 2
-                else:
-                    fill = "gray"
-                    width = 1
+                fill = "gray"
+                width = 1
+                if _is_link_critical_to_task(task, follower):
+                    width = 3
+                    if _is_link_critical_to_project(task, follower):
+                        fill = "red"
                 _x1 = follower.center[0] - HALF_SIDE
                 _y1 = follower.center[1]
                 canvas.create_line(
@@ -151,6 +143,18 @@ def draw_pert_chart(canvas: tk.Canvas, columns: List[List[Task]]):
     _draw_tasks(canvas, columns)
 
 
+def _is_link_critical_to_project(task: Task, follower: Task) -> bool:
+    return task.is_critical and follower.is_critical
+
+
+def _is_link_critical_to_task(task: Task, follower: Task) -> bool:
+    return task.end_time() == follower.start_time
+
+
+def _last_task(columns: List[List[Task]]):
+    return columns[-1][0]  # FIXME
+
+
 def _prepare(tasks: List[Task]):
     for task in tasks:
         task.prereq_count = len(task.prereq_tasks)
@@ -159,7 +163,7 @@ def _prepare(tasks: List[Task]):
             prereq.followers.append(task)
 
 
-def _rewire(tasks: List[Task]) -> List[Task]:
+def _update_indexes(tasks: List[Task]) -> List[Task]:
     for i, task in enumerate(tasks):
         task.index = i
         task.followers = []
