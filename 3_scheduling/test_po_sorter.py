@@ -73,11 +73,11 @@ def test_topo_sort():
     assert po_sorter.verify_sort(sorted_tasks)
 
 
-def test_topo_sort_with_a_sorted_list(sorted_tasks):
+def test_topo_sort_with_a_sorted_list(sorted_tasks: List[Task]):
     assert po_sorter.verify_sort(po_sorter.topo_sort(sorted_tasks))
 
 
-def test_topo_sort_with_independet_tasks(independent_tasks):
+def test_topo_sort_with_independet_tasks(independent_tasks: List[Task]):
     assert po_sorter.verify_sort(po_sorter.topo_sort(independent_tasks))
 
 
@@ -91,7 +91,7 @@ def test_topo_sort_with_loop():
     assert len(sorted_tasks) == 3
 
 
-def test_build_pert_chart(sorted_tasks):
+def test_build_pert_chart(sorted_tasks: List[Task]):
     columns = po_sorter.build_pert_chart(sorted_tasks)
     assert len(columns) == 3
     assert all(len(rows) == 1 for rows in columns)
@@ -100,7 +100,7 @@ def test_build_pert_chart(sorted_tasks):
     assert columns[2][0].name == "C"
 
 
-def test_build_pert_chart_with_independent_tasks(independent_tasks):
+def test_build_pert_chart_with_independent_tasks(independent_tasks: List[Task]):
     columns = po_sorter.build_pert_chart(independent_tasks)
     assert len(columns) == 1
     assert len(columns[0]) == 2
@@ -111,7 +111,7 @@ def test_build_pert_chart_with_an_empty_list():
     assert len(columns) == 0
 
 
-def test_arrange_tasks_horizontal(sorted_tasks):
+def test_arrange_tasks_horizontal(sorted_tasks: List[Task]):
     columns = po_sorter.build_pert_chart(sorted_tasks)
     po_sorter._arrange_tasks(columns, x_min=0, y_min=0)
     columns[0][0].center == (HALF_SIDE, HALF_SIDE)
@@ -119,8 +119,28 @@ def test_arrange_tasks_horizontal(sorted_tasks):
     columns[2][0].center == (5 * HALF_SIDE + 2 * X_SPACING, HALF_SIDE)
 
 
-def test_arrange_tasks_vertical(independent_tasks):
+def test_arrange_tasks_vertical(independent_tasks: List[Task]):
     columns = po_sorter.build_pert_chart(independent_tasks)
     po_sorter._arrange_tasks(columns, x_min=0, y_min=0)
     columns[0][0].center == (HALF_SIDE, HALF_SIDE)
     columns[0][1].center == (HALF_SIDE, 3 * HALF_SIDE + Y_SPACING)
+
+
+def test_set_time():
+    tasks = [
+        Task("A", index=0, prereq_numbers=[], duration=2),
+        Task("B", index=1, prereq_numbers=[], duration=1),
+        Task("C", index=2, prereq_numbers=[0, 1], duration=1),
+    ]
+    for task in tasks:
+        task.numbers_to_tasks(tasks)
+        task.set_times()
+    assert tasks[-1].start_time == 2
+
+
+def test_end_time(sorted_tasks: List[Task]):
+    for task in sorted_tasks:
+        task.set_times()
+    assert sorted_tasks[0].end_time() == 1
+    assert sorted_tasks[1].end_time() == 2
+    assert sorted_tasks[2].end_time() == 3

@@ -130,6 +130,7 @@ def draw_pert_chart(canvas: tk.Canvas, columns: List[List[Task]]):
 def _prepare(tasks: List[Task]):
     for task in tasks:
         task.prereq_count = len(task.prereq_tasks)
+        task.is_critical = False
         for prereq in task.prereq_tasks:
             prereq.followers.append(task)
 
