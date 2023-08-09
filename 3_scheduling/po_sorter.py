@@ -6,10 +6,10 @@ from typing import List
 
 from task import Task
 
-X_SPACING = 20
-Y_SPACING = 20
-SIDE = 20
-HALF_SIDE = 10
+X_SPACING = 25
+Y_SPACING = 25
+SIDE = 50
+HALF_SIDE = 25
 
 
 def verify_sort(sorted_tasks: List[Task]) -> bool:
@@ -133,8 +133,13 @@ def _draw_tasks(canvas: tk.Canvas, columns: List[List[Task]]):
     for rows in columns:
         for task in rows:
             outline = "red" if task.is_critical else "gray"
+            text = "Task {}\nDur: {}\nStart:{}\nEnd:{}".format(
+                task.index, task.duration, task.start_time, task.end_time()
+            )
             canvas.create_rectangle(task.bounds, fill="white", outline=outline)
-            canvas.create_text(*task.center, text=str(task.index))
+            canvas.create_text(
+                *task.center, font=("arial", 7), justify="center", text=text
+            )
 
 
 def draw_pert_chart(canvas: tk.Canvas, columns: List[List[Task]]):
