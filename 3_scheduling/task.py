@@ -23,6 +23,10 @@ class Task:
 
     def mark_is_critical(self) -> None:
         self.is_critical = True
+        for prereq in self.prereq_tasks:
+            if prereq.end_time() == self.start_time:
+                prereq.mark_is_critical()
+                return
 
     def numbers_to_tasks(self, tasks: List[Task]) -> None:
         self.prereq_tasks = [tasks[index] for index in self.prereq_numbers]
