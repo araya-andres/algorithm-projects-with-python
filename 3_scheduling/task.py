@@ -4,12 +4,13 @@ from typing import List
 
 
 class Task:
-    def __init__(self, name: str, index: int, prereq_numbers: List[int]):
+    def __init__(self, name: str, index: int, prereq_numbers: List[int], duration: int):
         self.name: str = name
         self.index: int = index
         self.prereq_numbers: List[int] = prereq_numbers
+        self.duration: int = duration
         self.prereq_tasks: List[Task] = []
-        self.prereq_count = 0
+        self.prereq_count: int = 0
         self.followers: List[Task] = []
 
     def __str__(self) -> str:

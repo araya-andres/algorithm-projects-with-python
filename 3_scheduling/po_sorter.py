@@ -27,12 +27,13 @@ def task_from_str(line: str) -> Task:
     """
     Parse a line from a .po file
     """
-    pattern = re.compile(r"""(\d+),\s*([^,]*),\s*\[([^\]]*)]""")
+    pattern = re.compile(r"""(\d+),\s*(\d+),\s*([^,]*),\s*\[([^\]]*)]""")
     match = pattern.match(line)
     index = int(match.group(1))
-    name = match.group(2)
-    prereq_numbers = [int(index) for index in match.group(3).split(",") if index]
-    return Task(name, index, prereq_numbers)
+    duration = int(match.group(2))
+    name = match.group(3)
+    prereq_numbers = [int(index) for index in match.group(4).split(",") if index]
+    return Task(name, index, prereq_numbers, duration)
 
 
 def load_po_file(filename: str) -> List[Task]:

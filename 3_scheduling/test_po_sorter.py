@@ -11,9 +11,9 @@ TEST_FILES_PATH = "3_scheduling/test_files/"
 @pytest.fixture
 def sorted_tasks() -> List[Task]:
     tasks = [
-        Task("A", 0, []),
-        Task("B", 1, [0]),
-        Task("C", 2, [0, 1]),
+        Task("A", index=0, prereq_numbers=[], duration=1),
+        Task("B", index=1, prereq_numbers=[0], duration=1),
+        Task("C", index=2, prereq_numbers=[0, 1], duration=1),
     ]
     for task in tasks:
         task.numbers_to_tasks(tasks)
@@ -23,8 +23,8 @@ def sorted_tasks() -> List[Task]:
 @pytest.fixture
 def independent_tasks() -> List[Task]:
     return [
-        Task("A", 0, []),
-        Task("B", 1, []),
+        Task("A", index=0, prereq_numbers=[], duration=1),
+        Task("B", index=1, prereq_numbers=[], duration=1),
     ]
 
 
@@ -33,34 +33,36 @@ def test_verify_sort(sorted_tasks):
 
 
 def test_verify_sort_returns_false_if_the_list_is_not_properly_sorted():
-    assert not po_sorter.verify_sort([Task("A", 0, [1])])
+    assert not po_sorter.verify_sort([Task("A", 0, [1], 1)])
 
 
 def test_parse_line():
-    task = po_sorter.task_from_str("18, Finish dungeon, [13, 14]")
+    task = po_sorter.task_from_str("18, 1, Finish dungeon, [13, 14]")
     assert task.name == "Finish dungeon"
     assert task.index == 18
     assert task.prereq_numbers == [13, 14]
+    assert task.duration == 1
 
 
 def test_parse_line_with_no_prerequisites():
-    task = po_sorter.task_from_str("1, Grade site, []")
+    task = po_sorter.task_from_str("1, 2, Grade site, []")
     assert task.name == "Grade site"
     assert task.index == 1
     assert task.prereq_numbers == []
+    assert task.duration == 2
 
 
 def test_load_po_file():
     tasks = po_sorter.load_po_file(TEST_FILES_PATH + "castle.po")
-    assert len(tasks) == 29
-    assert tasks[0].prereq_tasks[0].name == "Install siding"
+    assert len(tasks) == 31
+    assert tasks[1].prereq_tasks[0].name == "Install siding"
 
 
 def test_topo_sort():
     tasks = [
-        Task("A", 0, [1, 2]),
-        Task("B", 1, [2]),
-        Task("C", 2, []),
+        Task("A", index=0, prereq_numbers=[1, 2], duration=1),
+        Task("B", index=1, prereq_numbers=[2], duration=1),
+        Task("C", index=2, prereq_numbers=[], duration=1),
     ]
     for task in tasks:
         task.numbers_to_tasks(tasks)
