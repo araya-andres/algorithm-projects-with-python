@@ -157,7 +157,13 @@ def _is_link_critical_to_task(task: Task, follower: Task) -> bool:
 
 
 def _last_task(columns: List[List[Task]]):
-    return columns[-1][0]  # FIXME
+    last = None
+    end_time = 0
+    for task in columns[-1]:
+        if task.end_time() > end_time:
+            last = task
+            end_time = task.end_time()
+    return last
 
 
 def _prepare(tasks: List[Task]):
