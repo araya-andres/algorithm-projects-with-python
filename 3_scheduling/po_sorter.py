@@ -6,8 +6,8 @@ from typing import List
 
 from task import Task
 
-X_SPACING = 25
-Y_SPACING = 25
+X_SPACING = 50
+Y_SPACING = 50
 SIDE = 50
 HALF_SIDE = 25
 
@@ -108,7 +108,7 @@ def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
             _x0 = task.center[0] + HALF_SIDE
             _y0 = task.center[1]
             for follower in task.followers:
-                fill = "gray"
+                fill = "black"
                 width = 1
                 if _is_link_critical_to_task(task, follower):
                     width = 3
@@ -124,13 +124,18 @@ def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
 def _draw_tasks(canvas: tk.Canvas, columns: List[List[Task]]):
     for rows in columns:
         for task in rows:
-            outline = "red" if task.is_critical else "gray"
+            if task.is_critical:
+                color = "red"
+                fill = "pink"
+            else:
+                color = "black"
+                fill = "lightblue"
             text = "Task {}\nDur: {}\nStart:{}\nEnd:{}".format(
                 task.index, task.duration, task.start_time, task.end_time()
             )
-            canvas.create_rectangle(task.bounds, fill="white", outline=outline)
+            canvas.create_rectangle(task.bounds, fill=fill, outline=color)
             canvas.create_text(
-                *task.center, font=("arial", 7), justify="center", text=text
+                *task.center, fill=color, font=("arial", 7), justify="center", text=text
             )
 
 
