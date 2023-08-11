@@ -81,11 +81,11 @@ def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
             ready_tasks = new_ready_tasks
             new_ready_tasks = []
             columns.append(list(ready_tasks))
-    _last_task(columns).mark_is_critical()
+    last_task(columns).mark_is_critical()
     return columns
 
 
-def _last_task(columns: List[List[Task]]):
+def last_task(columns: List[List[Task]]) -> Task:
     last = None
     end_time = 0
     for task in columns[-1]:

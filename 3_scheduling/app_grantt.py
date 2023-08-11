@@ -12,7 +12,7 @@ class App:
         self.window = tk.Tk()
         self.window.title("draw_pert_chart")
         self.window.protocol("WM_DELETE_WINDOW", self.kill_callback)
-        self.window.geometry("400x300")
+        self.window.geometry("600x400")
 
         # Build the menu.
         self.menubar = tk.Menu(self.window)
