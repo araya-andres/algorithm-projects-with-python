@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
+import pert_chart
 import po_sorter
 
 
@@ -52,7 +53,7 @@ class App:
             tasks = po_sorter.load_po_file(filename)
             columns = po_sorter.build_pert_chart(tasks)
             self.canvas.delete("all")
-            po_sorter.draw_pert_chart(self.canvas, columns)
+            pert_chart.draw(self.canvas, columns)
 
 
 if __name__ == "__main__":

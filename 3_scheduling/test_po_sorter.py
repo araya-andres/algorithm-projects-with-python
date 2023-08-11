@@ -1,31 +1,10 @@
 from typing import List
 
 import po_sorter
-import pytest
-from po_sorter import HALF_SIDE, X_SPACING, Y_SPACING
+from fixtures import independent_tasks, sorted_tasks
 from task import Task
 
 TEST_FILES_PATH = "3_scheduling/test_files/"
-
-
-@pytest.fixture
-def sorted_tasks() -> List[Task]:
-    tasks = [
-        Task("A", index=0, prereq_numbers=[], duration=1),
-        Task("B", index=1, prereq_numbers=[0], duration=1),
-        Task("C", index=2, prereq_numbers=[0, 1], duration=1),
-    ]
-    for task in tasks:
-        task.numbers_to_tasks(tasks)
-    return tasks
-
-
-@pytest.fixture
-def independent_tasks() -> List[Task]:
-    return [
-        Task("A", index=0, prereq_numbers=[], duration=1),
-        Task("B", index=1, prereq_numbers=[], duration=1),
-    ]
 
 
 def test_verify_sort(sorted_tasks):
@@ -109,21 +88,6 @@ def test_build_pert_chart_with_independent_tasks(independent_tasks: List[Task]):
 def test_build_pert_chart_with_an_empty_list():
     columns = po_sorter.build_pert_chart([])
     assert len(columns) == 0
-
-
-def test_arrange_tasks_horizontal(sorted_tasks: List[Task]):
-    columns = po_sorter.build_pert_chart(sorted_tasks)
-    po_sorter._arrange_tasks(columns, x_min=0, y_min=0)
-    columns[0][0].center == (HALF_SIDE, HALF_SIDE)
-    columns[1][0].center == (3 * HALF_SIDE + X_SPACING, HALF_SIDE)
-    columns[2][0].center == (5 * HALF_SIDE + 2 * X_SPACING, HALF_SIDE)
-
-
-def test_arrange_tasks_vertical(independent_tasks: List[Task]):
-    columns = po_sorter.build_pert_chart(independent_tasks)
-    po_sorter._arrange_tasks(columns, x_min=0, y_min=0)
-    columns[0][0].center == (HALF_SIDE, HALF_SIDE)
-    columns[0][1].center == (HALF_SIDE, 3 * HALF_SIDE + Y_SPACING)
 
 
 def test_set_time():
