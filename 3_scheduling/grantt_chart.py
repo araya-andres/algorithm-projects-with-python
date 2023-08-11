@@ -6,7 +6,7 @@ from typing import List
 import po_sorter
 from task import Task
 
-TEXT_WIDTH = 100
+TEXT_WIDTH = 130
 TEXT_HEIGHT = 20
 
 DAY_WIDTH = TEXT_HEIGHT
@@ -59,7 +59,11 @@ def _draw_tasks_boxes(canvas: tk.Canvas, columns: List[List[Task]]):
 
 
 def _draw_tasks_text(canvas: tk.Canvas, tasks: List[Task], x_min: float, y_min: float):
-    pass
+    y = y_min + TEXT_HEIGHT / 2
+    for task in tasks:
+        text = f"{task.index}. {task.name}"
+        canvas.create_text(x_min, y, text=text, anchor=tk.W)
+        y += TEXT_HEIGHT
 
 
 def draw(canvas: tk.Canvas, tasks: List[Task], columns: List[List[Task]]) -> None:
