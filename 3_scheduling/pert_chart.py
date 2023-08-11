@@ -30,9 +30,9 @@ def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
             for follower in task.followers:
                 fill = "black"
                 width = 1
-                if _is_link_critical_to_task(task, follower):
+                if is_link_critical_to_task(task, follower):
                     width = 3
-                    if _is_link_critical_to_project(task, follower):
+                    if is_link_critical_to_project(task, follower):
                         fill = "red"
                 _x1 = follower.center[0] - HALF_SIDE
                 _y1 = follower.center[1]
@@ -68,9 +68,9 @@ def draw(canvas: tk.Canvas, columns: List[List[Task]]) -> None:
     _draw_tasks(canvas, columns)
 
 
-def _is_link_critical_to_project(task: Task, follower: Task) -> bool:
+def is_link_critical_to_project(task: Task, follower: Task) -> bool:
     return task.is_critical and follower.is_critical
 
 
-def _is_link_critical_to_task(task: Task, follower: Task) -> bool:
+def is_link_critical_to_task(task: Task, follower: Task) -> bool:
     return task.end_time() == follower.start_time
