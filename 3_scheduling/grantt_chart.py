@@ -3,19 +3,15 @@ from __future__ import annotations
 import tkinter as tk
 from typing import List
 
-import po_sorter
 from po_sorter import is_link_critical_to_project, is_link_critical_to_task
 from task import Task
 
-TEXT_WIDTH = 130
-TEXT_HEIGHT = 20
-
-DAY_WIDTH = TEXT_HEIGHT
-
-TASK_HEIGHT = 20
 MARGIN = 5
-
+TEXT_HEIGHT = 20
+TEXT_WIDTH = 130
+TASK_HEIGHT = TEXT_HEIGHT
 BOX_HEIGHT = TASK_HEIGHT - 2 * MARGIN
+DAY_WIDTH = TEXT_HEIGHT
 
 
 def _arrange_tasks_boxes(tasks: List[Task], x_min: float, y_min: float):
