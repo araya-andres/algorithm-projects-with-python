@@ -51,9 +51,9 @@ class App:
             title="Open Partial Ordering",
         ):
             tasks = po_sorter.load_po_file(filename)
-            columns = po_sorter.build_pert_chart(tasks)
+            _ = po_sorter.build_pert_chart(tasks)
             self.canvas.delete("all")
-            grantt_chart.draw(self.canvas, tasks, columns)
+            grantt_chart.draw(self.canvas, tasks)
 
 
 if __name__ == "__main__":

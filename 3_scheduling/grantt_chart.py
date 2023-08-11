@@ -12,10 +12,16 @@ TEXT_HEIGHT = 20
 DAY_WIDTH = TEXT_HEIGHT
 
 TASK_HEIGHT = 20
+MARGIN = 5
 
 
-def _arrange_tasks_boxes(columns: List[List[Task]], x_min: float, y_min: float):
-    pass
+def _arrange_tasks_boxes(tasks: List[Task], x_min: float, y_min: float):
+    for i, task in enumerate(tasks):
+        x0 = x_min + task.start_time * DAY_WIDTH
+        y0 = y_min + i * TASK_HEIGHT + MARGIN
+        x1 = x0 + task.duration * DAY_WIDTH
+        y1 = y0 + TASK_HEIGHT - 2 * MARGIN
+        task.bounds = (x0, y0, x1, y1)
 
 
 def _draw_grid(
@@ -50,12 +56,19 @@ def _draw_grid(
         x += DAY_WIDTH
 
 
-def _draw_links(canvas: tk.Canvas, columns: List[List[Task]]):
+def _draw_links(canvas: tk.Canvas, tasks: List[Task]):
     pass
 
 
-def _draw_tasks_boxes(canvas: tk.Canvas, columns: List[List[Task]]):
-    pass
+def _draw_tasks_boxes(canvas: tk.Canvas, tasks: List[Task]):
+    for task in tasks:
+        if task.is_critical:
+            outline = "red"
+            fill = "pink"
+        else:
+            outline = "black"
+            fill = "lightblue"
+        canvas.create_rectangle(*task.bounds, fill=fill, outline=outline)
 
 
 def _draw_tasks_text(canvas: tk.Canvas, tasks: List[Task], x_min: float, y_min: float):
@@ -66,19 +79,19 @@ def _draw_tasks_text(canvas: tk.Canvas, tasks: List[Task], x_min: float, y_min: 
         y += TEXT_HEIGHT
 
 
-def draw(canvas: tk.Canvas, tasks: List[Task], columns: List[List[Task]]) -> None:
+def draw(canvas: tk.Canvas, tasks: List[Task]) -> None:
     """
     Draw a PERT chart.
     """
     x_min = y_min = 10
-    _arrange_tasks_boxes(columns, x_min=x_min + TEXT_WIDTH, y_min=y_min + TEXT_HEIGHT)
+    _arrange_tasks_boxes(tasks, x_min=x_min + TEXT_WIDTH, y_min=y_min + TEXT_HEIGHT)
     _draw_grid(
         canvas,
         x_min=x_min + TEXT_WIDTH,
         y_min=y_min,
         no_rows=len(tasks),
-        no_cols=po_sorter.last_task(columns).end_time(),
+        no_cols=max(task.end_time() for task in tasks),
     )
-    _draw_links(canvas, columns)
     _draw_tasks_text(canvas, tasks, x_min=x_min, y_min=y_min + TEXT_HEIGHT)
-    _draw_tasks_boxes(canvas, columns)
+    _draw_tasks_boxes(canvas, tasks)
+    _draw_links(canvas, tasks)
