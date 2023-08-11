@@ -10,7 +10,7 @@ class App:
     def __init__(self):
         # Make the main interface.
         self.window = tk.Tk()
-        self.window.title("draw_pert_chart")
+        self.window.title("draw_grantt_chart")
         self.window.protocol("WM_DELETE_WINDOW", self.kill_callback)
         self.window.geometry("630x400")
 

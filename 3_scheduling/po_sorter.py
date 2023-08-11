@@ -85,6 +85,14 @@ def build_pert_chart(tasks: List[Task]) -> List[List[Task]]:
     return columns
 
 
+def is_link_critical_to_project(task: Task, follower: Task) -> bool:
+    return task.is_critical and follower.is_critical
+
+
+def is_link_critical_to_task(task: Task, follower: Task) -> bool:
+    return task.end_time() == follower.start_time
+
+
 def last_task(columns: List[List[Task]]) -> Task:
     last = None
     end_time = 0

@@ -3,6 +3,7 @@ from __future__ import annotations
 import tkinter as tk
 from typing import List
 
+from po_sorter import is_link_critical_to_project, is_link_critical_to_task
 from task import Task
 
 X_SPACING = 50
@@ -66,11 +67,3 @@ def draw(canvas: tk.Canvas, columns: List[List[Task]]) -> None:
     _arrange_tasks(columns)
     _draw_links(canvas, columns)
     _draw_tasks(canvas, columns)
-
-
-def is_link_critical_to_project(task: Task, follower: Task) -> bool:
-    return task.is_critical and follower.is_critical
-
-
-def is_link_critical_to_task(task: Task, follower: Task) -> bool:
-    return task.end_time() == follower.start_time
