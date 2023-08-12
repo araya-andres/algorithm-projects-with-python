@@ -1,8 +1,8 @@
 from typing import List
 
 import po_sorter
-from fixtures import independent_tasks, sorted_tasks
 from task import Task
+from test_fixtures import independent_tasks, sorted_tasks
 
 TEST_FILES_PATH = "3_scheduling/test_files/"
 

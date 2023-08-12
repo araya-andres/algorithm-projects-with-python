@@ -2,9 +2,9 @@ from typing import List
 
 import pert_chart
 import po_sorter
-from fixtures import independent_tasks, sorted_tasks
 from pert_chart import HALF_SIDE, X_SPACING, Y_SPACING
 from task import Task
+from test_fixtures import independent_tasks, sorted_tasks
 
 
 def test_arrange_tasks_horizontal(sorted_tasks: List[Task]):
