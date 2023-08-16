@@ -9,8 +9,8 @@ from common.point import Point
 from common.serializer import save_into_file
 
 
-def _cost(lenght: int) -> int:
-    return int(lenght * (1 + random.randint(0, 20) / 100))
+def _capacity() -> int:
+    return random.randint(1, 5)
 
 
 def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Network:
@@ -40,14 +40,10 @@ def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Netw
     col, row = 0, 0
     nodes = network.nodes
     for i in range(num_nodes):
-        if col > 0:
-            network.add_link(nodes[i], nodes[i - 1], _cost(dist_x))
         if col < num_cols - 1:
-            network.add_link(nodes[i], nodes[i + 1], _cost(dist_x))
-        if row > 0:
-            network.add_link(nodes[i], nodes[i - num_cols], _cost(dist_y))
+            network.add_link(nodes[i], nodes[i + 1], _capacity())
         if row < num_rows - 1:
-            network.add_link(nodes[i], nodes[i + num_cols], _cost(dist_y))
+            network.add_link(nodes[i], nodes[i + num_cols], _capacity())
         col += 1
         if col >= num_cols:
             col = 0

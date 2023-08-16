@@ -1,10 +1,10 @@
 import pytest
-import serializer
-from network import Network
 from pytest import approx
-from serializer import DeserializationException
 
+import common.serializer as serializer
+from common.network import Network
 from common.point import Point
+from common.serializer import DeserializationException
 
 TEST_FILES_PATH = "2_shortest_paths/test_files/"
 

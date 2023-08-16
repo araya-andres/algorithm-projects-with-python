@@ -1,6 +1,6 @@
 import pytest
-from network import Network
 
+from common.network import Network
 from common.point import Point
 
 

@@ -1,8 +1,7 @@
 """
 Serielizer for the Network class
 """
-from network import Link, Network, Node
-
+from common.network import Link, Network, Node
 from common.point import Point
 
 COMMENT = "#"
