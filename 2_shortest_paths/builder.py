@@ -16,7 +16,7 @@ def _cost(lenght: int) -> int:
 def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Network:
     """
     Build a grid-shaped network with num_rows rows and num_cols columns.
-     The nodes should be arranged in an area width pixels wide and height pixels tall.
+    The nodes should be arranged in an area width pixels wide and height pixels tall.
     The cost of a link equal to its length times a random value between 1.0 and 1.2.
     """
     network = Network()
