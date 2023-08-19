@@ -41,9 +41,9 @@ def build_grid_network(width: int, height: int, num_rows: int, num_cols) -> Netw
     nodes = network.nodes
     for i in range(num_nodes):
         if col < num_cols - 1:
-            network.add_link(nodes[i], nodes[i + 1], _capacity())
+            network.add_workflow_link(nodes[i], nodes[i + 1], _capacity())
         if row < num_rows - 1:
-            network.add_link(nodes[i], nodes[i + num_cols], _capacity())
+            network.add_workflow_link(nodes[i], nodes[i + num_cols], _capacity())
         col += 1
         if col >= num_cols:
             col = 0

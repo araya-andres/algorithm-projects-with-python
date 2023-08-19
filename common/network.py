@@ -55,6 +55,9 @@ class Link:
     def __str__(self) -> str:
         return f"{self.from_node} --> {self.to_node} ({self.cost})"
 
+    def _to_str(self) -> str:
+        return str(self.cost)
+
     def is_visible(self):
         return (
             (self.from_node.index < self.to_node.index)
@@ -84,7 +87,17 @@ class Link:
         _y = 0.667 * self.from_node.pos.y + 0.333 * self.to_node.pos.y
         _r = Node.LARGE_RADIUS
         canvas.create_oval(_x - _r, _y - _r, _x + _r, _y + _r, fill="white", width=0)
-        canvas.create_text(_x, _y, text=str(self.cost), angle=angle)
+        canvas.create_text(_x, _y, text=self._to_str(), angle=angle)
+
+
+class WorkflowLink(Link):
+    def __init__(self, from_node: Node, to_node: Node, cost: int):
+        super().__init__(from_node, to_node, cost)
+        self.flow = 0
+        self.capacity = cost
+
+    def _to_str(self) -> str:
+        return f"{self.flow}/{self.capacity}"
 
 
 class Network:
@@ -106,6 +119,11 @@ class Network:
 
     def add_link(self, from_node: Node, to_node: Node, cost: int) -> Link:
         link = Link(from_node, to_node, cost)
+        self.links.append(link)
+        return link
+
+    def add_workflow_link(self, from_node: Node, to_node: Node, cost: int) -> Link:
+        link = WorkflowLink(from_node, to_node, cost)
         self.links.append(link)
         return link
 

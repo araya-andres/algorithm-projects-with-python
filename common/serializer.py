@@ -50,7 +50,7 @@ def _add_node(network: Network, node_str: str, radius: int = Node.LARGE_RADIUS) 
         raise DeserializationException(f"Invalid node string: '{node_str}'") from ex
 
 
-def _add_link(network: Network, link_str: str) -> Link:
+def _add_link(network: Network, link_str: str, workflow: bool = False) -> Link:
     try:
         from_index, to_index, cost = (int(value) for value in link_str.split(","))
         n_nodes = len(network.nodes)
@@ -58,7 +58,8 @@ def _add_link(network: Network, link_str: str) -> Link:
             raise DeserializationException(f"Node index out of bounds: '{link_str}'")
         from_node = network.nodes[from_index]
         to_node = network.nodes[to_index]
-        return network.add_link(from_node, to_node, cost)
+        add_link_fn = network.add_workflow_link if workflow else network.add_link
+        return add_link_fn(from_node, to_node, cost)
     except ValueError as ex:
         raise DeserializationException(f"Invalid link string: '{link_str}'") from ex
 
@@ -90,7 +91,7 @@ def _parse_lines(reader, num_lines, parser, exception_msg):
             raise DeserializationException(f"{exception_msg} ({i}/{num_lines})")
 
 
-def load_from_file(filename: str) -> Network:
+def load_from_file(filename: str, workflow: bool = False) -> Network:
     """
     Load a network from a file
     """
@@ -116,7 +117,7 @@ def load_from_file(filename: str) -> Network:
         _parse_lines(
             reader,
             num_lines=num_links,
-            parser=lambda line: _add_link(network, link_str=line),
+            parser=lambda line: _add_link(network, link_str=line, workflow=workflow),
             exception_msg="Could not find the number of links expected",
         )
     return network

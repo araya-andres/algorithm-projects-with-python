@@ -91,7 +91,7 @@ class App:
     def open_network(self):
         if filename := filedialog.askopenfilename():
             try:
-                self.network = serializer.load_from_file(filename)
+                self.network = serializer.load_from_file(filename, workflow=True)
                 self.draw_network()
             except Exception as ex:
                 messagebox.showinfo("", f"Could not open file '{filename}'\n{ex}")
